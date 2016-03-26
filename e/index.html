@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>OpenToonz</title>
+	<meta name="description" content="OpenToonz - Open-source Animation Production Software to Develop and Create ALL Together" />
+	<meta name="keywords" content="ドワンゴ,dwango,アニメーションツール" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1,user-scalable=0">
+	<link rel="shortcut icon" href="./img/favicon.ico" />
+	<meta property="og:title" content="OpenToonz" />
+	<meta property="og:type" content="website" />
+    <meta property="og:description" content="OpenToonz - Open-source Animation Production Software to Develop and Create ALL Together" />
+	<meta property="og:url" content="https://opentoonz.github.io/" />
+	<meta property="og:image" content="https://opentoonz.github.io/e/img/ogp_e.jpg" />
+	<meta property="og:site_name" content="OpenToonz" />
+	<meta property="og:locale" content="en_US" />
+	<link rel="stylesheet" href="css/reset.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="./js/common.js"></script>
+	<script src="./js/heightLine.js"></script>
+	<script src="./js/jquery.flexslider.js"></script>
+	<script>
+	$(window).load(function() {
+		$('.slider').flexslider();
+	});
+	</script>
+</head>
+
+<body>
+	<header>
+		<div class="inner clearfix">
+			<h1>OpenToonz</h1>
+			<div class="link clearfix">
+				<nav>
+					<ul class="clearfix">
+						<li class="about"><a href="#about">About</a></li>
+						<li class="point"><a href="#point">Characteristics</a></li>
+						<li class="download"><a href="#download">Download</a></li>
+						<li class="faq"><a href="#faq">FAQ</a></li>
+					</ul>
+				</nav>
+				<ul class="sns clearfix">
+					<li class="fb"><a href="http://www.facebook.com/share.php?u=https://opentoonz.github.io/" onclick="window.open(encodeURI(decodeURI(this.href)), 'FBwindow', 'width=554, height=470, menubar=no, toolbar=no, scrollbars=yes'); return false;" rel="nofollow"><i class="fa fa-facebook">Facebook</i></a></li>
+                    <li class="tw"><a href="http://twitter.com/share?text=OpenToonz - Open-source Animation Production Software to Develop and Create ALL Together&amp;url=https://opentoonz.github.io/&amp;hashtags=opentoonz" onclick="window.open(encodeURI(decodeURI(this.href)), 'tweetwindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1' ); return false;" target="_blank"><i class="fa fa-twitter">Twitter</i></a></li>
+				</ul>
+				<div class="lang">
+					<a href="../index.html">日本語</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section id="cover">
+		<div class="inner">
+			<h1>OpenToonz</h1>
+			<h2>Open-source Animation Production Software－to Develop and Create All Together</h2>
+		</div>
+	</section>
+
+	<section id="about">
+		<h1><span>What is OpenToonz?</span></h1>
+		<ul class="list">
+			<li>This is software for producing a 2D animation.
+			<p class="notes"> It is based on the software "Toonz", which was developed by Digital Video S.p.A. in Italy, customized by Studio Ghibli, and has been used for creating its works for many years. Dwango launches this OpenToonz project, in cooperation with Digital Video and Studio Ghibli.</p></li>
+			<li>This software can be used by anyone free of charge, no matter whether the purpose of use is commercial or not.</li>
+			<li>This is available as an open source, so that users can modify its source code freely.</li>
+			<li>We aim to develop a new platform for connecting the academic research into frontline animation production.</li>
+		</ul>
+	</section>
+
+	<section id="point">
+		<h1><span>Characteristics of OpenToonz</span></h1>
+		<div class="contents">
+			<div class="inner clearfix">
+				<div class="point01 heightLine-01 card">
+					<h2><span>How it has been used in Studio Ghibli</span></h2>
+					<div class="block">
+						<p>Since the software "Toonz", which is the original version of OpenToonz, was first used for some cuts of Princess Mononoke, it has been used in the ink and paint, color design and digital composition process(*) of almost all of works of Studio Ghibli. After "Arrietty/The Secret World of Arrietty", it was customized inside the company, and evolved to become more usable according to its production style.</p>
+						<p class="notes">(*) The ink and paint, color design and digital composition: Processes from the scanning of hand-drawn pictures to the production of final footages</p>
+					</div>
+				</div>
+				<div class="point02 heightLine-01 card">
+					<h2><span>Open source, which can be used by anyone free of charge</span></h2>
+					<div class="block">
+						<p>The source code of OpenToonz can be modified freely, based on the license(*). It can be used by anyone free of charge, no matter whether the purpose of use is commercial or not. It can be used in all kinds of scenes, such as professional production, amateur production, and school education.</p>
+						<p class="notes">(*) For further information on the license of the software (installer), see the rules of use of OpenToonz. Its source code is available under the terms of the New BSD License.</p>
+					</div>
+				</div>
+				<div class="point03 heightLine-02 card">
+					<h2><span>Functions to meet on-site needs</span></h2>
+					<div class="block">
+						<p>OpenToonz is equipped with the unique functions that have been improved repeatedly based on the opinions of production staff, including the scanning tool "GTS" specializing in animation, which was developed in Studio Ghibli. For details, see "Introduction of the functions unique to OpenToonz" written below.</p>
+					</div>
+				</div>
+				<div class="point04 heightLine-02 card">
+					<h2><span>Effect development kit (SDK)</span></h2>
+					<div class="block">
+						<p>Dwango newly developed SDK, a plug-in effect for image processing for OpenToonz. By using SDK, anyone can add effects to OpenToonz. Video expression researchers can receive swift feedback from on-site workers, by developing and releasing their outcomes as plug-in effects.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="effect">
+		<h1><span>The effects developed by Dwango are also released</span></h1>
+		<p>By using the plug-in effect SDK, the effects developed by Dwango's machine leaning research and development team are released. They include the effect of automatically changing picture styles by applying the deep learning technology and the effect of producing affected incident light like those in classic works before the digitization of the production environment.</p>
+		<div class="contents clearfix">
+			<div class="effect01 card">
+				<h2><span>changing picture styles</span></h2>
+				<img src="./img/effect_img01.png" alt="">
+			</div>
+			<div class="effect02 card">
+				<h2><span>Affected incident light</span></h2>
+				<img src="./img/effect_img02.png" alt="">
+			</div>
+			<div class="effect03 card">
+				<h2><span>Wavy distortion</span></h2>
+				<img src="./img/effect_img03.png" alt="">
+			</div>
+		</div>
+	</section>
+
+	<section id="function">
+		<h1><span>Introduction of the functions unique to OpenToonz</span></h1>
+		<div class="inner">
+			<div class="slider contents clearfix">
+				<ul class="slides">
+					<li class="function01 card">
+						<div class="detail">
+							<h2><span>GTS, a scanning tool developed by Studio Ghibli</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img01.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>Sequence number scanning can be conducted efficiently according to in-between animation numbers.</li>
+										<li>Compatible with 4 types of scanning.<br>(black-and-white, colored, with or without binarization)</li>
+										<li>The settings for scanning can be saved. Processes can be reproduced when some cuts are rescanned.
+</li>
+										<li>Compatible with the TWAIN standards</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="function02 card">
+						<div class="detail">
+							<h2><span>Digital painting</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img02.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>Anti-aliased lines can be used.</li>
+										<li>Since the data of paintings are independent of those of the palette, it is easy to paint with provisional colors.</li>
+										<li>Smooth operation even with high-definition image data</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="function03 card">
+						<div class="detail">
+							<h2><span>Filming</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img03.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>Equipped with the time sheet-type interface</li>
+										<li>Effects can be synthesized easily with the GUI using the node tree.</li>
+										<li>Images can be handled with the real scale considering resolution [dpi] (units, such as millimeter, are specified)</li>
+										<li>It is possible to use more effects by using the plug-in.</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="function04 card">
+						<div class="detail">
+							<h2><span>Other features</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img04.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>Compatible with both raster and vector images</li>
+										<li>Equipped with the function for the interconversion between the sequence image of the colored binarized TGA and the OpenToonz format, to secure the compatibility with existing workflow.</li>
+										<li>The localization for the Japanese version available</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section id="download">
+		<h1><span>Click here to download</span></h1>
+		<div class="btnarea clearfix">
+			<a href="download/opentoonz.html"><img src="./img/download_btn_opentoonz.png" alt="OpenToonz"></a>
+			<a href="download/gts.html"><img src="./img/download_btn_gts.png" alt="GTS"></a>
+			<a href="https://github.com/opentoonz/dwango_opentoonz_plugins"><img src="./img/download_btn_effect.png" alt="Effects"></a>
+			<p>※ GTS is available for Windows only</p>
+		</div>
+		<div class="spno">
+			<p>Please download OpenToonz, GTS, or effects via PC browser.</p>
+			<p class="notes">※ GTS is available for Windows only</p>
+		</div>
+		<div class="contents clearfix">
+			<div class="download01 card">
+				<h2><span>For users</span></h2>
+				<ul class="list">
+					<li>Start-up manual for OpenToonz<br><a href="../document/OpenToonzスタートアップマニュアル_導入編.pdf">Introduction</a> <a href="../document/OpenToonzスタートアップマニュアル_仕上編.pdf">Inknpaint</a> (PDF) (in Japanese)</li>
+					<li><a href="../document/GTS取扱説明書.pdf">Start-up manual for GTS</a> (PDF) (in Japanese)</li>
+					<li><a href="https://github.com/opentoonz/opentoonz_plugin_utility/tree/master/doc">Manual for installing the effect plug-in</a><br> (in Japanese)</li>
+					<li><a href="https://github.com/opentoonz/dwango_opentoonz_plugins/tree/master/doc">Manual for effect plug-ins developed by DWANGO</a><br> (in Japanese)</li>
+					<li><a href="https://groups.google.com/forum/#!forum/opentoonz_en">User community for English speakers</a></li>
+				</ul>
+			</div>
+			<div class="download02 card">
+				<h2><span>For developers</span></h2>
+				<ul class="list">
+					<li><a href="https://github.com/opentoonz/opentoonz">GitHub repository</a></li>
+					<li><a href="https://github.com/opentoonz/plugin_sdk">Effect plug-in development procedures</a></li>
+					<li><a href="https://github.com/opentoonz/opentoonz/issues">Forum for developers</a></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section id="faq">
+		<h1><span>FAQ</span></h1>
+		<div class="contents">
+			<div class="card">
+				<dl>
+					<dt>Please tell me the recommended PC environment.</dt>
+					<dd>
+						<p>The requirements for using OpenToonz comfortably are as follows:</p>
+						<div class="clearfix">
+							<div class="os">
+								<h2>Windows</h2>
+								<ul class="list">
+									<li>Microsoft Windows 7 SP1/8.1/10 (64bit required)</li>
+									<li>Intel Core i series processor</li>
+									<li>4GB or more RAM</li>
+									<li>500 MB or more available storage space</li>
+									<li>1280 x 1024 or higher monitor resolution</li>
+								</ul>
+							</div>
+							<div class="os">
+								<h2>OS X</h2>
+								<ul class="list">
+									<li>OS X 10.9 or a later version</li>
+									<li>Intel Core i series processor</li>
+									<li>4 GB or more RAM</li>
+									<li>500 MB or more available storage space</li>
+									<li>1280 x 1024 or higher monitor resolution</li>
+								</ul>
+							</div>
+						</div>
+
+						<p>The requirements for using GTS comfortably are as follows:</p>
+						<ul class="list">
+							<li>Microsoft Windows 7/8.1/10</li>
+							<li>Intel Core i series processor</li>
+							<li>2 GB or more RAM</li>
+							<li>8 MB or more available storage space</li>
+							<li>Scanner compatible with the TWAIN standard (including the driver software)<br>※EPSON DS-50000 is recommended.
+</li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+
+			<div class="card">
+				<dl>
+					<dt>If I find a defect or have a trouble, what should I do?</dt>
+					<dd>OpenToonz has <a href="https://groups.google.com/forum/#!forum/opentoonz_en">a Google group</a>, to provide a place where users can solve troubles. Join the group to request functional improvements, report bugs, and have discussions with other users.<br>
+					In addition, there is <a href="https://github.com/opentoonz/opentoonz/issues">a forum</a> for developers and video researchers in GitHub. Please offer development-related topics here. </dd>
+				</dl>
+			</div>
+
+			<div class="card">
+				<dl>
+					<dt>Can I interview you? </dt>
+					<dd>
+						<p>Thank you very much for having interests in OpenToonz. If you want to interview us, please contact the following.</p>
+						<div class="mail">
+							<a href="mailto:dwango-contact@dwango.co.jp">dwango-contact@dwango.co.jp</a>
+						</div>
+						<p>This address is exclusively for inquiries from the media. We will not respond to inquiries from anyone other than media staff. We would appreciate your understanding.</p>
+					</dd>
+				</dl>
+			</div>
+		<div class="pagetop"><a href="#">TOP</a></div>
+		</div>
+	</section>
+
+
+	<footer>
+		<div class="inner">
+            <a href="http://dwango.co.jp/" class="company" target="_blank">COMPANY</a>
+			<p class="copyright">&nbsp;&copy;&nbsp;DWANGO&nbsp;Co.,&nbsp;Ltd.</p>
+		</div>
+	</footer>
+</body>
+</html>

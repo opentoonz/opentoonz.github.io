@@ -2,72 +2,324 @@
 <html lang="ja">
 
 <head>
-  <meta charset="UTF-8">
-  <title>OpenToonz</title>
-  <meta name="description" content="OpenToonz - アニメーション制作ツールのオープンソースプロジェクト" />
-  <meta name="keywords" content="ドワンゴ,dwango,アニメーションツール" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1,user-scalable=0">
-  <link rel="shortcut icon" href="img/favicon.ico" />
-  <meta property="og:title" content="OpenToonz" />
-  <meta property="og:type" content="website" />
-  <meta property="og:description" content="OpenToonz - アニメーション制作ツールのオープンソースプロジェクト" />
-  <meta property="og:url" content="https://opentoonz.github.io/" />
-  <meta property="og:image" content="https://opentoonz.github.io/img/ogp.jpg" />
-  <meta property="og:site_name" content="OpenToonz" />
-  <meta property="og:locale" content="ja_JP" />
-  <link rel="stylesheet" href="css/reset.css" />
-  <link rel="stylesheet" href="https://mplus-fonts.osdn.jp/webfonts/basic_latin/mplus_webfonts.css">
-  <link rel="stylesheet" href="https://mplus-fonts.osdn.jp/webfonts/general-j/mplus_webfonts.css">
-  <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="css/style.css" />
+	<meta charset="UTF-8">
+	<title>OpenToonz</title>
+	<meta name="description" content="OpenToonz - アニメーション制作ツールのオープンソースプロジェクト" />
+	<meta name="keywords" content="ドワンゴ,dwango,アニメーションツール" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1,user-scalable=0">
+	<link rel="shortcut icon" href="./img/favicon.ico" />
+	<meta property="og:title" content="OpenToonz" />
+	<meta property="og:type" content="website" />
+	<meta property="og:description" content="OpenToonz - アニメーション制作ツールのオープンソースプロジェクト" />
+	<meta property="og:url" content="https://opentoonz.github.io/" />
+	<meta property="og:image" content="https://opentoonz.github.io/img/ogp.jpg" />
+	<meta property="og:site_name" content="OpenToonz" />
+	<meta property="og:locale" content="ja_JP" />
+	<link rel="stylesheet" href="css/reset.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="./js/common.js"></script>
+	<script src="./js/heightLine.js"></script>
+	<script src="./js/jquery.flexslider.js"></script>
+	<script>
+	$(window).load(function() {
+		$('.slider').flexslider();
+	});
+	</script>
 </head>
 
 <body>
-  <header class="clearfix">
-    <h1>OpenToonz</h1>
-    <ul class="sns clearfix">
-      <li class="tw">
-        <a href="http://twitter.com/share?text=【OpenToonz】アニメーション制作ツールのオープンソースプロジェクト&amp;url=https://opentoonz.github.io/&amp;hashtags=opentoonz" onclick="window.open(encodeURI(decodeURI(this.href)), 'tweetwindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1' ); return false;" target="_blank"><i class="fa fa-twitter">Twitter</a>
-      </li>
-      <li class="fb">
-        <a href="http://www.facebook.com/share.php?u=https://opentoonz.github.io/" onclick="window.open(encodeURI(decodeURI(this.href)), 'FBwindow', 'width=554, height=470, menubar=no, toolbar=no, scrollbars=yes'); return false;" rel="nofollow"><i class="fa fa-facebook">Facebook</a>
-      </li>
-    </ul>
-  </header>
-  <div class="contents">
-    <section class="main">
-      <h1>OpenToonz</h1>
-      <p class="title">アニメーション制作ツールの
-        <br> オープンソースプロジェクト
-      </p>
-      <p class="date">2016年3月26日（土）スタート</p>
-    </section>
-    <section class="detail pc">
-      <h2>DETAIL</h2>
-      <h3>詳しくはAnimeJapan2016にて</h3>
-      <p><a href="http://anime-japan.jp/creation/creation_stage/" target="_blank">クリエイションステージ：3月26日（土）11:00〜</a></p>
-      <p><a href="http://www.kadokawa.co.jp/aj-info/" target="_blank">メインエリア：J41 KADOKAWAブース内ドワンゴエリア</a></p>
-    </section>
-    <section class="detail sp">
-      <h2>DETAIL</h2>
-      <h3>詳しくはAnimeJapan2016にて</h3>
-      <p><a href="http://anime-japan.jp/creation/creation_stage/" target="_blank">クリエイションステージ：<br>3月26日（土）11:00〜</a></p>
-      <p><a href="http://www.kadokawa.co.jp/aj-info/" target="_blank">メインエリア：<br>J41 KADOKAWAブース内<br>ドワンゴエリア</a></p>
-    </section>
-  </div>
-  <footer>
-    <a href="http://dwango.co.jp/" target="_blank" class="company">&gt;&nbsp;COMPANY</a>
-    <p class="copyright">&nbsp;&copy;&nbsp;DWANGO&nbsp;Co.,&nbsp;Ltd.</p>
-  </footer>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<header>
+		<div class="inner clearfix">
+			<h1>OpenToonz</h1>
+			<div class="link clearfix">
+				<nav>
+					<ul class="clearfix">
+						<li class="about"><a href="#about">OpenToonzとは</a></li>
+						<li class="point"><a href="#point">OpenToonzの特徴</a></li>
+						<li class="download"><a href="#download">ダウンロード</a></li>
+						<li class="faq"><a href="#faq">FAQ</a></li>
+					</ul>
+				</nav>
+				<ul class="sns clearfix">
+					<li class="fb"><a href="http://www.facebook.com/share.php?u=https://opentoonz.github.io/" onclick="window.open(encodeURI(decodeURI(this.href)), 'FBwindow', 'width=554, height=470, menubar=no, toolbar=no, scrollbars=yes'); return false;" rel="nofollow"><i class="fa fa-facebook">Facebook</i></a></li>
+					<li class="tw"><a href="http://twitter.com/share?text=【OpenToonz】アニメーション制作ツールのオープンソースプロジェクト&amp;url=https://opentoonz.github.io/&amp;hashtags=opentoonz" onclick="window.open(encodeURI(decodeURI(this.href)), 'tweetwindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1' ); return false;" target="_blank"><i class="fa fa-twitter">Twitter</i></a></li>
+				</ul>
+				<div class="lang">
+					<a href="./e/index.html">English</a>
+				</div>
+			</div>
+		</div>
+	</header>
 
-    ga('create', 'UA-75284004-1', 'auto');
-    ga('send', 'pageview');
+	<section id="cover">
+		<div class="inner">
+			<h1>OpenToonz</h1>
+			<h2>皆で開発して、皆で創る</h2>
+			<p>オープンソースのアニメーション制作ソフトウェア</p>
+		</div>
+	</section>
 
-  </script>
+	<section id="about">
+		<h1><span>OpenToonzとは</span></h1>
+		<ul class="list">
+			<li>2Dアニメーション制作ソフトウェアです。
+			<p class="notes">イタリアのDigital Video社が開発し、株式会社スタジオジブリのカスタマイズを経て、<br>
+				ジブリ作品の制作に長年使われてきたソフトウェア「Toonz」が基になっています。<br>
+				ドワンゴはDigital Video社とスタジオジブリの協力を得て、このOpenToonzのプロジェクトを開始します。</p></li>
+			<li>商用・非商用問わず、どなたでも無料で使用することができます。</li>
+			<li>オープンソースで公開され、自由にソースコードを改変することができます。</li>
+			<li>映像表現に関する学術研究とアニメ制作の現場とをつなぐ、あたらしいプラットフォームを目指しています。</li>
+		</ul>
+	</section>
+
+	<section id="point">
+		<h1><span>OpenToonzの特徴</span></h1>
+		<div class="contents">
+			<div class="inner clearfix">
+				<div class="point01 heightLine-01 card">
+					<h2><span>スタジオジブリでの使用実績</span></h2>
+					<div class="block">
+						<p>OpenToonzの元になったソフトウェア「Toonz」は、「もののけ姫」の一部のカットで使用されて以降、ほぼ全てのスタジオジブリ作品の仕上、色指定、撮影工程*に使われています。「借りぐらしのアリエッティ」以降は社内でもカスタマイズが行われ、制作スタイルに合わせてより使いやすく進化を重ねてきました。</p>
+						<dl class="notes">
+							<dt>※仕上、色指定、撮影</dt>
+							<dd>手描きの絵をスキャンするところから、最終的な画面を組み上げるところまでの各工程。</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="point02 heightLine-01 card">
+					<h2><span>オープンソース／どなたでも無料で使用可能</span></h2>
+					<div class="block">
+						<p>OpenToonzはライセンス*に基づき、自由にソースコードを改変することができます。商用・非商用問わず、無料で、どなたでも使用することができます。プロの現場はもちろん、個人制作、学校教育の場など、アニメーション制作に関わるあらゆる場でお使いいただけます。</p>
+						<p class="notes">※ ソフトウェア（インストーラー）のライセンスはOpenToonz利用規約をご参照ください。ソースコードは修正BSDライセンスで公開しています。</p>
+					</div>
+				</div>
+				<div class="point03 heightLine-02 card">
+					<h2><span>制作現場のニーズに対応した機能</span></h2>
+					<div class="block">
+						<p>OpenToonzには、スタジオジブリで社内開発された、アニメーション制作に特化したスキャンツール「GTS」をはじめとして、制作現場の声を聞いて改良を重ねてきた、他のアニメーション制作ソフトにはない機能を備えています。詳細については、下記の「OpenToonzならではの機能をご紹介」をご覧下さい。</p>
+					</div>
+				</div>
+				<div class="point04 heightLine-02 card">
+					<h2><span>エフェクト開発キット（SDK）</span></h2>
+					<div class="block">
+						<p>ドワンゴは、OpenToonz向けの画像処理用プラグインエフェクトSDKを新たに開発しました。このSDKを使って、どなたでもOpenToonzにエフェクトを追加できます。映像表現の研究者であれば、成果をプラグインエフェクトとして開発・公開することで、現場からの迅速なフィードバックを得ることができます。</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="effect">
+		<h1><span>ドワンゴが開発したエフェクトを同時公開</span></h1>
+		<p>プラグインエフェクトSDKを用いて、ドワンゴの研究チームが開発したエフェクトを公開します。<br>
+		ディープラーニングの技術を応用した、絵の画風を自動変換するエフェクトや、<br>
+		制作環境がデジタル化される以前の、往年の作品に見られるようなケレン味のある入射光を<br>
+		生成するエフェクトなどがあります。</p>
+		<div class="contents clearfix">
+			<div class="effect01 card">
+				<h2><span>画風の変換</span></h2>
+				<img src="./img/effect_img01.png" alt="">
+			</div>
+			<div class="effect02 card">
+				<h2><span>入射光表現</span></h2>
+				<img src="./img/effect_img02.png" alt="">
+			</div>
+			<div class="effect03 card">
+				<h2><span>波ガラス表現</span></h2>
+				<img src="./img/effect_img03.png" alt="">
+			</div>
+		</div>
+	</section>
+
+	<section id="function">
+		<h1><span>OpenToonzならではの機能をご紹介</span></h1>
+		<div class="inner">
+			<div class="slider contents clearfix">
+				<ul class="slides">
+					<li class="function01 card">
+						<div class="detail">
+							<h2><span>スタジオジブリが社内開発したスキャンツール「GTS」</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img01.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>連番スキャンを動画番号に対応付けて<br>効率よく行うことが可能</li>
+										<li>４タイプのスキャンに対応<br>（白黒／カラー、２値化の有／無）</li>
+										<li>スキャン設定が保存可能。これにより、<br>カットの一部を再スキャンする際に作業を再現できる</li>
+										<li>TWAIN規格に対応</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="function02 card">
+						<div class="detail">
+							<h2><span>デジタルペイント</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img02.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>アンチエイリアス付の描線で作業が可能</li>
+										<li>絵とパレットのデータが独立しているので、<br>仮色での塗り作業が簡単</li>
+										<li>高解像度の作画データでも軽い動作</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="function03 card">
+						<div class="detail">
+							<h2><span>撮影</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img03.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>タイムシート型のインタフェースを完備</li>
+										<li>ノードツリーを使ったGUIでエフェクトを簡単に合成</li>
+										<li>解像度（dpi）を考慮した実寸で画像の取扱いが可能<br>（mm等の単位指定）</li>
+										<li>プラグインを使ってさらに多くのエフェクトが利用可能</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="function04 card">
+						<div class="detail">
+							<h2><span>その他</span></h2>
+							<div class="block clearfix">
+								<div class="image">
+									<img src="./img/function_img04.png" alt="">
+								</div>
+								<div class="text">
+									<ul class="list">
+										<li>ラスター／ベクター両方の作画形式に対応</li>
+										<li>カラー２値TGAの連番画像ファイルとOpenToonz形式への相互変換機能を備え、既存ワークフローとの互換性を確保</li>
+										<li>日本語ローカライズ済み</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section id="download">
+		<h1><span>ダウンロードはこちらから</span></h1>
+		<div class="btnarea clearfix">
+			<a href="download/opentoonz.html"><img src="./img/download_btn_opentoonz.png" alt="opentoonz"></a>
+			<a href="download/gts.html"><img src="./img/download_btn_gts.png" alt=""></a>
+			<a href="https://github.com/opentoonz/dwango_opentoonz_plugins"><img src="./img/download_btn_effect.png" alt=""></a>
+			<p>※GTSはWindows版のみの提供となります。</p>
+		</div>
+		<div class="spno">
+			<p>OpenToonz、GTS、エフェクトのダウンロードはPCから行って下さい。</p>
+			<p class="notes">※GTSはWindows版のみの提供となります。</p>
+		</div>
+		<div class="contents clearfix">
+			<div class="download01 card">
+				<h2><span>ユーザー向け</span></h2>
+				<ul class="list">
+					<li>OpenToonzスタートアップマニュアル<br><a href="./document/OpenToonzスタートアップマニュアル_導入編.pdf">導入編</a> <a href="./document/OpenToonzスタートアップマニュアル_仕上編.pdf">仕上編</a> (PDF)</li>
+					<li><a href="./document/GTS取扱説明書.pdf">GTS マニュアル</a> (PDF)</li>
+					<li><a href="https://github.com/opentoonz/opentoonz_plugin_utility/tree/master/doc">エフェクトプラグインのインストールマニュアル</a></li>
+					<li><a href="https://github.com/opentoonz/dwango_opentoonz_plugins/tree/master/doc">ドワンゴ作成の各プラグインのマニュアル</a>
+					<li><a href="https://groups.google.com/forum/#!forum/opentoonz">ユーザーコミュニティ</a></li>
+				</ul>
+			</div>
+			<div class="download02 card">
+				<h2><span>開発者向け</span></h2>
+				<ul class="list">
+					<li><a href="https://github.com/opentoonz/opentoonz">OpenToonz 本体の GitHub リポジトリ</a></li>
+					<li><a href="https://github.com/opentoonz/plugin_sdk">エフェクトプラグイン開発手順</a></li>
+					<li><a href="https://github.com/opentoonz/opentoonz/issues">開発者フォーラム</a></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section id="faq">
+		<h1><span>FAQ</span></h1>
+		<div class="contents">
+			<div class="card">
+				<dl>
+					<dt>推奨環境を教えて下さい。</dt>
+					<dd>
+						<p>OpenToonzを快適にご利用いただくためには、以下の環境が必要です。</p>
+						<div class="clearfix">
+							<div class="os">
+								<h2>Windows</h2>
+								<ul class="list">
+									<li>Microsoft Windows 7 SP1/8.1/10 (64bit必須)</li>
+									<li>Intel Core iシリーズ プロセッサ</li>
+									<li>4GB以上のメモリ</li>
+									<li>500MB以上のストレージ空き容量</li>
+									<li>1280×1024ピクセル以上の<br>解像度を持つディスプレイ</li>
+								</ul>
+							</div>
+							<div class="os">
+								<h2>OS X</h2>
+								<ul class="list">
+									<li>OS X 10.9以上</li>
+									<li>Intel Core iシリーズ プロセッサ</li>
+									<li>4GB以上のメモリ</li>
+									<li>500MB以上のストレージ空き容量</li>
+									<li>1280×1024ピクセル以上の<br>解像度を持つディスプレイ</li>
+								</ul>
+							</div>
+						</div>
+
+						<p>また、GTSを快適にご利用いただくためには、以下の環境が必要です。</p>
+						<ul class="list">
+							<li>Microsoft Windows 7/8.1/10</li>
+							<li>Intel Core iシリーズ プロセッサ</li>
+							<li>2GB以上のメモリ</li>
+							<li>8MB以上のストレージ空き容量</li>
+							<li>TWAIN規格対応スキャナー（ドライバーソフトも含む）<br>※EPSON DS-50000を推奨しています。</li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+
+			<div class="card">
+				<dl>
+					<dt>不具合を発見したり、困ったことが起きた場合はどうしたらよいでしょうか。</dt>
+					<dd>OpenToonzではユーザーの方が問題を解決するための場として、<a href="https://groups.google.com/forum/#!forum/opentoonz">Googleグループ</a>を開設しています。機能改善の要望や、バグ報告など、ユーザー同士のディスカッションにぜひご参加ください。<br>
+					また、開発者・映像研究者の方に向けたフォーラムを、<a href="https://github.com/opentoonz/opentoonz/issues">GitHub上に</a>ご用意しています。<br>
+					開発に関するトピックは、ぜひこちらにお寄せください。</dd>
+				</dl>
+			</div>
+
+			<div class="card">
+				<dl>
+					<dt>取材を申し込みたいのですが。</dt>
+					<dd>
+						<p>OpenToonzに関心をお寄せいただきありがとうございます。取材依頼につきましては、以下にご連絡をお願い致します。</p>
+						<div class="mail">
+							<a href="mailto:dwango-contact@dwango.co.jp">dwango-contact@dwango.co.jp</a>
+						</div>
+						<p>なお、報道関係のお問い合わせ専用アドレスとなりますので、報道関係者以外からのお問い合わせにつきましては、お答えができないことをご了承ください。</p>
+					</dd>
+				</dl>
+			</div>
+		<div class="pagetop"><a href="#">TOP</a></div>
+		</div>
+	</section>
+
+
+	<footer>
+		<div class="inner">
+            <a href="http://dwango.co.jp/" class="company" target="_blank">COMPANY</a>
+			<p class="copyright">&nbsp;&copy;&nbsp;DWANGO&nbsp;Co.,&nbsp;Ltd.</p>
+		</div>
+	</footer>
 </body>
 </html>
