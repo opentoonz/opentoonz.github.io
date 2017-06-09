@@ -193,6 +193,28 @@ section h1 {
   font-weight: normal;
 }
 
+#about .contents {
+  box-sizing: border-box;
+}
+#about .inner {
+  margin: 0 auto;
+  width: 1080px;
+}
+#about .card {
+  float: left;
+  width: 520px;
+}
+#about .card:nth-child(odd) {
+  margin-right: 40px;
+}
+
+#about .left {
+  width: 700px;
+}
+#about .right {
+  width: 300px;
+}
+
 #point {
   margin-bottom: 90px;
 }
@@ -692,6 +714,18 @@ footer .copyright {
   }
   #about .list .notes {
     font-size: 16px;
+  }
+  #about .inner {
+    margin: 0;
+    width: 100%;
+  }
+  #about .card {
+    margin: 0 auto 20px;
+    float: none;
+    width: 400px;
+  }
+  #about .card:nth-child(odd) {
+    margin: 0 auto 20px;
   }
 
   #point {
