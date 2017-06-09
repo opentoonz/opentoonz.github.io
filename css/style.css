@@ -165,7 +165,7 @@ section h1 {
 
 #about {
   margin: 0 auto 90px;
-  width: 800px;
+  /*width: 800px;*/
 }
 #about h1 {
   margin-bottom: 30px;
@@ -191,6 +191,28 @@ section h1 {
 #about .list .notes {
   font-size: 14px;
   font-weight: normal;
+}
+
+#about .contents {
+  box-sizing: border-box;
+}
+#about .inner {
+  margin: 0 auto;
+  width: 1080px;
+}
+#about .card {
+  float: left;
+  width: 520px;
+}
+#about .card:nth-child(odd) {
+  margin-right: 40px;
+}
+
+#about .left {
+  width: 700px;
+}
+#about .right {
+  width: 300px;
 }
 
 #point {
@@ -681,9 +703,6 @@ footer .copyright {
     width: 162px;
     height: 23px;
   }
-  #about .list {
-    margin: 0 20px;
-  }
   #about .list li {
     margin-bottom: 20px;
     font-size: 16px;
@@ -691,6 +710,18 @@ footer .copyright {
   }
   #about .list .notes {
     font-size: 16px;
+  }
+  #about .inner {
+    margin: 0;
+    width: 100%;
+  }
+  #about .card {
+    margin: 0 auto 20px;
+    float: none;
+    width: 400px;
+  }
+  #about .card:nth-child(odd) {
+    margin: 0 auto 20px;
   }
 
   #point {
