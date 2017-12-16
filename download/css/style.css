@@ -80,7 +80,7 @@ header .logo a {
     padding: 19px 21px;
     -webkit-transition: all .3s;
     transition: all .3s;
-    min-width: 280px;
+    min-width: 200px;
 }
 
 .downloadarea .button {
@@ -110,6 +110,20 @@ header .logo a {
 }
 
 .downloadarea .button.mac a:hover {
+    border: 1px solid #506aea;
+    background: #fff;
+    color: #506aea;
+}
+
+.downloadarea .button.linux a {
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #e37c3b;
+    background: #e37c3b;
+    color: #fff;
+}
+
+.downloadarea .button.linux a:hover {
     border: 1px solid #506aea;
     background: #fff;
     color: #506aea;
