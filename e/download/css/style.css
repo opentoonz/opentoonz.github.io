@@ -157,4 +157,20 @@ footer .thanks  {
     padding-top: 12px;
 }
 
+.samplearea {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.samplearea  h2 {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #54963b;
+  text-align: center;
+  display: inline-block;
+  color: #569c3c;
+}
+
+
 
