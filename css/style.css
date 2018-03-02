@@ -30,7 +30,7 @@ header h1 {
 }
 
 header .link {
-  width: 650px;
+  width: 733px;
   float: right;
 }
 header nav {
@@ -70,18 +70,29 @@ header nav .faq a { width: 30px; background-position: 0 -76px; }
 
 header .lang {
   margin-top: 27px;
+  margin-left: 30px;
   float: right;
-  margin-left: 20px;
+}
+
+header .lang li{
+  float: left;
+  margin-left: 5px;
   width: 63px;
   height: 27px;
-  text-indent: -9999px;
-  background: url(../img/lang_e.png) no-repeat;
+  text-indent: -9999px;  
 }
-header .lang a {
+header .lang li a {
   display: block;
 }
-header .lang:hover {
+
+header .lang li.en{ background: url(../img/lang_e.png) no-repeat; }
+header .lang li.en:hover { 
   background: url(../img/lang_e_hv.png) no-repeat;
+  transition: .2s linear;
+}
+header .lang li.es { background: url(../img/lang_es.png) no-repeat; }
+header .lang li.es:hover { 
+  background: url(../img/lang_es_hv.png) no-repeat;
   transition: .2s linear;
 }
 

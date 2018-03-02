@@ -30,7 +30,7 @@ header h1 {
 }
 
 header .link {
-  width: 657px;
+  width: 777px;
   float: right;
 }
 header nav {
@@ -63,10 +63,10 @@ header nav a:hover::after {
   height: 2px;
   transition: width .5s ease;
 }
-header nav .about a { width: 46px; background-position: 0 0; }
-header nav .point a { width: 114px; background-position: 0 -26px; }
-header nav .download a { width: 72px; background-position: 0 -52px; }
-header nav .faq a { width: 30px; background-position: 0 -78px; }
+header nav .about a { width: 71px; background-position: 0 0; }
+header nav .point a { width: 102px; background-position: 0 -26px; }
+header nav .download a { width: 73px; background-position: 0 -52px; }
+header nav .faq a { width: 141px; background-position: 0 -78px; }
 
 header .lang {
   margin-top: 27px;
@@ -85,14 +85,14 @@ header .lang li a {
   display: block;
 }
 
-header .lang li.jp{ background: url(../img/lang_jp.png) no-repeat; }
+header .lang li.jp { background: url(../img/lang_jp.png) no-repeat; }
 header .lang li.jp:hover { 
   background: url(../img/lang_jp_hv.png) no-repeat;
   transition: .2s linear;
 }
-header .lang li.es { background: url(../img/lang_es.png) no-repeat; }
-header .lang li.es:hover { 
-  background: url(../img/lang_es_hv.png) no-repeat;
+header .lang li.en{ background: url(../img/lang_e.png) no-repeat; }
+header .lang li.en:hover { 
+  background: url(../img/lang_e_hv.png) no-repeat;
   transition: .2s linear;
 }
 
@@ -272,10 +272,10 @@ section h1 {
   text-indent: -9999px;
   display: inline-block;
 }
-#point .point01 span { width: 464px; background-position: 0 0; }
+#point .point01 span { width: 484px; background-position: 0 0; }
 #point .point02 span { width: 484px; background-position: 0 -30px; }
-#point .point03 span { width: 377px; background-position: 0 -60px; }
-#point .point04 span { width: 340px; background-position: 0 -90px; }
+#point .point03 span { width: 435px; background-position: 0 -60px; }
+#point .point04 span { width: 367px; background-position: 0 -90px; }
 #point .card .block {
   padding: 30px;
 }
@@ -343,9 +343,9 @@ section h1 {
   text-indent: -9999px;
   display: inline-block;
 }
-#effect .effect01 span { width: 194px; background-position: 0 0; }
-#effect .effect02 span { width: 185px; background-position: 0 -24px; }
-#effect .effect03 span { width: 136px; background-position: 0 -48px; }
+#effect .effect01 span { width: 230px; background-position: 0 0; }
+#effect .effect02 span { width: 208px; background-position: 0 -24px; }
+#effect .effect03 span { width: 190px; background-position: 0 -48px; }
 
 #function {
   margin-bottom: 90px;
@@ -421,9 +421,9 @@ section h1 {
   display: inline-block;
 }
 #function .function01 span { width: 600px; background-position: 0 0; }
-#function .function02 span { width: 206px; background-position: 0 -30px; }
-#function .function03 span { width: 90px; background-position: 0 -60px; }
-#function .function04 span { width: 192px; background-position: 0 -90px; }
+#function .function02 span { width: 153px; background-position: 0 -30px; }
+#function .function03 span { width: 177px; background-position: 0 -60px; }
+#function .function04 span { width: 231px; background-position: 0 -90px; }
 #function .card .block {
   padding: 30px;
 }
@@ -505,12 +505,12 @@ section h1 {
   display: inline-block;
 }
 #download .download01 span {
-  width: 76px;
+  width: 111px;
   background-position: 0 0;
 /*  background-size: 100% auto; */
 }
 #download .download02 span {
-  width: 125px;
+  width: 173px;
   background-position: 0 -24px;
 }
 #download .download01 ul { margin-left: 30px; }
@@ -532,11 +532,11 @@ section h1 {
 }
 
 #faq h1 {
-  width: 83px;
+  width: 318px;
 }
 #faq h1 span {
-  width: 83px;
-  height: 33px;
+  width: 318px;
+  height: 36px;
   display: block;
   background: url(../img/faq_ttl.png) no-repeat;
   background-size: 100% auto;
