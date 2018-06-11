@@ -64,6 +64,13 @@ header .logo a {
     margin-top: 32px;
 }
 
+.rcnotearea  {
+    width: 808px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 51px;
+}
+
 .downloadarea {
     text-align: center;
     margin-top: 51px;
