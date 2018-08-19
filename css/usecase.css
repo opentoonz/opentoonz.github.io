@@ -1,0 +1,173 @@
+@charset "UTF-8";
+
+/*** main ***/
+.usecase_Main_Container {
+  width: 100%;
+  background: #fff;
+  color: #404040;
+}
+.usecase_Main_Inner {
+  width: 80%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/*** section ***/
+.usecase_Section_Container {
+  padding: 90px 0 0;
+}
+
+/*** title ***/
+#usecase > h1 {
+  margin-bottom: 40px;
+  width: 168px;
+}
+#usecase > h1 > span {
+  width: 168px;
+  height: 46px;
+  display: block;
+}
+
+/*** AgeList ***/
+.usecase_AgeList_Container {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+  justify-content: space-between;
+  -ms-flex-pack: justify; /*IE10*/
+  -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-justify-content: space-between; /* Safari6.1以降 */
+  width: 236px;
+  margin: 0 auto 60px;
+  font-size: 24px;
+}
+.usecase_AgeList_AgeDetail a {
+  text-decoration: none;
+  color: #404040;
+}
+
+/*** ProductAgeContent ***/
+.usecase_ProductAgeContent_Container {
+  width: 100%;
+  margin: 0 auto 90px;
+}
+.usecase_productAgeContent_Title {
+  font-size: 28px;
+  color: #54963B;
+  text-align: center;
+  background: none;
+  font-weight: 400;
+  padding-bottom: 0;
+  margin: 0 auto 60px;
+}
+.usecase_productAgeContent_Title::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 60px;
+  background: #54963b;
+  margin: 0 auto 30px;
+}
+
+/*** Works ***/
+.usecase_Works_Container {
+  width: 100%;
+}
+.usecase_Works_Title {
+  width: 100%;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #54963b;
+}
+.usecase_Works_Title h2 {
+  font-size: 36px;
+}
+.usecase_Works_Title p {
+  font-size: 15px;
+}
+.usecase_Works_Title p span a {
+  text-decoration: none;
+  color: #54963b;
+}
+
+/*** WorksDetail ***/
+.usecase_WorksDetail_Container {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 278px;
+  width: 100%;
+  padding-top: 30px;
+}
+
+/*** WorksIntro ***/
+.usecase_WorksIntro_Container {
+  width: 100%;
+  padding-right: 15px;
+}
+.usecase_WorksIntro_Image {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.usecase_WorksIntro_Introduction h3 {
+  padding: 40px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+.usecase_WorksIntro_Introduction h3::before {
+  content: '';
+  width: 1px;
+  height: 24px;
+  border: 1px solid #404040;
+  margin-right: 20px;
+}
+.usecase_WorksIntro_Introduction p {
+  font-size: 16px;
+}
+
+/*** WorksInfo ***/
+.usecase_WorksInfo_Container {
+  width: 100%;
+  padding-left: 10px;
+}
+
+/*** WorksInfoDetail ***/
+.usecase_WorksInfoDetail_Container {
+  width: 100%;
+  margin-bottom: 40px;
+}
+.usecase_WorksInfoDetail_Title {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #404040;
+  margin-bottom: 20px;
+}
+.usecase_WorksInfoDetail_Content {
+  font-size: 16px;
+}
+.usecase_WorksInfoDetail_ExternalLink {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+  align-items: center;
+  -webkit-align-items: center;      /* Safari etc. */
+  -ms-align-items    : center;      /* IE10        */
+}
+.usecase_WorksInfoDetail_ExternalLink a {
+  text-decoration: none;
+  color: #404040;
+}
+.usecase_WorksInfoDetail_ExternalLink::before {
+  content: '';
+  display: inline-block;
+  margin-right: 4px;
+  width: 17px;
+  height: 17px;
+  background: url(../img/usecase_WorksInfoDetail_LinkIcon.png) center center / cover no-repeat;
+}
+.usecase_WorksInfoDetail_Image {
+  width: 160px;
+  height: auto;
+  margin: 10px auto;
+}

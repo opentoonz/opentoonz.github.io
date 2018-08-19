@@ -16,7 +16,7 @@
 	<meta property="og:site_name" content="OpenToonz" />
 	<meta property="og:locale" content="ja_JP" />
 	<link rel="stylesheet" href="css/reset.css" />
-	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/sitewide.css" />
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="./js/common.js"></script>
 	<script src="./js/heightLine.js"></script>
@@ -30,26 +30,25 @@
 
 <body>
 	<header>
-		<div class="inner clearfix">
+		<div class="sitewide_HeaderMenu_Container">
 			<h1>OpenToonz</h1>
-			<div class="link clearfix">
-				<nav>
-					<ul class="clearfix">
-						<li class="about"><a href="#about">OpenToonzとは</a></li>
-						<li class="point"><a href="#point">OpenToonzの特徴</a></li>
-						<li class="download"><a href="#download">ダウンロード</a></li>
-						<li class="faq"><a href="#faq">FAQ</a></li>
-					</ul>
-				</nav>
-				<ul class="sns clearfix">
-					<li class="fb"><a href="http://www.facebook.com/share.php?u=https://opentoonz.github.io/" onclick="window.open(encodeURI(decodeURI(this.href)), 'FBwindow', 'width=554, height=470, menubar=no, toolbar=no, scrollbars=yes'); return false;" rel="nofollow"><i class="fa fa-facebook">Facebook</i></a></li>
-					<li class="tw"><a href="http://twitter.com/share?text=【OpenToonz】アニメーション制作ツールのオープンソースプロジェクト&amp;url=https://opentoonz.github.io/&amp;hashtags=opentoonz" onclick="window.open(encodeURI(decodeURI(this.href)), 'tweetwindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1' ); return false;" target="_blank"><i class="fa fa-twitter">Twitter</i></a></li>
+			<nav>
+				<ul class="sitewide_HeaderMenu_MenuList">
+					<li class="about"><a href="#about">OpenToonzとは</a></li>
+					<li class="point"><a href="#point">OpenToonzの特徴</a></li>
+					<li class="download"><a href="#download">ダウンロード</a></li>
+					<li class="faq"><a href="#faq">FAQ</a></li>
+					<li class="faq"><a href="">採用事例</a></li>
 				</ul>
-				<ul class="lang">
-					<li class="en"><a href="./e/index.html">English</a></li>
-					<li class="es"><a href="./es/index.html">Español</a></li>
-				</ul>
-			</div>
+			</nav>
+			<ul class="sitewide_HeaderMenu_LangList">
+				<li class="sitewide_HeaderMenu_LangDetail"><a href="./e/index.html">English</a></li>
+				<li class="sitewide_HeaderMenu_LangDetail"><a href="./es/index.html">Español</a></li>
+			</ul>
+			<ul class="sitewide_HeaderMenu_SnsList">
+				<li class="fb"><a href="http://www.facebook.com/share.php?u=https://opentoonz.github.io/" onclick="window.open(encodeURI(decodeURI(this.href)), 'FBwindow', 'width=554, height=470, menubar=no, toolbar=no, scrollbars=yes'); return false;" rel="nofollow"><i class="fa fa-facebook">Facebook</i></a></li>
+				<li class="tw"><a href="http://twitter.com/share?text=【OpenToonz】アニメーション制作ツールのオープンソースプロジェクト&amp;url=https://opentoonz.github.io/&amp;hashtags=opentoonz" onclick="window.open(encodeURI(decodeURI(this.href)), 'tweetwindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1' ); return false;" target="_blank"><i class="fa fa-twitter">Twitter</i></a></li>
+			</ul>
 		</div>
 	</header>
 
@@ -123,7 +122,7 @@
 	</section>
 
 	<section id="effect">
-		<h1><span>ドワンゴが開発したエフェクトを同時公開</span></h1>
+		<h1><span>エフェクトを同時公開</span></h1>
 		<p>プラグインエフェクトSDKを用いて、ドワンゴの研究チームが開発したエフェクトを公開します。<br>
 		ディープラーニングの技術を応用した、絵の画風を自動変換するエフェクトや、<br>
 		制作環境がデジタル化される以前の、往年の作品に見られるようなケレン味のある入射光を<br>
@@ -329,9 +328,35 @@
 
 
 	<footer>
-		<div class="inner">
-            <a href="http://dwango.co.jp/" class="company" target="_blank">COMPANY</a>
-			<p class="copyright">&nbsp;&copy;&nbsp;DWANGO&nbsp;Co.,&nbsp;Ltd.</p>
+		<div class="sitewide_Footer_Container">
+			<div class="sitewide_Footer_Inner">
+				<span class="sitewide_Footer_Company">
+					<svg width="14px" height="14px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<defs>
+							<polygon id="path-1" points="0 0 15.9999605 0 15.9999605 16 0 16"></polygon>
+						</defs>
+						<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<g id="ICON" transform="translate(-81.000000, -61.000000)">
+								<g id="linkIcon" transform="translate(81.000000, 61.000000)">
+									<g id="Group-3">
+										<mask id="mask-2" fill="white">
+											<use xlink:href="#path-1"></use>
+										</mask>
+										<g id="Clip-2"></g>
+										<path d="M14.5777383,13.8665877 C14.5777383,14.2616494 14.2616889,14.5778963 13.8666272,14.5778963 L2.13329383,14.5778963 C1.7382321,14.5778963 1.42218272,14.2616494 1.42218272,13.8665877 L1.42218272,2.13345185 C1.42218272,1.73839012 1.7382321,1.42214321 2.13329383,1.42214321 L6.75551605,1.42214321 L6.75551605,-7.90123457e-05 L2.13329383,-7.90123457e-05 C0.948108642,-7.90123457e-05 -3.95061728e-05,0.948266667 -3.95061728e-05,2.13345185 L-3.95061728e-05,13.8665877 C-3.95061728e-05,15.0517728 0.948108642,16.0001185 2.13329383,16.0001185 L13.8666272,16.0001185 C15.0518123,16.0001185 15.9999605,15.0517728 15.9999605,13.8665877 L15.9999605,9.24456296 L14.5777383,9.24456296 L14.5777383,13.8665877 Z"
+										 id="Fill-1" fill="#FFFFFF" mask="url(#mask-2)"></path>
+									</g>
+									<g id="Group-6" transform="translate(7.901235, 0.000000)" fill="#FFFFFF">
+										<polygon id="Fill-4" points="1.34317037 -1.97530864e-05 1.34317037 1.42220247 5.6690963 1.42220247 0.0789728395 7.01232593 1.08638025 8.01973333 6.6765037 2.42960988 6.6765037 6.7555358 8.09872593 6.7555358 8.09872593 -1.97530864e-05"></polygon>
+									</g>
+								</g>
+							</g>
+						</g>
+					</svg>
+					<a href="http://dwango.co.jp/" target="_blank">COMPANY</a>
+				</span>
+				<p class="sitewide_Footer_Copyright">&nbsp;&copy;&nbsp;DWANGO&nbsp;Co.,&nbsp;Ltd.</p>
+			</div>
 		</div>
 	</footer>
   <script>
