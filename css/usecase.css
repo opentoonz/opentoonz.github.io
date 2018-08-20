@@ -7,7 +7,7 @@
   color: #404040;
 }
 .usecase_Main_Inner {
-  width: 80%;
+  width: 90%;
   max-width: 1080px;
   margin: 0 auto;
 }
@@ -170,4 +170,87 @@
   width: 160px;
   height: auto;
   margin: 10px auto;
+}
+
+@media (max-width: 680px) {
+  /*** main ***/
+  .usecase_Main_Container {
+    width: 100%;
+  }
+  .usecase_Main_Inner {
+    width: 100%;
+    padding: 0 20px;
+  }
+  /*** section ***/
+  .usecase_Section_Container {
+    padding: 50px 0 0;
+  }
+  #usecase > h1 {
+    margin-bottom: 20px;
+    width: 116px;
+  }
+  #usecase h1 span {
+    width: 116px;
+    height: 36px;
+  }
+
+  /*** AgeList ***/
+  .usecase_AgeList_Container {
+    display: none;
+  }
+
+  /*** productAgeContent ***/
+  .usecase_productAgeContent_Title {
+    font-size: 18px;
+    margin: 0 auto 60px;
+  }
+  .usecase_productAgeContent_Title::before  {
+    height: 24px;
+    margin: 0 auto 15px;
+  }
+
+  /*** Works ***/
+  .usecase_Works_Title h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  .usecase_Works_Title p {
+    font-size: 14px;
+  }
+
+  /*** WorksDetail ***/
+  .usecase_WorksDetail_Container {
+    display: block;
+    padding-top: 20px;
+  }
+
+  /*** WorksIntro ***/
+  .usecase_WorksIntro_Container {
+    padding-right: 0;
+    margin-bottom: 35px;
+  }
+  .usecase_WorksIntro_Image {
+    margin-bottom: 10px;
+  }
+  .usecase_WorksIntro_Introduction h3 {
+    font-size: 20px;
+    padding: 30px 0;
+  }
+  .usecase_WorksIntro_Introduction h3::before {
+    height: 20px;
+  }
+
+  /*** WorksInfo ***/
+  .usecase_WorksInfo_Container {
+    padding-left: 0;
+  }
+
+  /*** WorksInfoDetail ***/
+  .usecase_WorksInfoDetail_Container {
+    margin-bottom: 35px;
+  }
+  .usecase_WorksInfoDetail_Title {
+    margin-bottom: 15px;
+  }
 }
