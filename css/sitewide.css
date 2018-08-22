@@ -656,8 +656,12 @@ section h1 {
 .pagetop a {
   color: #fff;
   text-decoration: none;
-  padding-left: 20px;
-  background: url(../img/pagetop_arrow.png) no-repeat left center;
+}
+.pagetop a::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f106";
+  font-weight: 900;
+  margin-right: 8px;
 }
 
 /*** footer ***/
@@ -750,7 +754,6 @@ section h1 {
     margin: 19px auto 0;
     width: 30px;
     height: 22px;
-
   }
   #nav-open span, #nav-open span:before, #nav-open span:after {
     position: relative;
@@ -812,7 +815,25 @@ section h1 {
     height: 65px;
     border-bottom: 1px solid #fff;
   }
-  .sitewide_SpMenuList_Container a {
+  .sitewide_SpMenuList_Container:last-child, .sitewide_SpMenuList_Container:nth-last-child(2) {
+    border-bottom: none;
+  }
+  .sitewide_SpMenuList_Container:first-child {
+    display: flex;
+    display: -ms-flexbox; /* IE10 */
+    display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+    display: -webkit-flex; /* Safari6.1以降 */
+    align-items: center;
+    -ms-flex-align: center; /*IE10*/
+    -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+    -webkit-align-items: center; /* Safari6.1以降 */
+    justify-content: space-between;
+    -ms-flex-pack: justify; /*IE10*/
+    -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+    -webkit-justify-content: space-between; /* Safari6.1以降 */
+    padding: 15px;
+  }
+  .sitewide_SpMenuList_Container > a {
     display: inline-block;
     text-decoration: none;
     color: #fff;
@@ -824,7 +845,88 @@ section h1 {
     position: relative;
     width: 25px;
     height: 25px;
-    margin-right: 16px;
+  }
+  .sitewide_SpMenuList_ClosedButton::after, .sitewide_SpMenuList_ClosedButton::before {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 0;
+    width: 25px;
+    border-top: solid 3px #fff;
+    border-radius: 5px;
+  }
+  .sitewide_SpMenuList_ClosedButton::after {
+    transform: skewY(45deg);
+  }
+  .sitewide_SpMenuList_ClosedButton::before {
+    transform: skewY(-45deg);
+  }
+  .sitewide_SpMenuList_Logo {
+    width: 35px;
+    height: 35px;
+  }
+  .sitewide_SpMenuList_Logo svg {
+    width: 35px;
+    height: 35px;
+  }
+  .sitewide_SpMenuGrid_Container {
+    width: 100%;
+    height: 60px;
+    padding: 10px 10px 0;
+    display: flex;
+    display: -ms-flexbox; /* IE10 */
+    display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+    display: -webkit-flex; /* Safari6.1以降 */
+  }
+  .sitewide_SpMenuGrid_Cell {
+    width: 50%;
+    border: 1px solid #C9C7CA;
+    background: #fff;
+  }
+  .sitewide_SpMenuGrid_Cell:first-child {
+    margin-right: 5px;
+  }
+  .sitewide_SpMenuGrid_Cell:nth-child(2) {
+    margin-left: 5px;
+  }
+  .sitewide_SpMenuGrid_Cell a {
+    display: inline-block;
+    color: #404040;
+    text-decoration: none;
+    line-height: 50px;
+    width: 100%;
+    height: 50px;
+  }
+  .sitewite_SpMenuSns_Facebook, .sitewide_SpMenuSns_Twitter {
+    display: flex;
+    display: -ms-flexbox; /* IE10 */
+    display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+    display: -webkit-flex; /* Safari6.1以降 */
+    align-items: center;
+    -ms-flex-align: center; /*IE10*/
+    -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+    -webkit-align-items: center; /* Safari6.1以降 */
+    margin: 0 auto;
+  }
+  .sitewide_SpMenuSns_Twitter {
+    width: 80px;
+  }
+  .sitewite_SpMenuSns_Facebook {
+    width: 67px;
+  }
+  .sitewide_SpMenuSns_Twitter::before {
+    font-family: "Font Awesome 5 Brands";
+    display: block;
+    content: "\f099";
+    color: #32a7e0;
+    margin-right: 8px;
+  }
+  .sitewite_SpMenuSns_Facebook::before {
+    font-family: "Font Awesome 5 Brands";
+    display: block;
+    content: "\f09a";
+    color: #3c5a99;
+    margin-right: 8px;
   }
 
 
