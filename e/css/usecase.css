@@ -20,10 +20,10 @@
 /*** title ***/
 #usecase > h1 {
   margin-bottom: 40px;
-  width: 168px;
+  width: 350px;
 }
 #usecase > h1 > span {
-  width: 168px;
+  width: 350px;
   height: 46px;
   display: block;
 }
