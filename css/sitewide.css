@@ -684,12 +684,7 @@ section h1 {
   left: 15px;
   padding-left: 20px;
 }
-.sitewide_Footer_Company svg {
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  vertical-align: baseline;
-}
+
 .sitewide_Footer_Company a {
   display: inline-block;
   color: #fff;
@@ -697,6 +692,13 @@ section h1 {
   height: 14px;
   vertical-align: baseline;
   margin-left: 4px;
+}
+
+.sitewide_Footer_Company a::before {
+  font-family: "Font Awesome 5 Free";
+  content: '\f35d';
+  font-weight: 900;
+  margin-right: 4px;
 }
 
 
@@ -848,12 +850,13 @@ section h1 {
   }
   .sitewide_SpMenuList_ClosedButton::after, .sitewide_SpMenuList_ClosedButton::before {
     position: absolute;
+    display: block;
     content: '';
     top: 50%;
     left: 0;
     width: 25px;
+    height: 1px;
     border-top: solid 3px #fff;
-    border-radius: 5px;
   }
   .sitewide_SpMenuList_ClosedButton::after {
     transform: skewY(45deg);

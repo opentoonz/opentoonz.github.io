@@ -86,6 +86,7 @@
 /*** Works ***/
 .usecase_Works_Container {
   width: 100%;
+  margin-bottom: 80px;
 }
 .usecase_Works_Title {
   width: 100%;
@@ -102,11 +103,20 @@
   text-decoration: none;
   color: #54963b;
 }
+.usecase_Works_Title p span a::before {
+  font-family: "Font Awesome 5 Free";
+  content: '\f35d';
+  font-weight: 900;
+  margin-right: 4px;
+}
 
 /*** WorksDetail ***/
 .usecase_WorksDetail_Container {
   display: grid;
+  display: -ms-grid;
   grid-template-rows: 1fr;
+  -ms-grid-rows: auto;
+  -ms-grid-columns: 1fr 278px;
   grid-template-columns: 1fr 278px;
   width: 100%;
   padding-top: 30px;
@@ -116,6 +126,21 @@
 .usecase_WorksIntro_Container {
   width: 100%;
   padding-right: 15px;
+}
+.usecase_WorksIntro_ImageGrid {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+}
+.usecase_WorksIntro_ImageCell {
+  width: 50%;
+}
+.usecase_WorksIntro_ImageCell:first-child {
+  padding-right: 5px;
+}
+.usecase_WorksIntro_ImageCell:nth-child(2) {
+  padding-left: 5px;
 }
 .usecase_WorksIntro_Image {
   width: 100%;
@@ -139,8 +164,11 @@
 
 /*** WorksInfo ***/
 .usecase_WorksInfo_Container {
+  -ms-grid-column: 2;
+  -ms-grid-row: 1;
   width: 100%;
   padding-left: 10px;
+
 }
 
 /*** WorksInfoDetail ***/
@@ -158,31 +186,33 @@
 .usecase_WorksInfoDetail_Content {
   font-size: 16px;
 }
-.usecase_WorksInfoDetail_ExternalLink {
-  display: flex;
-  display: -ms-flexbox; /* IE10 */
-  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
-  display: -webkit-flex; /* Safari6.1以降 */
-  align-items: center;
-  -webkit-align-items: center;      /* Safari etc. */
-  -ms-align-items    : center;      /* IE10        */
-}
+
 .usecase_WorksInfoDetail_ExternalLink a {
   text-decoration: none;
   color: #404040;
 }
 .usecase_WorksInfoDetail_ExternalLink::before {
-  content: '';
-  display: inline-block;
+  font-family: "Font Awesome 5 Free";
+  content: '\f35d';
+  font-weight: 900;
   margin-right: 4px;
-  width: 17px;
-  height: 17px;
-  background: url(../img/usecase_WorksInfoDetail_LinkIcon.png) center center / cover no-repeat;
 }
 .usecase_WorksInfoDetail_Image {
   width: 160px;
   height: auto;
   margin: 10px auto;
+}
+
+/*** Staff ***/
+.usecase_Staff_Container {
+  width: 100%;
+  margin-bottom: 8px;
+}
+.usecase_Staff_Title::before {
+  font-family: "Font Awesome 5 Free";
+  content: '\f0c8';
+  font-weight: 900;
+  margin-right: 4px;
 }
 
 /*** pagetop ***/
@@ -252,6 +282,18 @@
     padding-right: 0;
     margin-bottom: 35px;
   }
+  .usecase_WorksIntro_ImageGrid {
+    display: block;
+  }
+  .usecase_WorksIntro_ImageCell {
+    width: 100%;
+  }
+  .usecase_WorksIntro_ImageCell:first-child {
+    padding-right: 0;
+  }
+  .usecase_WorksIntro_ImageCell:nth-child(2) {
+    padding-left: 0;
+  }
   .usecase_WorksIntro_Image {
     margin-bottom: 10px;
   }
@@ -281,8 +323,8 @@
   position: static;
   padding: 0 10px;
 }
-
 .pagetop a {
   color: #404040;
 }
+
 }
