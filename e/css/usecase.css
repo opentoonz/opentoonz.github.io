@@ -20,10 +20,10 @@
 /*** title ***/
 #usecase > h1 {
   margin-bottom: 40px;
-  width: 350px;
+  width: 500px;
 }
 #usecase > h1 > span {
-  width: 350px;
+  width: 500px;
   height: 46px;
   display: block;
 }
@@ -129,12 +129,13 @@
 }
 .usecase_WorksIntro_ImageGrid {
   display: flex;
+  flex-direction: var(--direction, row);
   display: -ms-flexbox; /* IE10 */
   display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
   display: -webkit-flex; /* Safari6.1以降 */
 }
 .usecase_WorksIntro_ImageCell {
-  width: 50%;
+  width: var(--width, 50%);
 }
 .usecase_WorksIntro_ImageCell:first-child {
   padding-right: 5px;
@@ -160,6 +161,29 @@
 }
 .usecase_WorksIntro_Introduction p {
   font-size: 16px;
+}
+
+/** embed YouTube's iframe ***/
+
+.usecase_iframe-content-wrap {
+  display: -webkit-box;
+  display: box;
+}
+.usecase_iframe-content-block {
+  -webkit-box-flex: 1;
+  box-flex: 1;
+}
+.usecase_iframe-content {
+  position: relative;
+  width: 100%;
+  padding: 57% 0 0 0;
+}
+.usecase_iframe-content iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /*** WorksInfo ***/
