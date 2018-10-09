@@ -1,0 +1,354 @@
+@charset "UTF-8";
+
+/*** main ***/
+.usecase_Main_Container {
+  width: 100%;
+  background: #fff;
+  color: #404040;
+}
+.usecase_Main_Inner {
+  width: 90%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/*** section ***/
+.usecase_Section_Container {
+  padding: 90px 0 0;
+}
+
+/*** title ***/
+#usecase > h1 {
+  margin-bottom: 40px;
+  width: 168px;
+}
+#usecase > h1 > span {
+  width: 168px;
+  height: 46px;
+  display: block;
+}
+
+/*** AgeList ***/
+.usecase_AgeList_Container {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+  justify-content: space-between;
+  -ms-flex-pack: justify; /*IE10*/
+  -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-justify-content: space-between; /* Safari6.1以降 */
+  width: 236px;
+  margin: 0 auto 60px;
+  font-size: 24px;
+}
+.usecase_AgeList_AgeDetail a {
+  text-decoration: none;
+  color: #404040;
+}
+.usecase_AgeList_AgeDetail a::after {
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #579c3b;
+  content: '';
+}
+
+.usecase_AgeList_AgeDetail a:hover::after {
+  width: 100%;
+  height: 2px;
+  transition: width .5s ease;
+}
+
+/*** ProductAgeContent ***/
+.usecase_ProductAgeContent_Container {
+  width: 100%;
+  margin: 0 auto 90px;
+}
+.usecase_productAgeContent_Title {
+  font-size: 28px;
+  color: #54963B;
+  text-align: center;
+  background: none;
+  font-weight: 400;
+  padding-bottom: 0;
+  margin: 0 auto 60px;
+}
+.usecase_productAgeContent_Title::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 60px;
+  background: #54963b;
+  margin: 0 auto 30px;
+}
+
+/*** Works ***/
+.usecase_Works_Container {
+  width: 100%;
+  margin-bottom: 80px;
+}
+.usecase_Works_Title {
+  width: 100%;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #54963b;
+}
+.usecase_Works_Title h2 {
+  font-size: 36px;
+}
+.usecase_Works_Title p {
+  font-size: 15px;
+}
+.usecase_Works_Title p span a {
+  text-decoration: none;
+  color: #54963b;
+}
+.usecase_Works_Title p span a::before {
+  font-family: "Font Awesome 5 Free";
+  content: '\f35d';
+  font-weight: 900;
+  margin-right: 4px;
+}
+
+/*** WorksDetail ***/
+.usecase_WorksDetail_Container {
+  display: grid;
+  display: -ms-grid;
+  grid-template-rows: 1fr;
+  -ms-grid-rows: auto;
+  -ms-grid-columns: 1fr 278px;
+  grid-template-columns: 1fr 278px;
+  width: 100%;
+  padding-top: 30px;
+}
+
+/*** WorksIntro ***/
+.usecase_WorksIntro_Container {
+  width: 100%;
+  padding-right: 15px;
+}
+.usecase_WorksIntro_ImageGrid {
+  display: flex;
+  flex-direction: var(--direction, row);
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+}
+.usecase_WorksIntro_ImageCell {
+  width: var(--width, 50%);
+}
+.usecase_WorksIntro_ImageCell:first-child {
+  padding-right: 5px;
+}
+.usecase_WorksIntro_ImageCell:nth-child(2) {
+  padding-left: 5px;
+}
+.usecase_WorksIntro_Image {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.usecase_WorksIntro_Introduction h3 {
+  padding: 40px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+.usecase_WorksIntro_Introduction h3::before {
+  content: '';
+  width: 1px;
+  height: 24px;
+  border: 1px solid #404040;
+  margin-right: 20px;
+}
+.usecase_WorksIntro_Introduction p {
+  font-size: 16px;
+}
+
+/** embed YouTube's iframe ***/
+
+.usecase_iframe-content-wrap {
+  display: -webkit-box;
+  display: box;
+}
+.usecase_iframe-content-block {
+  -webkit-box-flex: 1;
+  box-flex: 1;
+}
+.usecase_iframe-content {
+  position: relative;
+  width: 100%;
+  padding: 57% 0 0 0;
+}
+.usecase_iframe-content iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*** WorksInfo ***/
+.usecase_WorksInfo_Container {
+  -ms-grid-column: 2;
+  -ms-grid-row: 1;
+  width: 100%;
+  padding-left: 10px;
+
+}
+
+/*** WorksInfoDetail ***/
+.usecase_WorksInfoDetail_Container {
+  width: 100%;
+  margin-bottom: 40px;
+}
+.usecase_WorksInfoDetail_Title {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #404040;
+  margin-bottom: 20px;
+}
+.usecase_WorksInfoDetail_Content {
+  font-size: 16px;
+}
+
+.usecase_WorksInfoDetail_ExternalLink a {
+  text-decoration: none;
+  color: #404040;
+}
+.usecase_WorksInfoDetail_ExternalLink::before {
+  font-family: "Font Awesome 5 Free";
+  content: '\f35d';
+  font-weight: 900;
+  margin-right: 4px;
+}
+.usecase_WorksInfoDetail_Image {
+  width: 160px;
+  height: auto;
+  margin: 10px auto;
+}
+
+/*** Staff ***/
+.usecase_Staff_Container {
+  width: 100%;
+  margin-bottom: 8px;
+}
+.usecase_Staff_Title::before {
+  font-family: "Font Awesome 5 Free";
+  content: '\f0c8';
+  font-weight: 900;
+  margin-right: 4px;
+}
+
+/*** pagetop ***/
+.pagetop {
+  position: static;
+}
+
+.pagetop a {
+  color: #404040;
+}
+
+@media (max-width: 680px) {
+  /*** main ***/
+  .usecase_Main_Container {
+    width: 100%;
+  }
+  .usecase_Main_Inner {
+    width: 100%;
+    padding: 0 20px;
+  }
+  /*** section ***/
+  .usecase_Section_Container {
+    padding: 50px 0 0;
+  }
+  #usecase > h1 {
+    margin-bottom: 20px;
+    width: 116px;
+  }
+  #usecase h1 span {
+    width: 116px;
+    height: 36px;
+  }
+
+  /*** AgeList ***/
+  .usecase_AgeList_Container {
+    display: none;
+  }
+
+  /*** productAgeContent ***/
+  .usecase_productAgeContent_Title {
+    font-size: 18px;
+    margin: 0 auto 60px;
+  }
+  .usecase_productAgeContent_Title::before  {
+    height: 24px;
+    margin: 0 auto 15px;
+  }
+
+  /*** Works ***/
+  .usecase_Works_Title h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  .usecase_Works_Title p {
+    font-size: 14px;
+  }
+
+  /*** WorksDetail ***/
+  .usecase_WorksDetail_Container {
+    display: block;
+    padding-top: 20px;
+  }
+
+  /*** WorksIntro ***/
+  .usecase_WorksIntro_Container {
+    padding-right: 0;
+    margin-bottom: 35px;
+  }
+  .usecase_WorksIntro_ImageGrid {
+    display: block;
+  }
+  .usecase_WorksIntro_ImageCell {
+    width: 100%;
+  }
+  .usecase_WorksIntro_ImageCell:first-child {
+    padding-right: 0;
+  }
+  .usecase_WorksIntro_ImageCell:nth-child(2) {
+    padding-left: 0;
+  }
+  .usecase_WorksIntro_Image {
+    margin-bottom: 10px;
+  }
+  .usecase_WorksIntro_Introduction h3 {
+    font-size: 20px;
+    padding: 30px 0;
+  }
+  .usecase_WorksIntro_Introduction h3::before {
+    height: 20px;
+  }
+
+  /*** WorksInfo ***/
+  .usecase_WorksInfo_Container {
+    padding-left: 0;
+  }
+
+  /*** WorksInfoDetail ***/
+  .usecase_WorksInfoDetail_Container {
+    margin-bottom: 35px;
+  }
+  .usecase_WorksInfoDetail_Title {
+    margin-bottom: 15px;
+  }
+
+  /*** pagetop ***/
+.pagetop {
+  position: static;
+  padding: 0 10px;
+}
+.pagetop a {
+  color: #404040;
+}
+
+}

@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
 /*** common ***/
+* {
+  box-sizing: border-box;
+}
+
 html {
   height: 100%;
 }
@@ -10,121 +14,185 @@ body {
   font-family: "メイリオ", sans-serif;
 }
 
+img {
+  width: 100%;
+  height: auto;
+}
+
 /*** header ***/
 header {
   height: 75px;
   background: #fff;
 }
-header .inner {
+
+.sitewide_HeaderMenu_Container {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+  align-items: center;
+  -ms-flex-align: center; /*IE10*/
+  -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-align-items: center; /* Safari6.1以降 */
+  justify-content: space-between;
+  -ms-flex-pack: justify; /*IE10*/
+  -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-justify-content: space-between; /* Safari6.1以降 */
+  width: 90%;
+  max-width: 1080px;
   margin: 0 auto;
-  width: 1080px;
+  padding-top: 10px;
 }
 
-header h1 {
-  margin-top: 10px;
-  float: left;
+.sitewide_HeaderMenu_PcLogo {
   width: 54px;
   height: 54px;
-  background: url(../img/header_logo.png) no-repeat;
-  text-indent: -9999px;
+  margin-right: 4px;
 }
 
-header .link {
-  width: 733px;
-  float: right;
+.sitewide_HeaderMenu_PcLogo svg {
+  width: 54px;
+  height: 54px;
 }
-header nav {
-  margin-top: 30px;
-  float: left;
+
+.sitewide_HeaderMenu_SpLogo {
+  display: none;
 }
-header nav li {
-  margin-left: 30px;
-  float: left;
+
+.sitewide_HeaderMenu_MenuList {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+  align-items: center;
+  -ms-flex-align: center; /*IE10*/
+  -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-align-items: center; /* Safari6.1以降 */
+  justify-content: space-between;
+  -ms-flex-pack: justify; /*IE10*/
+  -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-justify-content: space-between; /* Safari6.1以降 */
+  width: 555px;
+  margin-right: 4px;
 }
-header nav a {
+
+.sitewide_HeaderMenu_MenuList a {
   height: 16px;
   position: relative;
-  display: inline-block;
-  background-image: url(../img/nav.png);
-  background-repeat: no-repeat;
-  text-indent: -9999px;
   line-height: 1;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
   color: #000;
 }
-header nav a::after {
+
+.sitewide_HeaderMenu_MenuList a::after {
   display: block;
   width: 0;
   height: 2px;
   background-color: #579c3b;
   content: '';
 }
-header nav a:hover::after {
+
+.sitewide_HeaderMenu_MenuList a:hover::after {
   width: 100%;
   height: 2px;
   transition: width .5s ease;
 }
-header nav .about a { width: 109px; background-position: 0 0; }
-header nav .point a { width: 126px; background-position: 0 -26px; }
-header nav .download a { width: 78px; background-position: 0 -53px; }
-header nav .faq a { width: 30px; background-position: 0 -76px; }
 
-header .lang {
-  margin-top: 27px;
-  margin-left: 30px;
-  float: right;
-}
-
-header .lang li{
-  float: left;
-  margin-left: 5px;
-  width: 63px;
-  height: 27px;
-  text-indent: -9999px;  
-}
-header .lang li a {
-  display: block;
+.sitewide_HeaderMenu_LangList {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+  align-items: center;
+  -ms-flex-align: center; /*IE10*/
+  -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-align-items: center; /* Safari6.1以降 */
+  justify-content: space-between;
+  -ms-flex-pack: justify; /*IE10*/
+  -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-justify-content: space-between; /* Safari6.1以降 */
+  margin-right: 4px;
 }
 
-header .lang li.en{ background: url(../img/lang_e.png) no-repeat; }
-header .lang li.en:hover { 
-  background: url(../img/lang_e_hv.png) no-repeat;
-  transition: .2s linear;
-}
-header .lang li.es { background: url(../img/lang_es.png) no-repeat; }
-header .lang li.es:hover { 
-  background: url(../img/lang_es_hv.png) no-repeat;
-  transition: .2s linear;
+.sitewide_HeaderMenu_LangDetail {
+  border: 1px solid #404040;
+  border-radius: 25px;
+  word-break: keep-all;
 }
 
-header .sns {
-  margin-top: 20px;
-  float: right;
+.sitewide_HeaderMenu_LangDetail:hover {
+  border: 1px solid #54963B;
+  background: #54963B;
+  transition: 0.5s;
 }
-header .sns li {
-  float: left;
-  margin-left: 15px;
+
+
+.sitewide_HeaderMenu_LangDetail:first-child {
+  margin-right: 8px;
+}
+
+.sitewide_HeaderMenu_LangDetail a {
+  color: #404040;
+  text-decoration: none;
+  padding: 5px;
+}
+
+.sitewide_HeaderMenu_LangDetail a:hover {
+  color: #fff;
+  transition: 0.5s;
+}
+
+.sitewide_HeaderMenu_SnsList {
+  display: flex;
+  display: -ms-flexbox; /* IE10 */
+  display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+  display: -webkit-flex; /* Safari6.1以降 */
+  align-items: center;
+  -ms-flex-align: center; /*IE10*/
+  -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-align-items: center; /* Safari6.1以降 */
+  justify-content: space-between;
+  -ms-flex-pack: justify; /*IE10*/
+  -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+  -webkit-justify-content: space-between; /* Safari6.1以降 */
+  width: 80px;
+}
+
+
+.sitewide_HeaderMenu_SnsList li {
   width: 37px;
   height: 37px;
   text-indent: -9999px;
 }
-header .sns li.fb { background: url(../img/sns_icon_fb.png) no-repeat; }
-header .sns li.tw { background: url(../img/sns_icon_tw.png) no-repeat; }
-header .sns li a {
+
+.sitewide_HeaderMenu_SnsList li.fb { background: url(../img/sns_icon_fb.png) no-repeat; }
+.sitewide_HeaderMenu_SnsList li.tw { background: url(../img/sns_icon_tw.png) no-repeat; }
+.sitewide_HeaderMenu_SnsList li a {
   display: block;
 }
-header .sns li.fb:hover {
+.sitewide_HeaderMenu_SnsList li.fb:hover {
   background: url(../img/sns_icon_fb_hv.png) no-repeat;
   transition: .2s linear;
 }
-header .sns li.tw:hover {
+.sitewide_HeaderMenu_SnsList li.tw:hover {
   background: url(../img/sns_icon_tw_hv.png) no-repeat;
   transition: .2s linear;
+}
+
+.sitewide_NavDrawer_Container {
+  display: none;
 }
 
 /*** detail ***/
 section h1 {
   margin: 0 auto 40px;
-  padding-bottom: 28px;
+  padding-bottom: 46px;
+  color: #54963b;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
   background: url(../img/ttl_bg.png) no-repeat center bottom;
 }
 .spno {
@@ -155,8 +223,8 @@ section h1 {
   margin: 0 auto 25px;
   background: url(../img/cover_catch.png) no-repeat;
   background-size: 100% auto;
-  width: 795px;
-  height: 51px;
+  width: 1065px;
+  height: 131px;
   text-indent: -9999px;
 }
 #cover p {
@@ -179,15 +247,12 @@ section h1 {
 }
 #about h1 {
   margin-bottom: 30px;
-  width: 324px;
+  width: 390px;
 }
 #about h1 span {
-  width: 324px;
+  width: 390px;
   height: 46px;
   display: block;
-  background: url(../img/about_ttl.png) no-repeat;
-  background-size: 100% auto;
-  text-indent: -9999px;
 }
 #about .list li {
   margin-bottom: 40px;
@@ -229,15 +294,12 @@ section h1 {
   margin-bottom: 90px;
 }
 #point h1 {
-  width: 374px;
+  width: 386px;
 }
 #point h1 span {
-  width: 374px;
+  width: 386px;
   height: 46px;
   display: block;
-  background: url(../img/point_ttl.png) no-repeat;
-  background-size: 100% auto;
-  text-indent: -9999px;
 }
 #point .contents {
   padding: 90px 0;
@@ -266,11 +328,9 @@ section h1 {
   border-radius: 5px 5px 0 0;
 }
 #point .card h2 span {
-  background-image: url(../img/point_sttl.png);
-  background-repeat: no-repeat;
-  height: 26px;
-  text-indent: -9999px;
-  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
 }
 #point .point01 span { width: 359px; background-position: 0 0; }
 #point .point02 span { width: 473px; background-position: 0 -26px; }
@@ -301,15 +361,12 @@ section h1 {
   margin-bottom: 90px;
 }
 #effect h1 {
-  width: 519px;
+  width: 300px;
 }
 #effect h1 span {
-  width: 519px;
+  width: 300px;
   height: 46px;
   display: block;
-  background: url(../img/effect_ttl.png) no-repeat;
-  background-size: 100% auto;
-  text-indent: -9999px;
 }
 #effect p {
   margin: 0 auto 50px;
@@ -335,12 +392,9 @@ section h1 {
   text-align: center;
 }
 #effect .card h2 span {
-  background-image: url(../img/effect_sttl.png);
-  background-size: 100% auto;
-  background-repeat: no-repeat;
-  height: 17px;
-  text-indent: -9999px;
-  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #54963b;
 }
 #effect .effect01 span { width: 100px; background-position: 0 0; }
 #effect .effect02 span { width: 100px; background-position: 0 -16px; }
@@ -350,15 +404,12 @@ section h1 {
   margin-bottom: 90px;
 }
 #function h1 {
-  width: 705px;
+  width: 530px;
 }
 #function h1 span {
-  width: 705px;
+  width: 530px;
   height: 46px;
   display: block;
-  background: url(../img/function_ttl.png) no-repeat;
-  background-size: 100% auto;
-  text-indent: -9999px;
 }
 #function .inner {
   padding: 90px 0;
@@ -458,9 +509,6 @@ section h1 {
   width: 495px;
   height: 46px;
   display: block;
-  background: url(../img/download_ttl.png) no-repeat;
-  background-size: 100% auto;
-  text-indent: -9999px;
 }
 #download .btnarea {
   margin: 0 auto 60px;
@@ -537,9 +585,6 @@ section h1 {
   width: 93px;
   height: 46px;
   display: block;
-  background: url(../img/faq_ttl.png) no-repeat;
-  background-size: 100% auto;
-  text-indent: -9999px;
 }
 #faq .contents {
   padding: 90px 0;
@@ -607,33 +652,53 @@ section h1 {
 .pagetop a {
   color: #fff;
   text-decoration: none;
-  padding-left: 20px;
-  background: url(../img/pagetop_arrow.png) no-repeat left center;
+}
+.pagetop a::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f106";
+  font-weight: 900;
+  margin-right: 8px;
 }
 
 /*** footer ***/
-footer {
-  clear: both;
+.sitewide_Footer_Container {
   width: 100%;
+  font-size: 14px;
   color: #fff;
   background-color: rgba(0,0,0,0.2);
   font-weight: bold;
   padding: 15px 0;
 }
-footer .inner {
+.sitewide_Footer_Inner {
   margin: 0 auto;
-  width: 1080px;
+  width: 90%;
+  max-width: 1080px;
   position: relative;
 }
-footer .company {
+.sitewide_Footer_Company {
   position: absolute;
   left: 15px;
+  padding-left: 20px;
+}
+
+.sitewide_Footer_Company a {
+  display: inline-block;
   color: #fff;
   text-decoration: none;
-  padding-left: 20px;
-  background: url(../img/footer_arrow_link.png) no-repeat left center;
+  height: 14px;
+  vertical-align: baseline;
+  margin-left: 4px;
 }
-footer .copyright {
+
+.sitewide_Footer_Company a::before {
+  font-family: "Font Awesome 5 Free";
+  content: '\f35d';
+  font-weight: 900;
+  margin-right: 4px;
+}
+
+
+.sitewide_Footer_Copyright {
   text-align: center;
 }
 
@@ -642,31 +707,237 @@ footer .copyright {
   header {
     height: auto;
   }
-  header .inner {
+  .sitewide_HeaderMenu_Container {
     width: 100%;
+    display: block;
+    position: relative;
+    height: 60px;
+    padding-top: 16px;
   }
-  header h1 {
-    margin: 20px;
-  }
-  header nav {
+  .sitewide_HeaderMenu_PcLogo {
     display: none;
   }
-  header .link {
-    width: auto;
+  .sitewide_HeaderMenu_MenuList {
+    display: none;
   }
-  header .sns {
-    margin: 30px 20px 30px 0;
+  .sitewide_HeaderMenu_LangList {
+    display: none;
   }
-  header .lang {
-    margin-top: 36px;
-    margin-left: 0;
+  .sitewide_HeaderMenu_SnsList {
+    display: none;
   }
+  .sitewide_HeaderMenu_SpLogo {
+    display: block;
+    width: 132px;
+    height: 33px;
+    margin: 0 auto;
+  }
+  .sitewide_NavDrawer_Container {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .nav-unshown {
+    display:none;
+  }
+  #nav-open {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    vertical-align: middle;
+    background: #404040;
+  }
+  .sitewide_HamburgerMenu_Container {
+    margin: 19px auto 0;
+    width: 30px;
+    height: 22px;
+  }
+  #nav-open span, #nav-open span:before, #nav-open span:after {
+    position: relative;
+    height: 2px;
+    width: 30px;
+    border-radius: 3px;
+    background: #fff;
+    display: block;
+    content: '';
+    cursor: pointer;
+  }
+  #nav-open span:before {
+    bottom: -8px;
+  }
+  #nav-open span:after {
+    bottom: -16px;
+  }
+  #nav-close {
+    display: none;
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0;
+    transition: .3s ease-in-out;
+  }
+  #nav-content {
+    overflow: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 90%;
+    max-width: 330px;
+    height: 100%;
+    background: #404040;
+    transition: .3s ease-in-out;
+    -webkit-transform: translateX(-105%);
+    transform: translateX(-105%);
+  }
+  #nav-input:checked ~ #nav-close {
+    display: block;/*カバーを表示*/
+    opacity: .5;
+  }
+  #nav-input:checked ~ #nav-content {
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);/*中身を表示（右へスライド）*/
+    box-shadow: 6px 0 25px rgba(0,0,0,.15);
+  }
+  .sitewide_SpMenu_Container {
+    width: 100%;
+    font-size: 14px;
+  }
+  .sitewide_SpMenuList_Container {
+    text-align: center;
+    height: 65px;
+    border-bottom: 1px solid #fff;
+  }
+  .sitewide_SpMenuList_Container:last-child, .sitewide_SpMenuList_Container:nth-last-child(2) {
+    border-bottom: none;
+  }
+  .sitewide_SpMenuList_Container:first-child {
+    display: flex;
+    display: -ms-flexbox; /* IE10 */
+    display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+    display: -webkit-flex; /* Safari6.1以降 */
+    align-items: center;
+    -ms-flex-align: center; /*IE10*/
+    -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+    -webkit-align-items: center; /* Safari6.1以降 */
+    justify-content: space-between;
+    -ms-flex-pack: justify; /*IE10*/
+    -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
+    -webkit-justify-content: space-between; /* Safari6.1以降 */
+    padding: 15px;
+  }
+  .sitewide_SpMenuList_Container > a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    width: 100%;
+    height: 65px;
+    line-height: 65px;
+  }
+  .sitewide_SpMenuList_ClosedButton {
+    position: relative;
+    width: 25px;
+    height: 25px;
+  }
+  .sitewide_SpMenuList_ClosedButton::after, .sitewide_SpMenuList_ClosedButton::before {
+    position: absolute;
+    display: block;
+    content: '';
+    top: 50%;
+    left: 0;
+    width: 25px;
+    height: 1px;
+    border-top: solid 3px #fff;
+  }
+  .sitewide_SpMenuList_ClosedButton::after {
+    transform: skewY(45deg);
+  }
+  .sitewide_SpMenuList_ClosedButton::before {
+    transform: skewY(-45deg);
+  }
+  .sitewide_SpMenuList_Logo {
+    width: 35px;
+    height: 35px;
+  }
+  .sitewide_SpMenuList_Logo svg {
+    width: 35px;
+    height: 35px;
+  }
+  .sitewide_SpMenuGrid_Container {
+    width: 100%;
+    height: 60px;
+    padding: 10px 10px 0;
+    display: flex;
+    display: -ms-flexbox; /* IE10 */
+    display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+    display: -webkit-flex; /* Safari6.1以降 */
+  }
+  .sitewide_SpMenuGrid_Cell {
+    width: 50%;
+    border: 1px solid #C9C7CA;
+    background: #fff;
+  }
+  .sitewide_SpMenuGrid_Cell:first-child {
+    margin-right: 5px;
+  }
+  .sitewide_SpMenuGrid_Cell:nth-child(2) {
+    margin-left: 5px;
+  }
+  .sitewide_SpMenuGrid_Cell a {
+    display: inline-block;
+    color: #404040;
+    text-decoration: none;
+    line-height: 50px;
+    width: 100%;
+    height: 50px;
+  }
+  .sitewite_SpMenuSns_Facebook, .sitewide_SpMenuSns_Twitter {
+    display: flex;
+    display: -ms-flexbox; /* IE10 */
+    display: -webkit-box; /* Android4.3以下、Safari3.1〜6.0 */
+    display: -webkit-flex; /* Safari6.1以降 */
+    align-items: center;
+    -ms-flex-align: center; /*IE10*/
+    -webkit-box-align: center; /* Android4.3以下、Safari3.1〜6.0 */
+    -webkit-align-items: center; /* Safari6.1以降 */
+    margin: 0 auto;
+  }
+  .sitewide_SpMenuSns_Twitter {
+    width: 80px;
+  }
+  .sitewite_SpMenuSns_Facebook {
+    width: 67px;
+  }
+  .sitewide_SpMenuSns_Twitter::before {
+    font-family: "Font Awesome 5 Brands";
+    display: block;
+    content: "\f099";
+    color: #32a7e0;
+    margin-right: 8px;
+  }
+  .sitewite_SpMenuSns_Facebook::before {
+    font-family: "Font Awesome 5 Brands";
+    display: block;
+    content: "\f09a";
+    color: #3c5a99;
+    margin-right: 8px;
+  }
+
+
+
+
 
   /*** detail ***/
   section h1 {
     margin: 0 auto 20px;
     padding-bottom: 14px;
     background-size: 354px 12px;
+    font-size: 24px;
   }
 
   #cover {
@@ -685,7 +956,7 @@ footer .copyright {
   #cover h2 {
     margin: 0 auto 5px;
     width: 291px;
-    height: auto;
+    height: 40px;
   }
   #cover p {
     width: 290px;
@@ -707,11 +978,11 @@ footer .copyright {
   }
   #about h1 {
     margin-bottom: 15px;
-    width: 162px;
+    width: 240px;
   }
   #about h1 span {
-    width: 162px;
-    height: 23px;
+    width: 240px;
+    height: 36px;
   }
   #about .list li {
     margin-bottom: 20px;
@@ -728,7 +999,7 @@ footer .copyright {
   #about .card {
     margin: 0 auto 20px;
     float: none;
-    width: 400px;
+    width: 100%;
   }
   #about .card:nth-child(odd) {
     margin: 0 auto 20px;
@@ -738,11 +1009,11 @@ footer .copyright {
     margin-bottom: 50px;
   }
   #point h1 {
-    width: 187px;
+    width: 218px;
   }
   #point h1 span {
-    width: 187px;
-    height: 23px;
+    width: 218px;
+    height: 36px;
   }
   #point .contents {
     padding: 40px 0 20px;
@@ -764,9 +1035,7 @@ footer .copyright {
     line-height: 13px;
   }
   #point .card h2 span {
-    height: 13px;
-    background-image: url(../img/point_sttl.png);
-    background-size: 237px 52px;
+    line-height: 1.5;
   }
   #point .point01 span { width: 179px; background-position: 0 0; }
   #point .point02 span { width: 236px; background-position: 0 -13px; }
@@ -793,11 +1062,11 @@ footer .copyright {
     margin-bottom: 50px;
   }
   #effect h1 {
-    width: 260px;
+    width: 180px;
   }
   #effect h1 span {
-    width: 260px;
-    height: 23px;
+    width: 180px;
+    height: 36px;
   }
   #effect p {
     margin: 0 10px 20px;
@@ -831,6 +1100,7 @@ footer .copyright {
     text-indent: 0;
     color: #54963b;
     font-size: 18px;
+    line-height: 1.3;
   }
   #effect .card img {
     width: 100%;
@@ -849,7 +1119,6 @@ footer .copyright {
     width: 320px;
     height: auto;
     display: block;
-    text-indent: -9999px;
   }
   #function .inner {
     padding: 20px 0;
@@ -920,12 +1189,11 @@ footer .copyright {
     margin-bottom: 50px;
   }
   #download h1 {
-    width: 123px;
-    overflow: hidden;
+    width: 350px;
   }
   #download h1 span {
-    width: 248px;
-    height: 23px;
+    width: 350px;
+    height: 36px;
   }
   #download .btnarea {
     display: none;
@@ -951,7 +1219,7 @@ footer .copyright {
   #download .card h2 {
     margin-bottom: 10px;
     line-height: 10px;
-    height: 10px;
+    height: 20px;
   }
   #download .card h2 span {
     background-image: none;
@@ -969,11 +1237,11 @@ footer .copyright {
   }
 
   #faq h1 {
-    width: 47px;
+    width: 60px;
   }
   #faq h1 span {
-    width: 47px;
-    height: 23px;
+    width: 60px;
+    height: 36px;
   }
   #faq .contents {
     padding: 50px 0;
@@ -1023,17 +1291,11 @@ footer .copyright {
   footer {
     text-align: center;
   }
-  footer .inner {
-    margin: 0 auto;
-    width: 100%;
+  .sitewide_Footer_Company {
     position: relative;
-  }
-  footer .company {
-    position: static;
-    display: inline-block;
-    margin-bottom: 10px;
-  }
-  footer .copyright { 
-    position: static;
+    left: 0;
+    display: block;
+    padding-left: 0;
+    margin: 0 auto 8px;
   }
 }
