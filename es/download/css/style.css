@@ -71,6 +71,22 @@ header .logo a {
     margin-top: 51px;
 }
 
+.warningarea  {
+    width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+}
+
+.warningarea .warning_osx {
+    width: 380px;
+    margin-left: auto;
+    color: #700000;
+    font-size: 75%;
+    border: solid thin #700000;
+    padding: 2px;
+}
+
 .downloadarea {
     text-align: center;
     margin-top: 51px;
