@@ -195,5 +195,19 @@ footer .thanks  {
   color: #569c3c;
 }
 
+.kumodescarea {
+    width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 20px;
+}
+.kumohowtoarea {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
 
 
