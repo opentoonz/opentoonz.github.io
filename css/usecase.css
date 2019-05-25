@@ -38,7 +38,7 @@
   -ms-flex-pack: justify; /*IE10*/
   -webkit-box-pack: justify; /* Android4.3以下、Safari3.1〜6.0 */
   -webkit-justify-content: space-between; /* Safari6.1以降 */
-  width: 236px;
+  width: 400px;
   margin: 0 auto 60px;
   font-size: 24px;
 }
