@@ -179,10 +179,10 @@ section h1 {
 }
 #about h1 {
   margin-bottom: 30px;
-  width: 460px;
+  width: 480px;
 }
 #about h1 span {
-  width: 460px;
+  width: 480px;
   height: 49px;
   display: block;
   background: url(../img/about_ttl.png) no-repeat;
@@ -229,10 +229,10 @@ section h1 {
   margin-bottom: 90px;
 }
 #point h1 {
-  width: 655px;
+  width: 330px;
 }
 #point h1 span {
-  width: 655px;
+  width: 330px;
   height: 50px;
   display: block;
   background: url(../img/point_ttl.png) no-repeat;
@@ -302,11 +302,11 @@ section h1 {
   margin-bottom: 90px;
 }
 #effect h1 {
-  width: 696px;
+  width: 175px;
 }
 #effect h1 span {
-  width: 696px;
-  height: 30px;
+  width: 175px;
+  height: 50px;
   display: block;
   background: url(../img/effect_ttl.png) no-repeat;
   background-size: 100% auto;
@@ -351,10 +351,10 @@ section h1 {
   margin-bottom: 90px;
 }
 #function h1 {
-  width: 1027px;
+  width: 240px;
 }
 #function h1 span {
-  width: 1027px;
+  width: 240px;
   height: 50px;
   display: block;
   background: url(../img/function_ttl.png) no-repeat;
@@ -453,10 +453,10 @@ section h1 {
   margin-bottom: 90px;
 }
 #download h1 {
-  width: 474px;
+  width: 400px;
 }
 #download h1 span {
-  width: 474px;
+  width: 400px;
   height: 36px;
   display: block;
   background: url(../img/download_ttl.png) no-repeat;
