@@ -466,14 +466,14 @@ section h1 {
 #function .card h2 span {
   background-image: url(../img/function_sttl.png);
   background-repeat: no-repeat;
-  height: 26px;
+  height: 30px;
   text-indent: -9999px;
   display: inline-block;
 }
-#function .function01 span { width: 574px; background-position: 0 0; }
-#function .function02 span { width: 230px; background-position: 0 -26px; }
-#function .function03 span { width: 68px; background-position: 0 -52px; }
-#function .function04 span { width: 87px; background-position: 0 -78px; }
+#function .function01 span { width: 600px; background-position: 0 0; }
+#function .function02 span { width: 207px; background-position: 0 -30px; }
+#function .function03 span { width: 92px; background-position: 0 -60px; }
+#function .function04 span { width: 193px; background-position: 0 -90px; }
 #function .card .block {
   padding: 30px;
 }
@@ -493,10 +493,6 @@ section h1 {
   float: right;
   width: 510px;
   text-align: right;
-}
-#function .function03 .image img {
-  position: relative;
-  top: -60px;
 }
 
 #download {
@@ -538,7 +534,7 @@ section h1 {
   text-align: left;
 }
 #download .card h2 {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   padding-bottom: 5px;
   border-bottom: 2px solid #54963b;
   text-align: center;
@@ -547,18 +543,19 @@ section h1 {
 #download .card h2 span {
   background-image: url(../img/download_sttl.png);
   background-repeat: no-repeat;
-  height: 20px;
+  height: 24px;
   text-indent: -9999px;
   display: inline-block;
 }
 #download .download01 span {
-  width: 118px;
-  background-position: 0 0;
-  background-size: 100% auto;
+  width: 100px;
+  background-position: 12px 0;
+  background-size: 125% auto;
 }
 #download .download02 span {
-  width: 98px;
-  background-position: 0 -20px;
+  width: 125px;
+  background-position: 0 -24px;
+  background-size: 100% auto;
 }
 #download .download01 ul { margin-left: 30px; }
 #download .download02 ul { margin-left: 80px; }
