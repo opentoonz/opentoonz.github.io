@@ -133,6 +133,10 @@ header {
   margin-right: 8px;
 }
 
+.sitewide_HeaderMenu_LangDetail:nth-child(2) {
+  margin-right: 8px;
+}
+
 .sitewide_HeaderMenu_LangDetail a {
   color: #404040;
   text-decoration: none;
@@ -883,6 +887,10 @@ section h1 {
     margin-right: 5px;
   }
   .sitewide_SpMenuGrid_Cell:nth-child(2) {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .sitewide_SpMenuGrid_Cell:nth-child(3) {
     margin-left: 5px;
   }
   .sitewide_SpMenuGrid_Cell a {
