@@ -664,6 +664,7 @@ section h1 {
   content: "\f106";
   font-weight: 900;
   margin-right: 8px;
+  margin-left: 8px;
 }
 
 /*** footer ***/
@@ -701,11 +702,13 @@ section h1 {
   content: '\f35d';
   font-weight: 900;
   margin-right: 4px;
+  margin-left: 4px;
 }
 
 
 .sitewide_Footer_Copyright {
   text-align: center;
+  direction: ltr;
 }
 
 @media (max-width: 680px) {

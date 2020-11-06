@@ -5,6 +5,7 @@
 body {
     font-size: 16px;
     direction: rtl;
+    font-family: 'Vazir', sans-serif;
 }
 
 /*** header ***/
@@ -35,7 +36,6 @@ header .logo a {
 }
 
 .main .title h1 {
-    font-family: 'Vazir', sans-serif;
     font-size: 36px;
     font-weight: bold;
     text-align: center;
@@ -90,7 +90,6 @@ header .logo a {
 
 
 .button a {
-    font-family: 'Vazir', sans-serif;
     font-size: 24px;
     font-weight: bold;
     border-style: solid;
@@ -168,6 +167,7 @@ footer .copyright  {
     color: #fff;
     text-align: center;
     padding-top: 12px;
+    direction: ltr;
 }
 
 footer .thanks  {
