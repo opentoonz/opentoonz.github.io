@@ -921,24 +921,24 @@ section h1 {
     margin: 0 auto;
   }
   .sitewide_SpMenuSns_Twitter {
-    width: 80px;
+    width: 87px;
   }
   .sitewite_SpMenuSns_Facebook {
-    width: 67px;
+    width: 97px;
   }
   .sitewide_SpMenuSns_Twitter::before {
     font-family: "Font Awesome 5 Brands";
     display: block;
     content: "\f099";
     color: #32a7e0;
-    margin-right: 8px;
+    margin-left: 8px;
   }
   .sitewite_SpMenuSns_Facebook::before {
     font-family: "Font Awesome 5 Brands";
     display: block;
     content: "\f09a";
     color: #3c5a99;
-    margin-right: 8px;
+    margin-left: 8px;
   }
 
 
