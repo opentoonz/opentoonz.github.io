@@ -133,6 +133,14 @@ header .logo a {
     color: #506aea;
 }
 
+.nightly .downloadarea {
+    margin-top: 30px;
+}
+.nightly .button a{
+    font-size: 16px;
+    padding: 15px 18px;
+}
+
 .returnarea {
     margin-top: 80px;
     text-align: center;
