@@ -4,9 +4,12 @@
 
 body {
     font-size: 16px;
+    font-family: 'Rubik', sans-serif;
 }
 
+
 /*** header ***/
+
 header {
     display: block;
     width: 1080px;
@@ -14,11 +17,12 @@ header {
 }
 
 header .logo {
-    background-image: url(../img/logo.jpg) ;
+    background-image: url(../img/logo.jpg);
     width: 55px;
     height: 55px;
     margin-top: 12px;
     margin-left: 16px;
+    border-radius: 5px;
 }
 
 header .logo a {
@@ -27,18 +31,19 @@ header .logo a {
     height: 55px;
 }
 
+
 /*** main ***/
+
 .main {
     width: 1080px;
     margin: 0 auto;
 }
 
 .main .title h1 {
-    font-family: 'M+ C Type-1 (basic latin) Regular','M+ Type-1 (general-j) Regular', sans-serif;
     font-size: 36px;
     font-weight: bold;
     text-align: center;
-    color: #569c3c;
+    color: #579C3B;
     margin-top: 88px;
 }
 
@@ -50,6 +55,7 @@ header .logo a {
     margin-left: auto;
     margin-right: auto;
 }
+
 .main .content textarea {
     width: 808px;
     height: 582px;
@@ -57,18 +63,24 @@ header .logo a {
     margin-left: auto;
     margin-right: auto;
     margin-top: 60px;
+    font-family: inherit;
+    line-height: 40px;
+    font-size: inherit;
+    padding-left: 10px;
+    border-width: 2px;
+    border-color: #579c3b;
 }
 
-.checkarea  {
+.checkarea {
     text-align: center;
-    margin-top: 32px;
+    margin-top: 50px;
 }
 
-.rcnotearea  {
+.rcnotearea {
     width: 808px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 51px;
+    margin-top: 30px;
 }
 
 .warningarea {
@@ -78,8 +90,9 @@ header .logo a {
     color: #800000;
     font-size: 100%;
     border: solid #B00000;
-    padding: 2px;
-    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 30px;
 }
 
 .downloadarea {
@@ -87,13 +100,11 @@ header .logo a {
     margin-top: 51px;
 }
 
-
 .button a {
-    font-family: 'M+ C Type-1 (basic latin) Regular','M+ Type-1 (general-j) Regular', sans-serif;
     font-size: 24px;
     font-weight: bold;
     border-style: solid;
-    border-radius: 5px;
+    border-radius: 10px;
     text-decoration: none;
     padding: 19px 21px;
     -webkit-transition: all .3s;
@@ -102,33 +113,33 @@ header .logo a {
 }
 
 .downloadarea .button {
-    margin:0 32px;
+    margin: 0 32px;
 }
 
 .downloadarea .button.win a {
     display: inline-block;
     text-align: center;
-    border: 1px solid #569c3c;
-    background: #569c3c;
+    border: 2px solid #579C3B;
+    background: #579C3B;
     color: #fff;
 }
 
 .downloadarea .button.win a:hover {
-    border: 1px solid #569c3c;
+    border: 2px solid #579C3B;
     background: #fff;
-    color: #569c3c;
+    color: #579C3B;
 }
 
 .downloadarea .button.mac a {
     display: inline-block;
     text-align: center;
-    border: 1px solid #506aea;
+    border: 2px solid #506aea;
     background: #506aea;
     color: #fff;
 }
 
 .downloadarea .button.mac a:hover {
-    border: 1px solid #506aea;
+    border: 2px solid #506aea;
     background: #fff;
     color: #506aea;
 }
@@ -136,7 +147,8 @@ header .logo a {
 .nightly .downloadarea {
     margin-top: 30px;
 }
-.nightly .button a{
+
+.nightly .button a {
     font-size: 16px;
     padding: 15px 18px;
 }
@@ -148,21 +160,21 @@ header .logo a {
 
 .returnarea .button a {
     display: inline-block;
-    border: 1px solid #569c3c;
+    border: 2px solid #579C3B;
     background: #fff;
-    color: #569c3c;
+    color: #579C3B;
 }
 
 .returnarea .button a:hover {
-    border: 1px solid #569c3c;
-    background: #569c3c;
+    border: 2px solid #579C3B;
+    background: #579C3B;
     color: #fff;
 }
 
 footer {
     width: 100%;
     height: 80px;
-    background-color: #ccc;
+    background-color: #579C3B;
     margin-top: 100px;
 }
 
@@ -171,14 +183,14 @@ footer .wrapper {
     margin: 0 auto;
 }
 
-footer .copyright  {
+footer .copyright {
     color: #fff;
     text-align: center;
     padding-top: 12px;
 }
 
-footer .thanks  {
-    color: #000;
+footer .thanks {
+    color: #fff;
     text-align: center;
     padding-top: 12px;
 }
@@ -188,14 +200,14 @@ footer .thanks  {
     margin-top: 20px;
 }
 
-.samplearea  h2 {
-  margin-top: 50px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 2px solid #54963b;
-  text-align: center;
-  display: inline-block;
-  color: #569c3c;
+.samplearea h2 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #54963b;
+    text-align: center;
+    display: inline-block;
+    color: #569c3c;
 }
 
 .kumodescarea {
@@ -205,12 +217,10 @@ footer .thanks  {
     text-align: center;
     margin-top: 20px;
 }
+
 .kumohowtoarea {
     width: 400px;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
 }
-
-
-
