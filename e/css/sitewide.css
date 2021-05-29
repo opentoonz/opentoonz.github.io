@@ -67,14 +67,12 @@ header {
     max-width: 1080px;
     margin: 0 auto;
     transition: .3s ease-in-out;
+    padding-top: 10px;
 }
 
 .active_sitewide_HeaderMenu_Container {
     margin-top: -2px;
-}
-
-.deactive_sitewide_HeaderMenu_Container {
-    padding-top: 10px;
+    padding-top: 0px;
 }
 
 .sitewide_HeaderMenu_PcLogo {
