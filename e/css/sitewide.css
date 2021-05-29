@@ -36,9 +36,13 @@ header {
     transition: .3s ease-in-out;
 }
 
-.active {
+.active_header {
     background-color: #579c3b;
     height: 50px;
+}
+
+.usecase_header {
+    background-color: #579c3b;
 }
 
 .sitewide_HeaderMenu_Container {
