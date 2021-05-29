@@ -85,19 +85,16 @@ header {
     box-shadow: 0 0 0px 2px #fff;
     background-color: #fff;
     transition: .3s ease-in-out;
-}
-
-.active_sitewide_HeaderMenu_PcLogo {
-    width: 33px;
-    height: 33px;
-    margin-top: 10px;
-    border-radius: 3px;
-}
-
-.dective_sitewide_HeaderMenu_PcLogo {
     width: 54px;
     height: 54px;
     border-radius: 5px;
+}
+
+.active_sitewide_HeaderMenu_PcLogo {
+    width: 33px !important;
+    height: 33px !important;
+    margin-top: 10px;
+    border-radius: 3px !important;
 }
 
 .sitewide_HeaderMenu_SpLogo {
