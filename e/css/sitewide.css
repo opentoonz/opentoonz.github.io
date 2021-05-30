@@ -35,7 +35,7 @@ img {
     border: none;
     outline: none;
     color: white;
-    padding: 16px 16px;
+    padding: 7px 16px;
     background-color: inherit;
     font-family: inherit;
     font-weight: bold;
@@ -50,8 +50,7 @@ img {
     background-color: #579C3B;
     box-shadow: 0px 5px 0px rgb(0 0 0 / 15%);
     z-index: 1;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
 }
 
 .home_dropdown-content a {
@@ -85,7 +84,7 @@ img {
     border: none;
     outline: none;
     color: white;
-    padding: 16px 16px;
+    padding: 7px 16px;
     background-color: inherit;
     font-family: inherit;
     font-weight: bold;
@@ -100,8 +99,7 @@ img {
     background-color: #579C3B;
     box-shadow: 0px 5px 0px rgb(0 0 0 / 15%);
     z-index: 1;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
 }
 
 .download_dropdown-content a {
@@ -135,7 +133,7 @@ img {
     border: none;
     outline: none;
     color: white;
-    padding: 16px 16px;
+    padding: 7px 16px;
     background-color: inherit;
     font-family: inherit;
     font-weight: bold;
@@ -150,8 +148,7 @@ img {
     background-color: #579C3B;
     box-shadow: 0px 5px 0px rgb(0 0 0 / 15%);
     z-index: 1;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
 }
 
 .social_dropdown-content a {
