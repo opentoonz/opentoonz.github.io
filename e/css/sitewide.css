@@ -398,6 +398,7 @@ header {
 
 .sitewide_HeaderMenu_SnsList li a {
     display: block;
+    height: 100%;
 }
 
 .sitewide_HeaderMenu_SnsList li.fb:hover {
