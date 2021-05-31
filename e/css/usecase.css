@@ -30,7 +30,7 @@
 }
 
 #usecase>h1>span {
-    width: 500px;
+    width: 240px;
     height: 46px;
     display: block;
 }
@@ -302,7 +302,8 @@
 /*** pagetop ***/
 
 .pagetop {
-    position: static;
+    position: relative;
+    top: -10px;
 }
 
 .pagetop a {
@@ -316,23 +317,24 @@
     }
     .usecase_Main_Inner {
         width: 100%;
-        padding: 0 20px;
+        padding: 0 30px;
     }
     /*** section ***/
     .usecase_Section_Container {
-        padding: 50px 0 0;
+        padding: 110px 0 0;
     }
     #usecase>h1 {
         margin-bottom: 20px;
         width: 200px;
     }
     #usecase h1 span {
-        width: 200px;
         height: 36px;
+        text-align: initial;
+        margin-left: -20px;
     }
     /*** AgeList ***/
     .usecase_AgeList_Container {
-        display: none;
+        width: 234px;
     }
     /*** productAgeContent ***/
     .usecase_productAgeContent_Title {
@@ -399,6 +401,7 @@
     .pagetop {
         position: static;
         padding: 0 10px;
+        margin-bottom: 15px;
     }
     .pagetop a {
         color: #404040;
