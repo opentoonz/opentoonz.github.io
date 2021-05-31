@@ -30,7 +30,6 @@
 }
 
 #usecase>h1>span {
-    width: 240px;
     height: 46px;
     display: block;
 }
@@ -326,6 +325,11 @@
     #usecase>h1 {
         margin-bottom: 20px;
         width: 200px;
+    }
+    #usecase>h1>span {
+        width: 240px;
+        height: 46px;
+        display: block;
     }
     #usecase h1 span {
         height: 36px;
