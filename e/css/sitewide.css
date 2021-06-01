@@ -1156,42 +1156,6 @@ section h1 {
         height: 65px;
         line-height: 65px;
     }
-    /* download dropdown */
-    .download_dropdown {
-        float: left;
-        overflow: hidden;
-        border-bottom: 1px solid #57913b;
-    }
-    .download_dropdown .download_dropbtn {
-        font-size: inherit;
-        font-weight: inherit;
-        color: #fff;
-        height: 65px;
-        padding: 0px 122px 0px;
-    }
-    .download_dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #57913b;
-        box-shadow: 0px 5px 0px rgb(0 0 0 / 15%);
-        z-index: 1;
-        border-radius: 0px;
-    }
-    .download_dropdown-content a {
-        float: none;
-        color: #fff;
-        padding: 12px 124px;
-        text-decoration: none;
-        display: block;
-        text-align: center;
-        font-weight: normal !important;
-    }
-    .download_dropdown:hover .download_dropdown-content {
-        display: block;
-    }
-    .fa-caret-down:before {
-        padding-left: 2px;
-    }
     /* learn dropdown */
     .learn_dropbtn {
         text-align: center;
