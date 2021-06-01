@@ -15,8 +15,11 @@
     <meta property="og:image" content="https://opentoonz.github.io/img/ogp_kumo.jpg" />
     <meta property="og:site_name" content="OpenToonz" />
     <meta property="og:locale" content="en_US" />
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../js/header.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://mplus-fonts.osdn.jp/webfonts/basic_latin/mplus_webfonts.css">
@@ -25,8 +28,78 @@
 
 <body>
     <header>
-        <div class="logo">
-            <a href="../index.html"></a>
+        <div class="sitewide_HeaderMenu_Container">
+            <h1 class="sitewide_HeaderMenu_PcLogo">
+                <a href="../index.html">
+                    <img src="../img/header_logo.png">
+                </a>
+            </h1>
+            <nav>
+                <ul class="sitewide_HeaderMenu_MenuList">
+                    <li class="home_dropdown">
+                        <button class="home_dropbtn">Home
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="home_dropdown-content">
+                            <a href="../index.html#about">About</a>
+                            <a href="../index.html#point">Characteristics</a>
+                            <a href="../index.html#download">Download</a>
+                            <a href="../index.html#faq">FAQ</a>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="../usecase.html">Cases of Introduction</a>
+                    </li>
+                    <li class="download_dropdown">
+                        <button class="download_dropbtn">Download
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="download_dropdown-content">
+                            <a href="./opentoonz.html">OpenToonz</a>
+                            <a href="https://github.com/opentoonz/dwango_opentoonz_plugins" target="_blank">Effects</a>
+                            <a href="./gts.html">GTS</a>
+                            <a href="./sample.html">Sample Data</a>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="https://opentoonz.readthedocs.io/" target="_blank">Learn</a>
+                    </li>
+                    <li class="social_dropdown">
+                        <button class="social_dropbtn">Social
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="social_dropdown-content">
+                            <a href="https://discord.gg/qhdbr2DgUY" target="_blank">Discord</a>
+                            <a href="https://www.reddit.com/r/OpenToonz/" target="_blank">Reddit</a>
+                            <a href="https://twitter.com/opentoonz" target="_blank">Twitter</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <ul class="sitewide_HeaderMenu_LangList">
+                <li class="sitewide_HeaderMenu_LangDetail">
+                    <a href="../../download/kumoworks.html">日本語</a>
+                </li>
+                <li class="sitewide_HeaderMenu_LangDetail">
+                    <a href="../../es/download/kumoworks.html">Español</a>
+                </li>
+                <li class="sitewide_HeaderMenu_LangDetail">
+                    <a href="../../fa/download/kumoworks.html">فارسی</a>
+                </li>
+            </ul>
+            <ul class="sitewide_HeaderMenu_SnsList">
+                <li class="fb">
+                    <a href="http://www.facebook.com/share.php?u=https://opentoonz.github.io/" onclick="window.open(encodeURI(decodeURI(this.href)), 'FBwindow', 'width=554, height=470, menubar=no, toolbar=no, scrollbars=yes'); return false;" rel="nofollow">
+                        <i class="fa fa-facebook">Facebook</i>
+                    </a>
+                </li>
+                <li class="tw">
+                    <a href="http://twitter.com/share?text=OpenToonz - Open-source Animation Production Software&amp;url=https://opentoonz.github.io/e/&amp;hashtags=opentoonz" onclick="window.open(encodeURI(decodeURI(this.href)), 'tweetwindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1' ); return false;"
+                        target="_blank">
+                        <i class="fa fa-twitter">Twitter</i>
+                    </a>
+                </li>
+            </ul>
         </div>
     </header>
     <div class="main">
@@ -43,17 +116,17 @@
             </p>
         </div>
         <div class="kumohowtoarea">
-            <p>
+            <p style="margin-top: 30px;">
                 [A Very-basic Usage]
-                <ol class="list">
-                    <li>Launch KumoWorks.</li>
-                    <li>Draw a silhouette of cloud on the viewer.</li>
-                    <li>Hit Enter(Return) key.</li>
+                <ol class="list" style="display: block; list-style-type: decimal; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 0px; margin-inline-end: 0px; padding-inline-start: 40px;">
+                    <li style="list-style: auto;">Launch KumoWorks.</li>
+                    <li style="list-style: auto;">Draw a silhouette of cloud on the viewer.</li>
+                    <li style="list-style: auto;">Hit Enter(Return) key.</li>
                 </ol>
             </p>
         </div>
         <div class="title">
-            <h1>KumoWorks Terms of Use</h1>
+            <h1 style="margin-top: 130px;">KumoWorks Terms of Use</h1>
             <div class="title_shape">
             </div>
         </div>
@@ -132,14 +205,7 @@ Established on April 15, 2019
                   <a href="https://github.com/opentoonz/kumoworks/releases/download/v1.0.1/KumoWorks.pkg">Download for macOS<br>v1.0.1</a>
                 </span>
                 </div>
-                <div class="returnarea">
-                    <div class="button">
-                        <a href="../index.html"> Back to Homepage</a>
-                    </div>
-                </div>
-                <div class="pagetop">
-
-                </div>
+                <div class="pagetop"><a href="#">TOP</a></div>
             </div>
         </form>
     </div>

@@ -179,7 +179,7 @@ header {
     height: 50px;
 }
 
-.usecase_header {
+.green_header {
     background-color: #579c3b;
 }
 
@@ -1338,6 +1338,7 @@ section h1 {
         width: 25px;
         height: 1px;
         border-top: solid 2px #fff;
+        border-radius: 20%;
     }
     .sitewide_SpMenuList_ClosedButton::after {
         transform: rotate(45deg);

@@ -15,8 +15,11 @@
     <meta property="og:image" content="https://opentoonz.github.io/img/ogp.jpg" />
     <meta property="og:site_name" content="OpenToonz" />
     <meta property="og:locale" content="en_US" />
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../js/header.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://mplus-fonts.osdn.jp/webfonts/basic_latin/mplus_webfonts.css">
@@ -25,8 +28,78 @@
 
 <body>
     <header>
-        <div class="logo">
-            <a href="../index.html"></a>
+        <div class="sitewide_HeaderMenu_Container">
+            <h1 class="sitewide_HeaderMenu_PcLogo">
+                <a href="../index.html">
+                    <img src="../img/header_logo.png">
+                </a>
+            </h1>
+            <nav>
+                <ul class="sitewide_HeaderMenu_MenuList">
+                    <li class="home_dropdown">
+                        <button class="home_dropbtn">Home
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="home_dropdown-content">
+                            <a href="../index.html#about">About</a>
+                            <a href="../index.html#point">Characteristics</a>
+                            <a href="../index.html#download">Download</a>
+                            <a href="../index.html#faq">FAQ</a>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="../usecase.html">Cases of Introduction</a>
+                    </li>
+                    <li class="download_dropdown">
+                        <button class="download_dropbtn">Download
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="download_dropdown-content">
+                            <a href="./opentoonz.html">OpenToonz</a>
+                            <a href="https://github.com/opentoonz/dwango_opentoonz_plugins" target="_blank">Effects</a>
+                            <a href="./gts.html">GTS</a>
+                            <a href="./kumoworks.html">KumoWorks</a>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="https://opentoonz.readthedocs.io/" target="_blank">Learn</a>
+                    </li>
+                    <li class="social_dropdown">
+                        <button class="social_dropbtn">Social
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="social_dropdown-content">
+                            <a href="https://discord.gg/qhdbr2DgUY" target="_blank">Discord</a>
+                            <a href="https://www.reddit.com/r/OpenToonz/" target="_blank">Reddit</a>
+                            <a href="https://twitter.com/opentoonz" target="_blank">Twitter</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <ul class="sitewide_HeaderMenu_LangList">
+                <li class="sitewide_HeaderMenu_LangDetail">
+                    <a href="../../download/sample.html">日本語</a>
+                </li>
+                <li class="sitewide_HeaderMenu_LangDetail">
+                    <a href="../../es/download/sample.html">Español</a>
+                </li>
+                <li class="sitewide_HeaderMenu_LangDetail">
+                    <a href="../../fa/download/sample.html">فارسی</a>
+                </li>
+            </ul>
+            <ul class="sitewide_HeaderMenu_SnsList">
+                <li class="fb">
+                    <a href="http://www.facebook.com/share.php?u=https://opentoonz.github.io/" onclick="window.open(encodeURI(decodeURI(this.href)), 'FBwindow', 'width=554, height=470, menubar=no, toolbar=no, scrollbars=yes'); return false;" rel="nofollow">
+                        <i class="fa fa-facebook">Facebook</i>
+                    </a>
+                </li>
+                <li class="tw">
+                    <a href="http://twitter.com/share?text=OpenToonz - Open-source Animation Production Software&amp;url=https://opentoonz.github.io/e/&amp;hashtags=opentoonz" onclick="window.open(encodeURI(decodeURI(this.href)), 'tweetwindow', 'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1' ); return false;"
+                        target="_blank">
+                        <i class="fa fa-twitter">Twitter</i>
+                    </a>
+                </li>
+            </ul>
         </div>
     </header>
     <div class="main">
@@ -37,16 +110,16 @@
         </div>
         <div class="samplearea">
             <iframe width="640" height="360" src="https://www.youtube.com/embed/hCui51kNvcQ?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            <p>OpenToonz Sample Data is released for trial use of the software, making online tutorial, reporting bugs or any other purposes.</p>
+            <p style="margin-top: 10px;">OpenToonz Sample Data is released for trial use of the software, making online tutorial, reporting bugs or any other purposes.</p>
 
             <div class="downloadarea">
                 <span class="button win">
                             <a href="https://github.com/opentoonz/opentoonz_sample/releases/download/v1.0/OpenToonz_sample.zip">OpenToonz_sample.zip<br>(41.6 MB)</a>
                         </span>
             </div>
-            <p>
+            <p style="margin-top: 6px;">
                 This work is licensed under a
-                <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+                <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" style="color: #009a0c;">
                         Creative Commons Attribution-NonCommercial 4.0 International License
                     </a>.
                 <br>
@@ -57,12 +130,7 @@
 
         </div>
         <form class="content">
-            <div class="returnarea">
-                <div class="button">
-                    <a href="../index.html"> Back to Homepage</a>
-                </div>
-            </div>
-            <div class="pagetop"> </div>
+            <div class="pagetop"><a href="#">TOP</a></div>
         </form>
     </div>
     <footer>

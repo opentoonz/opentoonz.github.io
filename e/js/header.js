@@ -16,7 +16,25 @@ $(function() {
     });
 
     if (document.URL.includes("usecase.html")) {
-        $("header").addClass("usecase_header");
+        $("header").addClass("green_header");
+    }
+
+    if (document.URL.includes("opentoonz.html")) {
+        $("header").addClass("green_header");
+    }
+
+    if (document.URL.includes("gts.html")) {
+        $("header").addClass("green_header");
+        $("footer .copyright").addClass("center_footer_copyright");
+    }
+
+    if (document.URL.includes("kumoworks.html")) {
+        $("header").addClass("green_header");
+        $("footer .copyright").addClass("center_footer_copyright");
+    }
+
+    if (document.URL.includes("sample.html")) {
+        $("header").addClass("green_header");
     }
 
 });
