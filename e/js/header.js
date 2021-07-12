@@ -13,6 +13,8 @@ $(function() {
             $(".sitewide_HeaderMenu_SpLogo").removeClass("acitve_sitewide_HeaderMenu_SpLogo");
             $(".sitewide_HamburgerMenu_Container").removeClass("active_sitewide_HamburgerMenu_Container");
         }
+
+
     });
 
     if (document.URL.includes("usecase.html")) {
@@ -36,5 +38,11 @@ $(function() {
     if (document.URL.includes("sample.html")) {
         $("header").addClass("green_header");
     }
+
+    $("[href]").each(function() {
+        if (this.href == window.location.href) {
+            $(this).addClass("current_page");
+        }
+    });
 
 });

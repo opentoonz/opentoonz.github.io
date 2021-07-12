@@ -393,6 +393,11 @@ header {
     display: none;
 }
 
+.current_page::after {
+    width: 100% !important;
+    height: 2px !important;
+}
+
 
 /*** main ***/
 
