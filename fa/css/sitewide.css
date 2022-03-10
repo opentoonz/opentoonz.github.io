@@ -11,7 +11,7 @@ html {
 body {
   color: #404040;
   line-height: 1.6;
-  font-family: 'Vazir', sans-serif;
+  font-family: Vazirmatn, sans-serif;
   direction: rtl;
 }
 
@@ -443,7 +443,7 @@ section h1 {
   width: 90px;
   height: 90px;
   display: block;
-  text-indent: -9999px;
+  text-indent: 9999px;
 }
 #function .flex-prev {
   left: -100px;
