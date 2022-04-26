@@ -11,10 +11,12 @@ html {
 }
 
 body {
-    color: #404040;
-    line-height: 1.6;
-    font-family: 'Vazir', sans-serif;
-    direction: rtl;
+
+  color: #404040;
+  line-height: 1.6;
+  font-family: Vazirmatn, sans-serif;
+  direction: rtl;
+
 }
 
 img {
@@ -557,13 +559,15 @@ section h1 {
 }
 
 #function .flex-direction-nav a {
-    position: absolute;
-    top: 50%;
-    margin-top: -90px;
-    width: 90px;
-    height: 90px;
-    display: block;
-    text-indent: -9999px;
+
+  position: absolute;
+  top: 50%;
+  margin-top: -90px;
+  width: 90px;
+  height: 90px;
+  display: block;
+  text-indent: 9999px;
+
 }
 
 #function .flex-prev {
