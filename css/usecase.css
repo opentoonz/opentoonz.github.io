@@ -162,6 +162,14 @@
 .usecase_WorksIntro_Introduction p {
   font-size: 16px;
 }
+.usecase_WorksIntro_Introduction ul{
+  font-size: 14px;
+	margin: 1em 0;
+	padding-left: 40px;
+}
+.usecase_WorksIntro_Introduction li{
+  list-style: disc;
+}
 
 /** embed YouTube's iframe ***/
 
