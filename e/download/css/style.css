@@ -72,6 +72,7 @@ header .logo a {
 }
 
 .warningarea {
+    text-align: left;
     width: 808px;
     margin-left: auto;
     margin-right: auto;
