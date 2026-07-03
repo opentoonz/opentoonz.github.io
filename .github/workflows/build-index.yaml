@@ -1,0 +1,47 @@
+name: Auto Build Apps Index
+
+on:
+  push:
+    branches:
+      - main  # または master (OpenToonzのデフォルトブランチに合わせてください)
+    paths:
+      - 'ai-tools/apps/**/meta.json' # meta.json が追加・修正された時だけ実行
+  workflow_dispatch: # 管理画面から手動で実行できるようにするボタンを追加
+
+# リポジトリへの書き込み権限を付与
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. リポジトリのチェックアウト
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Node.js 環境のセットアップ
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-node-version: '20'
+
+    # 3. インデックス構築スクリプトの実行
+    - name: Run build script
+      run: node ai-tools/scripts/build-index.js
+
+    # 4. 変更があればGitHub ActionsのBot名義でコミット&プッシュ
+    - name: Commit and Push changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        
+        # 変更があるか確認
+        if ! git diff --exit-code ai-tools/apps/apps-index.json; then
+          git add ai-tools/apps/apps-index.json
+          git commit -m "chore: [skip ci] apps-index.json を自動更新"
+          git push
+        else
+          echo "変更はありませんでした。"
+        fi

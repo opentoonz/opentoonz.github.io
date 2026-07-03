@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黒ピクセルを塗り色で埋める</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* ドロップエリア */
+        #drop-zone {
+            border: 3px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        #drop-zone.dragover {
+            border-color: var(--primary-color);
+            background-color: #eef2ff;
+        }
+
+        #drop-zone p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #64748b;
+        }
+
+        /* ステータス表示 */
+        #status {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            min-height: 24px;
+        }
+
+        /* プレビューエリア */
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .preview-box {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            background: #f1f5f9;
+        }
+
+        .preview-box h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #475569;
+        }
+
+        .canvas-wrapper {
+            max-width: 100%;
+            max-height: 400px;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+            border-radius: 4px;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            image-rendering: pixelated;
+        }
+
+        /* ボタン */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        #download-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: none;
+        }
+
+        #download-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #download-btn:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>黒ピクセルを塗り色で埋めるツール</h1>
+    
+    <div id="drop-zone">
+        <p>ここにTGAファイルをドラッグ＆ドロップ、またはクリックして選択 (複数可)</p>
+        <input type="file" id="file-input" accept=".tga" multiple style="display: none;">
+    </div>
+
+    <div id="status">ファイルを選択してください。</div>
+
+    <div class="preview-container">
+        <div class="preview-box">
+            <h3>現在処理中のオリジナル (入力)</h3>
+            <div class="canvas-wrapper">
+                <canvas id="input-canvas"></canvas>
+            </div>
+        </div>
+        <div class="preview-box">
+            <h3>現在処理中の結果 (プレビュー)</h3>
+            <div class="canvas-wrapper">
+                <canvas id="output-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <button id="download-btn">ダウンロード</button>
+    </div>
+</div>
+
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const statusText = document.getElementById('status');
+    const inputCanvas = document.getElementById('input-canvas');
+    const outputCanvas = document.getElementById('output-canvas');
+    const downloadBtn = document.getElementById('download-btn');
+
+    const ctxIn = inputCanvas.getContext('2d');
+    const ctxOut = outputCanvas.getContext('2d');
+
+    let isProcessing = false;
+    let fileQueue = [];
+    let currentFileIndex = 0;
+    let processedResults = [];
+
+    // イベント設定
+    dropZone.addEventListener('click', () => { if(!isProcessing) fileInput.click(); });
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (isProcessing) return;
+        if (e.dataTransfer.files.length > 0) handleFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) handleFiles(e.target.files);
+    });
+
+    // 複数ファイルの受け取りと管理
+    async function handleFiles(files) {
+        fileQueue = Array.from(files).filter(f => f.name.toLowerCase().endsWith('.tga'));
+        
+        if (fileQueue.length === 0) {
+            alert('有効なTGA画像（.tga）が選択されませんでした。');
+            return;
+        }
+
+        isProcessing = true;
+        downloadBtn.style.display = 'none';
+        processedResults = [];
+
+        for (let i = 0; i < fileQueue.length; i++) {
+            currentFileIndex = i;
+            const file = fileQueue[i];
+            statusText.innerText = `ファイル (${i + 1}/${fileQueue.length}): ${file.name} を読み込み中...`;
+            
+            try {
+                await processSingleFile(file);
+            } catch (err) {
+                console.error(err);
+                alert(`${file.name} の処理中にエラーが発生しました: ${err.message}`);
+            }
+        }
+
+        statusText.innerText = `すべての処理が完了しました！ (${fileQueue.length}件)`;
+        isProcessing = false;
+        downloadBtn.style.display = 'block';
+        
+        if (fileQueue.length === 1) {
+            downloadBtn.innerText = "処理結果をTGAでダウンロード";
+        } else {
+            downloadBtn.innerText = `処理結果 (${fileQueue.length}件) をZIPで一括ダウンロード`;
+        }
+    }
+
+    // 単一ファイルの非同期読み込み・処理
+    function processSingleFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                    const { width, height, rgba } = decodeTGA(event.target.result);
+
+                    inputCanvas.width = width;
+                    inputCanvas.height = height;
+                    outputCanvas.width = width;
+                    outputCanvas.height = height;
+
+                    const imgDataIn = ctxIn.createImageData(width, height);
+                    imgDataIn.data.set(rgba);
+                    ctxIn.putImageData(imgDataIn, 0, 0);
+
+                    const outputBlob = await runInfillAlgorithm(width, height, rgba, file.name);
+
+                    const outputName = file.name.replace(/\.[^/.]+$/, "") + ".tga";
+                    processedResults.push({ name: outputName, blob: outputBlob });
+
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            };
+            reader.onerror = () => reject(new Error("ファイルの読み込みに失敗しました。"));
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    // 穴埋めアルゴリズム本体
+    async function runInfillAlgorithm(width, height, rgbaArray, filename) {
+        const data = rgbaArray;
+
+        for (let i = 0; i < data.length; i += 4) {
+            if (data[i] === 0 && data[i+1] === 0 && data[i+2] === 0 && data[i+3] === 255) {
+                data[i+3] = 0;
+            }
+        }
+
+        ctxOut.putImageData(ctxIn.createImageData(width, height), 0, 0); 
+        const initialImgData = ctxOut.createImageData(width, height);
+        initialImgData.data.set(data);
+        ctxOut.putImageData(initialImgData, 0, 0);
+
+        let loopCount = 0;
+        const totalFiles = fileQueue.length;
+        const fileNum = currentFileIndex + 1;
+
+        while (true) {
+            loopCount++;
+            statusText.innerText = `ファイル (${fileNum}/${totalFiles}): ${filename} 処理中... (ステップ ${loopCount})`;
+
+            const currentImgData = ctxOut.getImageData(0, 0, width, height);
+            const currentData = currentImgData.data;
+            
+            const nextImgData = ctxOut.createImageData(width, height);
+            nextImgData.data.set(currentData);
+            const nextData = nextImgData.data;
+
+            let transparentCount = 0;
+            let changed = false;
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+
+                    if (currentData[idx + 3] === 0) {
+                        transparentCount++;
+                        const colorCounts = {};
+                        let maxCount = 0;
+
+                        for (let dy = -1; dy <= 1; dy++) {
+                            for (let dx = -1; dx <= 1; dx++) {
+                                if (dx === 0 && dy === 0) continue;
+
+                                const nx = x + dx;
+                                const ny = y + dy;
+
+                                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                                    const nIdx = (ny * width + nx) * 4;
+
+                                    if (currentData[nIdx + 3] > 0) {
+                                        const colorKey = `${currentData[nIdx]},${currentData[nIdx+1]},${currentData[nIdx+2]},${currentData[nIdx+3]}`;
+                                        colorCounts[colorKey] = (colorCounts[colorKey] || 0) + 1;
+                                        if (colorCounts[colorKey] > maxCount) {
+                                            maxCount = colorCounts[colorKey];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (maxCount === 0) continue; 
+
+                        const candidates = [];
+                        for (const color in colorCounts) {
+                            if (colorCounts[color] === maxCount) {
+                                candidates.push(color);
+                            }
+                        }
+
+                        const chosenColor = candidates[Math.floor(Math.random() * candidates.length)];
+                        const [r, g, b, a] = chosenColor.split(',').map(Number);
+
+                        nextData[idx] = r;
+                        nextData[idx+1] = g;
+                        nextData[idx+2] = b;
+                        nextData[idx+3] = a;
+                        changed = true;
+                    }
+                }
+            }
+
+            ctxOut.putImageData(nextImgData, 0, 0);
+
+            if (transparentCount === 0 || !changed) {
+                break;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
+
+        const finalImgData = ctxOut.getImageData(0, 0, width, height);
+        return encodeTGA(width, height, finalImgData.data);
+    }
+
+    // ダウンロードボタンのクリック処理
+    downloadBtn.addEventListener('click', async () => {
+        if (processedResults.length === 0) return;
+
+        if (processedResults.length === 1) {
+            const result = processedResults[0];
+            const link = document.createElement('a');
+            link.download = result.name;
+            link.href = URL.createObjectURL(result.blob);
+            link.click();
+        } else {
+            downloadBtn.disabled = true;
+            const originalText = downloadBtn.innerText;
+            downloadBtn.innerText = "ZIP圧縮ファイルを生成中...";
+
+            const zip = new JSZip();
+            processedResults.forEach(res => {
+                zip.file(res.name, res.blob);
+            });
+
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+            const link = document.createElement('a');
+            link.download = 'processed_images.zip';
+            link.href = URL.createObjectURL(zipBlob);
+            link.click();
+
+            downloadBtn.disabled = false;
+            downloadBtn.innerText = originalText;
+        }
+    });
+
+    // --- TGA デコーダー ---
+    function decodeTGA(arrayBuffer) {
+        const view = new DataView(arrayBuffer);
+        const idLength = view.getUint8(0);
+        const colorMapType = view.getUint8(1);
+        const imageType = view.getUint8(2);
+
+        if (imageType !== 2 && imageType !== 10) {
+            throw new Error('未圧縮(Type 2)またはRLE圧縮(Type 10)のTrue-Color TGAのみ対応しています。');
+        }
+
+        const width = view.getUint16(12, true);
+        const height = view.getUint16(14, true);
+        const pixelDepth = view.getUint8(16);
+        const imageDescriptor = view.getUint8(17);
+
+        if (pixelDepth !== 24 && pixelDepth !== 32) {
+            throw new Error('24bitまたは32bitのTGAのみ対応しています。');
+        }
+
+        const isTopToBottom = (imageDescriptor & 0x20) !== 0;
+        const hasAlpha = pixelDepth === 32;
+
+        let offset = 18 + idLength;
+        if (colorMapType === 1) {
+            const colorMapLength = view.getUint16(5, true);
+            const colorMapSize = view.getUint8(7);
+            offset += colorMapLength * Math.ceil(colorMapSize / 8);
+        }
+
+        const rgba = new Uint8ClampedArray(width * height * 4);
+        const tgaData = new Uint8Array(arrayBuffer, offset);
+        let tgaIdx = 0;
+        const pixelCount = width * height;
+
+        if (imageType === 2) {
+            for (let i = 0; i < pixelCount; i++) {
+                let x = i % width;
+                let y = Math.floor(i / width);
+                if (!isTopToBottom) y = height - 1 - y;
+
+                const rgbaIdx = (y * width + x) * 4;
+                const b = tgaData[tgaIdx++];
+                const g = tgaData[tgaIdx++];
+                const r = tgaData[tgaIdx++];
+                const a = hasAlpha ? tgaData[tgaIdx++] : 255;
+
+                rgba[rgbaIdx] = r;
+                rgba[rgbaIdx+1] = g;
+                rgba[rgbaIdx+2] = b;
+                rgba[rgbaIdx+3] = a;
+            }
+        } else if (imageType === 10) {
+            let pixelIdx = 0;
+            while (pixelIdx < pixelCount) {
+                const packetHeader = tgaData[tgaIdx++];
+                const isRLE = (packetHeader & 0x80) !== 0;
+                const count = (packetHeader & 0x7F) + 1;
+
+                if (isRLE) {
+                    const b = tgaData[tgaIdx++];
+                    const g = tgaData[tgaIdx++];
+                    const r = tgaData[tgaIdx++];
+                    const a = hasAlpha ? tgaData[tgaIdx++] : 255;
+
+                    for (let c = 0; c < count; c++) {
+                        let x = pixelIdx % width;
+                        let y = Math.floor(pixelIdx / width);
+                        if (!isTopToBottom) y = height - 1 - y;
+                        const rgbaIdx = (y * width + x) * 4;
+
+                        rgba[rgbaIdx] = r;
+                        rgba[rgbaIdx+1] = g;
+                        rgba[rgbaIdx+2] = b;
+                        rgba[rgbaIdx+3] = a;
+                        pixelIdx++;
+                    }
+                } else {
+                    for (let c = 0; c < count; c++) {
+                        const b = tgaData[tgaIdx++];
+                        const g = tgaData[tgaIdx++];
+                        const r = tgaData[tgaIdx++];
+                        const a = hasAlpha ? tgaData[tgaIdx++] : 255;
+
+                        let x = pixelIdx % width;
+                        let y = Math.floor(pixelIdx / width);
+                        if (!isTopToBottom) y = height - 1 - y;
+                        const rgbaIdx = (y * width + x) * 4;
+
+                        rgba[rgbaIdx] = r;
+                        rgba[rgbaIdx+1] = g;
+                        rgba[rgbaIdx+2] = b;
+                        rgba[rgbaIdx+3] = a;
+                        pixelIdx++;
+                    }
+                }
+            }
+        }
+        return { width, height, rgba };
+    }
+
+    // --- TGA エンコーダー (RLE圧縮 32bit型) ---
+    function encodeTGA(width, height, rgbaData) {
+        const compressedChunks = [];
+
+        // TGAは標準で「下から上」に向かってピクセルを並べるため、逆順に処理
+        for (let y = height - 1; y >= 0; y--) {
+            const rowPixels = [];
+            for (let x = 0; x < width; x++) {
+                const idx = (y * width + x) * 4;
+                rowPixels.push([rgbaData[idx+2], rgbaData[idx+1], rgbaData[idx], rgbaData[idx+3]]); // BGRA順
+            }
+
+            let x = 0;
+            while (x < width) {
+                // 1. RLE(連続ピクセル)の長さをカウント (TGAの仕様上、最大128個)
+                let runLength = 1;
+                while (x + runLength < width && runLength < 128) {
+                    const p0 = rowPixels[x];
+                    const p1 = rowPixels[x + runLength];
+                    if (p0[0] === p1[0] && p0[1] === p1[1] && p0[2] === p1[2] && p0[3] === p1[3]) {
+                        runLength++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (runLength > 1) {
+                    // RLEパケットを生成 (最上位ビットを1にする: 0x80)
+                    const chunk = new Uint8Array(5);
+                    chunk[0] = 0x80 | (runLength - 1);
+                    chunk[1] = rowPixels[x][0]; // B
+                    chunk[2] = rowPixels[x][1]; // G
+                    chunk[3] = rowPixels[x][2]; // R
+                    chunk[4] = rowPixels[x][3]; // A
+                    compressedChunks.push(chunk);
+                    x += runLength;
+                } else {
+                    // 2. Raw(非連続ピクセル)の長さをカウント (最大128個)
+                    let rawLength = 1;
+                    while (x + rawLength < width && rawLength < 128) {
+                        // 次の2ピクセルが連続して同一（RLEの始まり）なら、Rawパケットをここで区切る
+                        if (x + rawLength + 1 < width) {
+                            const pA = rowPixels[x + rawLength];
+                            const pB = rowPixels[x + rawLength + 1];
+                            if (pA[0] === pB[0] && pA[1] === pB[1] && pA[2] === pB[2] && pA[3] === pB[3]) {
+                                break;
+                            }
+                        }
+                        rawLength++;
+                    }
+
+                    // Rawパケットを生成 (最上位ビットは0)
+                    const chunk = new Uint8Array(1 + rawLength * 4);
+                    chunk[0] = rawLength - 1;
+                    for (let i = 0; i < rawLength; i++) {
+                        const p = rowPixels[x + i];
+                        chunk[1 + i * 4] = p[0];     // B
+                        chunk[1 + i * 4 + 1] = p[1]; // G
+                        chunk[1 + i * 4 + 2] = p[2]; // R
+                        chunk[1 + i * 4 + 3] = p[3]; // A
+                    }
+                    compressedChunks.push(chunk);
+                    x += rawLength;
+                }
+            }
+        }
+
+        // 全圧縮パケットの合計バイト数を算出
+        let totalCompressedSize = 0;
+        compressedChunks.forEach(c => totalCompressedSize += c.length);
+
+        const headerSize = 18;
+        const buffer = new ArrayBuffer(headerSize + totalCompressedSize);
+        const view = new DataView(buffer);
+        const uint8 = new Uint8Array(buffer);
+
+        // TGA ヘッダー設定
+        view.setUint8(0, 0);         // ID長
+        view.setUint8(1, 0);         // カラーマップ有無 (なし)
+        view.setUint8(2, 10);        // 画像タイプ (10: RLE圧縮 True-Color)
+        view.setUint16(8, 0, true);  // X原点
+        view.setUint16(10, 0, true); // Y原点
+        view.setUint16(12, width, true);
+        view.setUint16(14, height, true);
+        view.setUint8(16, 32);       // ピクセル深度 (32bit)
+        view.setUint8(17, 8);        // ディスクリプタ (下から上、アルファ8bit)
+
+        // バイナリデータの結合
+        let offset = headerSize;
+        compressedChunks.forEach(chunk => {
+            uint8.set(chunk, offset);
+            offset += chunk.length;
+        });
+
+        return new Blob([buffer], { type: 'image/x-tga' });
+    }
+</script>
+
+</body>
+</html>

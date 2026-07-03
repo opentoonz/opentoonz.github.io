@@ -1,0 +1,672 @@
+<!-- 
+Although this source code was AI-generated, it was explicitly prompted to reference the following open-source software:
+
+clipstudio.js  https://github.com/saitolume/clipstudio.js
+---------------------------------
+MIT License
+
+Copyright (c) 2020 Tadao Iseki
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+---------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLIP FILE Checker - Prototype V13</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 30px; background: #f8f9fa; color: #333; line-height: 1.5; }
+        h1 { font-size: 24px; color: #222; }
+        p { color: #666; margin: 5px 0 15px 0; }
+        
+        /* 条件設定エリア */
+        .config-box { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .config-box h3 { margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #1e293b; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
+        .config-list { list-style: none; padding: 0; margin: 0; }
+        .config-list li { margin-bottom: 12px; font-size: 14px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .config-list input[type="text"] { padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; width: 180px; }
+        .config-list input[type="number"] { padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; width: 50px; text-align: center; }
+        
+        /* ファイル入力エリア構成 */
+        .io-container { display: flex; gap: 15px; align-items: center; margin-bottom: 10px; }
+        #drop-zone {
+            flex: 2; border: 3px dashed #cbd5e1; padding: 30px 20px; text-align: center; background: #fff;
+            border-radius: 12px; cursor: pointer; transition: all 0.2s ease; font-size: 16px; font-weight: bold; color: #64748b;
+        }
+        #drop-zone.hover { border-color: #3b82f6; background: #eff6ff; color: #1e40af; }
+        
+        /* ボタン共通スタイル */
+        .action-btn {
+            padding: 32px 20px; font-size: 15px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0;
+            background: #f1f5f9; color: #94a3b8; cursor: not-allowed; transition: all 0.2s ease; box-sizing: border-box; flex: 1; text-align: center;
+        }
+        .action-btn.active { color: #fff; cursor: pointer; }
+        #reload-btn.active { background: #64748b; border-color: #64748b; }
+        #reload-btn.active:hover { background: #475569; }
+        
+        /* 修正版保存ボタンのハイライト */
+        #save-btn.active { background: #10b981; border-color: #10b981; }
+        #save-btn.active:hover { background: #059669; }
+
+        #file-path-display { background: #e2e8f0; padding: 8px 15px; border-radius: 6px; font-size: 13px; color: #334155; margin-bottom: 15px; display: none; font-family: monospace; }
+        .status { margin: 0 0 15px 0; padding: 10px 15px; border-radius: 6px; font-weight: bold; display: inline-block; }
+        .status.loading { background: #e2e8f0; color: #475569; }
+        .status.success { background: #dcfce7; color: #15803d; }
+        .status.error { background: #fee2e2; color: #b91c1c; }
+        
+        /* 各セクション */
+        .section { background: #fff; padding: 25px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .header-flex { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-top: 0; margin-bottom: 15px; }
+        h2 { font-size: 18px; margin: 0; color: #1e293b; }
+        
+        /* ツリー構造のレイヤーリスト */
+        #layer-list { background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .layer-item { padding: 6px 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; box-sizing: border-box; }
+        .layer-item:hover { background: #f1f5f9; }
+        
+        .toggle-arrow { display: inline-block; width: 14px; margin-right: 2px; text-align: center; font-size: 11px; color: #64748b; font-family: monospace; }
+        .layer-item.is-folder { background: #f8fafc; font-weight: bold; border-left: 3px solid #64748b; }
+        .layer-item.is-anime-folder { background: #f0f9ff; font-weight: bold; border-left: 3px solid #3b82f6; color: #0369a1; }
+        .layer-item.is-hidden { opacity: 0.35; font-style: italic; background: #f1f5f9 !important; color: #94a3b8 !important; }
+        
+        /* 警告レイヤーのハイライト定義 */
+        .layer-item.has-warning { background: #fef2f2 !important; border-left: 5px solid #ef4444 !important; color: #b91c1c !important; }
+        .layer-item.has-warning .anime-count-tag { color: #b91c1c !important; }
+        
+        /* ★ 新設：軽微な警告（非表示のラフ等）用の黄色ハイライト */
+        .layer-item.has-minor-warning { background: #fef9c3 !important; border-left: 5px solid #eab308 !important; color: #713f12 !important; }
+        .layer-item.has-minor-warning .anime-count-tag { color: #713f12 !important; }
+        .layer-item.has-minor-warning .toggle-arrow { color: #713f12 !important; }
+        
+        .layer-name { display: flex; align-items: center; gap: 6px; }
+        .anime-count-tag { color: #2563eb; font-weight: bold; margin-left: 4px; font-size: 13px; }
+        .layer-meta { font-size: 13px; color: #64748b; font-weight: normal; }
+        
+        /* 警告文表示パネルの色分け */
+        .check-item { margin: 6px 0; padding: 10px; border-radius: 6px; font-size: 14px; }
+        .check-pass { background: #dcfce7; color: #166534; border-left: 5px solid #22c55e; }
+        .check-warn { background: #fee2e2; color: #b91c1c; border-left: 5px solid #ef4444; }
+        .check-minor-warn { background: #fef9c3; color: #713f12; border-left: 5px solid #eab308; } /* 黄色警告 */
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+</head>
+<body>
+
+    <h1>CLIP STUDIO ファイル解析・チェック</h1>
+
+    <div class="config-box">
+        <h3>⚠️ 警告判定条件の設定（入力値を変更するとリアルタイムに再チェックします）</h3>
+        <ul class="config-list">
+            <li>
+                <span>・レイヤー名に</span>
+                <input type="text" id="cond-a-text" value="shadow,kumisen">
+                <span>を含む表示中レイヤーに、下書き属性（OutputAttribute=1）がない場合</span>
+            </li>
+            <li>
+                <span>・レイヤー名が</span>
+                <input type="text" id="cond-b-text" value="ラフ">
+                <span>から始まる場合（※表示中なら<span style="color:#ef4444; font-weight:bold;">赤警告＆自動非表示化</span>、非表示中なら<span style="color:#eab308; font-weight:bold;">黄警告＆操作なし</span>）</span>
+            </li>
+            <li>
+                <span>・表示中の下書きレイヤーの不透明度が</span>
+                <input type="number" id="cond-c-draft" value="50">
+                <span>%でない場合、それ以外の表示中レイヤーの不透明度が</span>
+                <input type="number" id="cond-c-normal" value="100">
+                <span>%でない場合</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="io-container">
+        <div id="drop-zone">ここにCLIPファイルをドラッグ＆ドロップ（またはクリックして選択）</div>
+        <button id="reload-btn" class="action-btn" disabled>再読み込み</button>
+        <button id="save-btn" class="action-btn" disabled>修正版を保存</button>
+    </div>
+    <input type="file" id="file-input" accept=".clip" style="display: none;">
+
+    <div id="file-path-display">📁 <strong>読み込み中のファイル:</strong> <span id="file-path-text"></span></div>
+    <div id="status" class="status loading">SQL.js 初期化中...</div>
+
+    <div id="check-section" class="section" style="display: none;">
+        <div class="header-flex"><h2>指定条件チェック結果</h2></div>
+        <div id="check-results"></div>
+    </div>
+
+    <div id="layer-section" class="section" style="display: none;">
+        <div class="header-flex">
+            <h2>レイヤー構造</h2>
+            <span id="cell-count-badge" style="font-size: 14px; background: #3b82f6; color: white; padding: 3px 10px; border-radius: 20px; font-weight: bold;">セル数: 0</span>
+        </div>
+        <div id="layer-list"></div>
+    </div>
+
+    <script>
+        let SQL = null;
+        let fileHandle = null; 
+        
+        let clipHeaderBytes = null; 
+        let currentDb = null;       
+        let currentFileName = "";   
+        let detectedColumns = {};   
+        let pendingUpdatesMap = {}; 
+
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const reloadBtn = document.getElementById('reload-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const filePathDisplay = document.getElementById('file-path-display');
+        const filePathText = document.getElementById('file-path-text');
+        const statusDiv = document.getElementById('status');
+
+        initSqlJs({
+            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+        }).then(sql => {
+            SQL = sql;
+            statusDiv.innerText = "準備完了：CLIPファイルをドロップしてください。";
+            statusDiv.className = "status success";
+        }).catch(err => {
+            statusDiv.innerText = "SQL.js の初期化に失敗しました: " + err.message;
+            statusDiv.className = "status error";
+        });
+
+        function triggerRealtimeCheck() {
+            if (currentDb) {
+                const result = currentDb.exec("SELECT * FROM Layer");
+                if (result.length > 0) renderResults(result[0].columns, result[0].values);
+            }
+        }
+
+        ['cond-a-text', 'cond-b-text', 'cond-c-draft', 'cond-c-normal'].forEach(id => {
+            document.getElementById(id).addEventListener('input', triggerRealtimeCheck);
+        });
+
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('hover'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('hover'); });
+        
+        dropZone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('hover');
+            if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+                const item = e.dataTransfer.items[0];
+                if (item.kind === 'file') {
+                    if (typeof item.getAsFileSystemHandle === 'function') {
+                        fileHandle = await item.getAsFileSystemHandle();
+                        const file = await fileHandle.getFile();
+                        handleFile(file);
+                    } else {
+                        fileHandle = null;
+                        handleFile(e.dataTransfer.files[0]);
+                    }
+                }
+            }
+        });
+        
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                fileHandle = null; 
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        reloadBtn.addEventListener('click', async () => {
+            if (fileHandle) {
+                try {
+                    statusDiv.innerText = "最新のファイル状態を確認中...";
+                    statusDiv.className = "status loading";
+                    const currentFile = await fileHandle.getFile();
+                    handleFile(currentFile);
+                } catch (err) {
+                    statusDiv.innerText = "再読み込みに失敗しました: " + err.message;
+                    statusDiv.className = "status error";
+                }
+            }
+        });
+
+        // ★【仕様変更】ファイルブラウザを開き、上書き保存時のみ自動再チェックを走らせる
+        saveBtn.addEventListener('click', async () => {
+            if (!currentDb || !clipHeaderBytes || Object.keys(pendingUpdatesMap).length === 0) return;
+
+            try {
+                statusDiv.innerText = "保存先を指定してください...";
+                statusDiv.className = "status loading";
+
+                // File System Access API でファイル選択ブラウザを起動
+                const options = {
+                    suggestedName: "fixed_" + currentFileName,
+                    types: [{
+                        description: 'CLIP STUDIO Format',
+                        accept: { 'application/octet-stream': ['.clip'] }
+                    }],
+                    // 元のファイルが存在するフォルダを初期位置に指定
+                    startIn: fileHandle || 'documents'
+                };
+                
+                let newHandle;
+                try {
+                    newHandle = await window.showSaveFilePicker(options);
+                } catch (e) {
+                    // ユーザーが保存ダイアログをキャンセルした場合
+                    statusDiv.innerText = "保存がキャンセルされました。";
+                    statusDiv.className = "status success";
+                    return;
+                }
+
+                statusDiv.innerText = "修正データをビルド中...";
+
+                // 元のメモリ内DB（currentDb）を汚染させないよう、保存用の一時クローンDBを作成
+                const tempDb = new SQL.Database(currentDb.export());
+
+                // クローンDBに対して一括でUPDATEクエリを実行
+                for (let mainId in pendingUpdatesMap) {
+                    let instructions = pendingUpdatesMap[mainId];
+                    let setClauses = [];
+
+                    if (instructions.outputAttribute !== undefined) setClauses.push(`${detectedColumns.output} = ${instructions.outputAttribute}`);
+                    if (instructions.opacity !== undefined) setClauses.push(`${detectedColumns.opacity} = ${instructions.opacity}`);
+                    if (instructions.visibility !== undefined) setClauses.push(`${detectedColumns.visibility} = ${instructions.visibility}`);
+
+                    if (setClauses.length > 0) {
+                        const sqlQuery = `UPDATE Layer SET ${setClauses.join(', ')} WHERE ${detectedColumns.mainId} = ${mainId}`;
+                        tempDb.run(sqlQuery);
+                    }
+                }
+
+                // 修正後のSQLiteバイナリを抽出し、クローンは即時クローズしてメモリ解放
+                const modifiedDbBytes = tempDb.export();
+                tempDb.close();
+
+                // 独自ヘッダーと新DBを再結合
+                const finalBlob = new Blob([clipHeaderBytes, modifiedDbBytes], { type: "application/octet-stream" });
+                
+                // 指定されたパス（ハンドル）へ直接ストリーム書き込み
+                const writable = await newHandle.createWritable();
+                await writable.write(finalBlob);
+                await writable.close();
+
+                statusDiv.innerText = "ファイルの書き出しが完了しました。";
+                statusDiv.className = "status success";
+
+                // ★判定：元のファイル名（currentFileName）とまったく同じ名前で保存された場合（上書き）
+                if (newHandle.name === currentFileName) {
+                    statusDiv.innerText = "元のファイルへの上書きを検知しました。再チェックを自動実行します...";
+                    fileHandle = newHandle; // ハンドルを上書きした最新のものに差し替え
+                    const currentFile = await fileHandle.getFile();
+                    handleFile(currentFile); // 再ロードして画面をリフレッシュ
+                } else {
+                    // 別名保存の場合はメモリの元の状態を維持するため、画面の再レンダリングは行わない
+                    statusDiv.innerText = `別名で保存されました: ${newHandle.name} (元の構造を維持しています)`;
+                    statusDiv.className = "status success";
+                }
+
+            } catch (err) {
+                statusDiv.innerText = "保存中にエラーが発生しました: " + err.message;
+                statusDiv.className = "status error";
+            }
+        });
+
+        function toggleFolder(element) {
+            const childrenContainer = element.nextElementSibling;
+            const arrow = element.querySelector('.toggle-arrow');
+            if (childrenContainer && childrenContainer.classList.contains('folder-children')) {
+                if (childrenContainer.style.display === 'none') {
+                    childrenContainer.style.display = 'block';
+                    if (arrow) arrow.innerText = '▼';
+                } else {
+                    childrenContainer.style.display = 'none';
+                    if (arrow) arrow.innerText = '▶';
+                }
+            }
+        }
+
+        function handleFile(file) {
+            if (!SQL) return alert("SQL.jsの初期化が完了していません。");
+            
+            currentFileName = file.name;
+            filePathDisplay.style.display = 'block';
+            filePathText.innerText = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            
+            if (fileHandle) {
+                reloadBtn.disabled = false;
+                reloadBtn.classList.add('active');
+            } else {
+                reloadBtn.disabled = true;
+                reloadBtn.classList.remove('active');
+            }
+
+            statusDiv.innerText = `ファイル解析中: ${file.name}...`;
+            statusDiv.className = "status loading";
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const view = new Uint8Array(e.target.result);
+                    const magicText = "SQLite format 3";
+                    const magicBytes = new TextEncoder().encode(magicText);
+                    let sqliteOffset = -1;
+
+                    for (let i = 0; i <= view.length - magicBytes.length; i++) {
+                        let match = true;
+                        for (let j = 0; j < magicBytes.length; j++) {
+                            if (view[i + j] !== magicBytes[j]) { match = false; break; }
+                        }
+                        if (match) { sqliteOffset = i; break; }
+                    }
+
+                    if (sqliteOffset === -1) throw new Error("有効な.clipファイルではない可能性があります。");
+
+                    clipHeaderBytes = view.subarray(0, sqliteOffset);
+                    const dbBytes = view.subarray(sqliteOffset);
+                    
+                    if (currentDb) currentDb.close();
+                    currentDb = new SQL.Database(dbBytes);
+
+                    statusDiv.innerText = `チェック完了！`;
+                    statusDiv.className = "status success";
+
+                    triggerRealtimeCheck();
+
+                } catch (err) {
+                    statusDiv.innerText = "解析エラー: " + err.message;
+                    statusDiv.className = "status error";
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function parseInputKeywords(elementId) {
+            return document.getElementById(elementId).value
+                .split(',')
+                .map(k => k.trim().toLowerCase())
+                .filter(k => k !== "");
+        }
+
+        function renderResults(columns, values) {
+            const mainIdIdx = columns.findIndex(c => c.toLowerCase() === 'mainid');
+            const firstChildIdx = columns.findIndex(c => c.toLowerCase() === 'layerfirstchildindex');
+            const nextIdx = columns.findIndex(c => c.toLowerCase() === 'layernextindex');
+            const nameIdx = columns.findIndex(c => c.toLowerCase().includes('name'));
+            const opacityIdx = columns.findIndex(c => c.toLowerCase().includes('opacity'));
+            const outputIdx = columns.findIndex(c => c.toLowerCase().includes('outputattribute') || c.toLowerCase() === 'output');
+            const animeFolderIdx = columns.findIndex(c => c.toLowerCase() === 'animationfolder');
+            const visibilityIdx = columns.findIndex(c => c.toLowerCase().includes('visibility'));
+            const layerTypeIdx = columns.findIndex(c => c.toLowerCase() === 'layertype'); 
+
+            detectedColumns = {
+                mainId: columns[mainIdIdx],
+                output: columns[outputIdx],
+                opacity: columns[opacityIdx],
+                visibility: columns[visibilityIdx]
+            };
+
+            const layerList = document.getElementById('layer-list');
+            const checkResults = document.getElementById('check-results');
+            layerList.innerHTML = '';
+            checkResults.innerHTML = '';
+
+            const keywordsA = parseInputKeywords('cond-a-text');
+            const keywordsB = parseInputKeywords('cond-b-text');
+            const targetDraftOpacity = Number(document.getElementById('cond-c-draft').value);
+            const targetNormalOpacity = Number(document.getElementById('cond-c-normal').value);
+
+            const draftOpacityRaw = Math.round((targetDraftOpacity / 100) * 255);
+            const normalOpacityRaw = Math.round((targetNormalOpacity / 100) * 255);
+
+            let warnings = [];
+            let layerMap = {};
+            let allChildAndNextIds = new Set();
+            let visibleAnimeFolderCount = 0; 
+            
+            pendingUpdatesMap = {};
+
+            values.forEach((row) => {
+                const mainId = row[mainIdIdx];
+                const firstChild = row[firstChildIdx];
+                const next = row[nextIdx];
+                const name = nameIdx !== -1 ? row[nameIdx] : `MainID:${mainId}`;
+                const opacityRaw = opacityIdx !== -1 ? row[opacityIdx] : 255;
+                const opacityPercent = typeof opacityRaw === 'number' ? Math.round((opacityRaw / 255) * 100) : 100;
+                const outputAttr = outputIdx !== -1 ? row[outputIdx] : 0;
+                const layerType = layerTypeIdx !== -1 ? row[layerTypeIdx] : 0; 
+                
+                const animFolderVal = animeFolderIdx !== -1 ? row[animeFolderIdx] : null;
+                const isAnimationFolder = animFolderVal !== null && animFolderVal !== '';
+                const visibilityVal = visibilityIdx !== -1 ? row[visibilityIdx] : 1;
+                const isVisible = visibilityVal !== 0;
+
+                if (firstChild && firstChild !== 0) allChildAndNextIds.add(firstChild);
+                if (next && next !== 0) allChildAndNextIds.add(next);
+
+                layerMap[mainId] = {
+                    mainId, firstChild, next, name, opacityPercent,
+                    outputAttribute: outputAttr,
+                    layerType: layerType, 
+                    isFolder: firstChild && firstChild !== 0,
+                    isAnimationFolder: isAnimationFolder,
+                    isVisible: isVisible, 
+                    children: []
+                };
+            });
+
+            let rootStartId = null;
+            for (let mainId in layerMap) {
+                if (!allChildAndNextIds.has(Number(mainId))) {
+                    rootStartId = Number(mainId);
+                    break;
+                }
+            }
+
+            // ツリー構造の構築
+            function buildTreeChain(startId) {
+                let chain = [];
+                let currentId = startId;
+                while (currentId && currentId !== 0 && layerMap[currentId]) {
+                    let layer = layerMap[currentId];
+                    if (layer.firstChild && layer.firstChild !== 0) {
+                        layer.children = buildTreeChain(layer.firstChild);
+                    }
+                    chain.push(layer);
+                    currentId = layer.next;
+                }
+                return chain;
+            }
+
+            let finalTree = [];
+            if (rootStartId) finalTree = buildTreeChain(rootStartId);
+            else if (Object.keys(layerMap).length > 0) finalTree = buildTreeChain(Number(Object.keys(layerMap)[0]));
+
+            // ツリー走査・警告チェック
+            function processTreeAndRender(node, depth = 0, parentVisible = true, parentPath = []) {
+                
+                if (node.layerType !== 0 && node.layerType !== 1 && node.layerType !== 256) {
+                    return { html: '', hasWarning: false }; 
+                }
+
+                const isCurrentlyVisible = node.isVisible && parentVisible;
+                const fullPath = [...parentPath, node.name || '(名称未設定)'].join('>');
+                
+                let hasWarning = false;       // 赤警告（深刻）
+                let hasMinorWarning = false;  // 黄警告（軽微）
+                let fixInstructions = {};
+
+                // ★【仕様変更】ルールB：ラフ始まりレイヤーの表示状態による深刻度の分岐
+                if (keywordsB.some(k => node.name.toLowerCase().startsWith(k))) {
+                    if (isCurrentlyVisible) {
+                        // 表示中のラフ：従来どおり赤警告を出し、修正版では「非表示(0)」にする
+                        warnings.push({ level: 'red', text: `[ルールB] 表示中レイヤー「${fullPath}」は指定された文字列から始まっています。` });
+                        hasWarning = true;
+                        fixInstructions.visibility = 0; 
+                    } else {
+                        // 非表示中のラフ：深刻度の低い黄警告を出す。修正版でのデータ操作（非表示のまま）は行わない
+                        warnings.push({ level: 'yellow', text: `[ルールB] 非表示レイヤー「${fullPath}」は指定された文字列から始まっています。` });
+                        hasMinorWarning = true;
+                    }
+                }
+
+                // 表示中のレイヤーのみを対象とするチェック（ルールA、C）
+                if (isCurrentlyVisible) {
+                    let currentEffectiveOutputAttr = node.outputAttribute;
+
+                    if (keywordsA.some(k => node.name.toLowerCase().includes(k)) && node.outputAttribute !== 1) {
+                        warnings.push({ level: 'red', text: `[ルールA] 表示中レイヤー「${fullPath}」は名前に該当文字列を含んでいますが、下書き属性がありません。` });
+                        hasWarning = true;
+                        fixInstructions.outputAttribute = 1;
+                        currentEffectiveOutputAttr = 1; 
+                    }
+
+                    if (currentEffectiveOutputAttr === 1) { 
+                        if (node.opacityPercent !== targetDraftOpacity) {
+                            warnings.push({ level: 'red', text: `[不透明度] 表示中の下書きレイヤー「${fullPath}」の不透明度が${targetDraftOpacity}%ではありません（現在: ${node.opacityPercent}%）` });
+                            hasWarning = true;
+                            fixInstructions.opacity = draftOpacityRaw;
+                        }
+                    } else { 
+                        if (node.opacityPercent !== targetNormalOpacity) {
+                            warnings.push({ level: 'red', text: `[不透明度] 表示中の通常レイヤー「${fullPath}」の不透明度が${targetNormalOpacity}%ではありません（現在: ${node.opacityPercent}%）` });
+                            hasWarning = true;
+                            fixInstructions.opacity = normalOpacityRaw;
+                        }
+                    }
+
+                    if (node.isAnimationFolder) {
+                        visibleAnimeFolderCount++;
+                    }
+                }
+
+                if (Object.keys(fixInstructions).length > 0) {
+                    pendingUpdatesMap[node.mainId] = fixInstructions;
+                }
+
+                let childrenHtml = '';
+                let childWarningDetected = false;
+
+                if (node.children && node.children.length > 0) {
+                    const nextPath = node.isFolder ? [...parentPath, node.name || '(名称未設定)'] : parentPath;
+                    const reversedChildren = [...node.children].reverse();
+                    reversedChildren.forEach(child => {
+                        const res = processTreeAndRender(child, depth + 1, isCurrentlyVisible, nextPath);
+                        childrenHtml += res.html;
+                        if (res.hasWarning || res.hasMinorWarning) childWarningDetected = true;
+                    });
+                }
+
+                // 自身または子供に何らかの警告（赤・黄どちらでも）があれば、問題ありとして初期展開する
+                let amIOrChildrenWarning = hasWarning || hasMinorWarning || childWarningDetected;
+                let isCollapsed = (node.isFolder || node.isAnimationFolder) && !amIOrChildrenWarning;
+
+                let html = '';
+                const indent = depth * 24;
+                let icon = '📄';
+                let folderClass = '';
+                let animeCountText = '';
+
+                if (node.isAnimationFolder) {
+                    icon = '🎬';
+                    folderClass = 'is-anime-folder';
+                    const frameCount = node.children ? node.children.length : 0;
+                    animeCountText = `<span class="anime-count-tag">（動画枚数: ${frameCount}）</span>`;
+                } else if (node.isFolder) {
+                    icon = '📁';
+                    folderClass = 'is-folder';
+                }
+                
+                if (!isCurrentlyVisible) folderClass += ' is-hidden';
+                
+                // ★ 警告深刻度に応じたクラスの割り当て
+                if (hasWarning) {
+                    folderClass += ' has-warning'; // 赤ハイライト
+                } else if (hasMinorWarning) {
+                    folderClass += ' has-minor-warning'; // 黄ハイライト
+                }
+
+                const draftBadge = node.outputAttribute === 1 ? ' <span style="color:#ef4444; font-size:11px; border:1px solid #ef4444; padding:1px 3px; border-radius:3px; font-weight:normal;">下書き</span>' : '';
+                const hiddenBadge = !isCurrentlyVisible ? ' <span style="color:#64748b; font-size:11px; border:1px solid #cbd5e1; padding:1px 3px; border-radius:3px; font-weight:normal; background:#f1f5f9;">非表示</span>' : '';
+
+                if (node.isFolder || node.isAnimationFolder) {
+                    let displayStyle = isCollapsed ? 'none' : 'block';
+                    let arrowIcon = isCollapsed ? '▶' : '▼';
+                    html += `
+                        <div class="layer-item ${folderClass}" style="padding-left: ${indent + 10}px; cursor: pointer;" onclick="toggleFolder(this)">
+                            <span class="layer-name"><span class="toggle-arrow">${arrowIcon}</span> ${icon} ${node.name || '(名称未設定)'}${animeCountText}${draftBadge}${hiddenBadge}</span>
+                            <span class="layer-meta">不透明度: ${node.opacityPercent}% <small style="color:#94a3b8; margin-left:10px;">(ID:${node.mainId})</small></span>
+                        </div>
+                        <div class="folder-children" style="display: ${displayStyle};">
+                            ${childrenHtml}
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="layer-item ${folderClass}" style="padding-left: ${indent + 10}px;">
+                            <span class="layer-name"><span class="toggle-arrow"></span>${icon} ${node.name || '(名称未設定)'}${draftBadge}${hiddenBadge}</span>
+                            <span class="layer-meta">不透明度: ${node.opacityPercent}% <small style="color:#94a3b8; margin-left:10px;">(ID:${node.mainId})</small></span>
+                        </div>
+                    `;
+                }
+
+                return { html: html, hasWarning: amIOrChildrenWarning };
+            }
+
+            finalTree.forEach(rootNode => {
+                if (rootNode.layerType === 256) {
+                    if (rootNode.children && rootNode.children.length > 0) {
+                        const reversedRoots = [...rootNode.children].reverse();
+                        reversedRoots.forEach(child => {
+                            const res = processTreeAndRender(child, 0, rootNode.isVisible, []);
+                            layerList.innerHTML += res.html;
+                        });
+                    }
+                } else {
+                    const res = processTreeAndRender(rootNode, 0, true, []);
+                    layerList.innerHTML += res.html;
+                }
+            });
+
+            document.getElementById('cell-count-badge').innerText = `セル数: ${visibleAnimeFolderCount}`;
+
+            // 5. 【仕様変更】色分けされた警告文リストを出力
+            if (warnings.length === 0) {
+                checkResults.innerHTML = `<div class="check-item check-pass">✔ すべての条件を満たしています。</div>`;
+                saveBtn.disabled = true;
+                saveBtn.classList.remove('active');
+            } else {
+                warnings.forEach(warn => {
+                    const badgeClass = warn.level === 'red' ? 'check-warn' : 'check-minor-warn';
+                    const icon = warn.level === 'red' ? '⚠️' : '💡';
+                    checkResults.innerHTML += `<div class="check-item ${badgeClass}">${icon} ${warn.text}</div>`;
+                });
+                
+                // 修正可能な項目（pendingUpdatesMapのタスク）がある場合のみ、保存ボタンをアクティブ化
+                if (Object.keys(pendingUpdatesMap).length > 0) {
+                    saveBtn.disabled = false;
+                    saveBtn.classList.add('active');
+                } else {
+                    saveBtn.disabled = true;
+                    saveBtn.classList.remove('active');
+                }
+            }
+
+            document.getElementById('check-section').style.display = 'block';
+            document.getElementById('layer-section').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XDTS 原画・動画タイムライン自動比較ツール (複数カット対応版)</title>
+    <style>
+        body { font-family: 'Segoe UI', Meiryo, sans-serif; background-color: #f4f7f6; color: #333; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { font-size: 1.5rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+        
+        .flex-container { display: flex; gap: 20px; margin-bottom: 20px; }
+        .box { flex: 1; background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #e1e8ed; text-align: center; }
+        .box-title { font-weight: bold; margin-bottom: 15px; font-size: 1.2rem; border-bottom: 3px solid; padding-bottom: 5px; display: inline-block; }
+        .genga-title { color: #e74c3c; border-color: #e74c3c; }
+        .douga-title { color: #3498db; border-color: #3498db; }
+        label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 0.9rem; }
+        input[type="file"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px dashed #ccc; border-radius: 4px; background: #fff; cursor: pointer; }
+        
+        button.analyze-btn { background-color: #3498db; color: white; border: none; padding: 15px 20px; font-size: 1.2rem; border-radius: 6px; cursor: pointer; transition: background 0.3s; width: 100%; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-top: 10px; }
+        button.analyze-btn:hover { background-color: #2980b9; }
+        
+        .icon-btn { background: #ecf0f1; border: 1px solid #bdc3c7; color: #2c3e50; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; margin-right: 5px; transition: 0.2s; }
+        .icon-btn:hover:not(:disabled) { background: #d6dbdf; }
+        .icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        
+        #status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.1rem; }
+        
+        .result-grid-2col { display: flex; gap: 20px; margin-bottom: 20px; }
+        .grid-item-total { flex: 1; min-width: 0; } 
+        .grid-item-slip { flex: 2; min-width: 0; }  
+        
+        .result-section { background: #fafbfc; padding: 15px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 20px; }
+        .side-title { font-weight: bold; color: #2c3e50; margin-top: 0; margin-bottom: 10px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        
+        .summary-list { font-family: monospace; font-size: 1.2rem; line-height: 1.8; background: #fff; padding: 15px; border: 1px solid #e1e8ed; border-radius: 4px; white-space: pre-wrap; word-break: break-all; }
+        
+        .total-color { color: #27ae60; font-weight: bold; }
+        .genga-detect-color { color: #e67e22; font-weight: bold; }
+
+        .slip-container { background: #fff; padding: 10px; border: 1px solid #e1e8ed; border-radius: 4px; }
+        .slip-folder-title { font-weight: bold; color: #2c3e50; font-size: 1.1rem; margin-bottom: 10px; border-left: 5px solid #3498db; padding-left: 8px; }
+        
+        .slip-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: #fff; border: 2px solid #000; }
+        .slip-table th, .slip-table td { border: 1px solid #333; padding: 10px; text-align: center; font-family: 'Meiryo', sans-serif; font-size: 1.1rem; }
+        .slip-table th { background-color: #fff; border-bottom: 2px double #000; font-weight: bold; color: #000; font-size: 1.2rem; }
+        
+        .slip-parent { font-weight: bold; color: #000; font-size: 1.15rem; }
+        .slip-arrow { font-size: 1.5rem; font-weight: bold; color: #333; line-height: 1; }
+        .slip-child { font-weight: bold; color: #000; }
+        .slip-result { font-weight: bold; color: #000; }
+        .slip-end-tag { font-size: 0.85rem; font-weight: bold; color: #000; margin-left: 4px; vertical-align: bottom; }
+
+        .normal-table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 10px; }
+        .normal-table th, .normal-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        .normal-table th { background-color: #f0f4f8; font-weight: bold; font-size: 1rem; }
+        
+        .cell-name { font-weight: bold; color: #2c3e50; }
+        .frame-num { color: #7f8c8d; }
+        .log-box { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 4px; font-family: monospace; margin-top: 15px; height: 120px; overflow-y: auto; font-size: 0.85rem; white-space: pre-wrap; }
+        
+        .pairing-missing { background-color: #ffeaea !important; }
+        .flex-center { display: flex; align-items: center; justify-content: flex-start; gap: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>XDTS 動画タイムライン専用 総合チェックツール (複数カット兼用対応版)</h1>
+    <p style="font-size: 0.9rem; color: #555;">原画と動画の <b>.xdtsファイル</b> を選択（複数選択可）し、動画タイムラインの全体集計と合成伝票を自動生成します。
+<br><span style="font-size: 18px; color: red;">補助的に使用して最終確認は必ずして下さい。</span>
+<br><b>※動画のXDTSファイルのみの場合は、総枚数一覧と合成伝票のみを表示</b>
+</p>
+    
+    <div class="flex-container">
+        <div class="box">
+            <div class="box-title genga-title">原画データ</div>
+            <label>原画のXDTSファイルを選択 (複数可)</label>
+            <input type="file" id="gengaFile" accept=".xdts" multiple>
+        </div>
+
+        <div class="box">
+            <div class="box-title douga-title">動画データ</div>
+            <label>動画のXDTSファイルを選択 (複数可)</label>
+            <input type="file" id="dougaFile" accept=".xdts" multiple>
+        </div>
+    </div>
+
+    <div id="pairingSection" class="result-section" style="display:none;">
+        <h3 class="side-title" style="color: #8e44ad; border-color: #8e44ad;">🔗 結合予定のペアリング状況 (実行前プレビュー)</h3>
+        <p style="font-size: 0.85rem; margin-top: 0;">※自動で名前順に揃いますが、ズレている場合は「▲」「▼」ボタンで個別に順番を入れ替えて修正してください。</p>
+        <table class="normal-table" style="margin-top: 0;">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">ペア順</th>
+                    <th style="width: 46%; color: #e74c3c;">原画のファイル名 (順番変更)</th>
+                    <th style="width: 46%; color: #3498db;">動画のファイル名 (順番変更)</th>
+                </tr>
+            </thead>
+            <tbody id="pairingBody"></tbody>
+        </table>
+    </div>
+
+    <button class="analyze-btn" onclick="analyzeXDTS()">タイムラインを解析して伝票・表を作成</button>
+
+    <div id="status"></div>
+    <div id="log" class="log-box">ここに解析ログが表示されます...</div>
+    
+    <div id="resultArea" style="display:none; margin-top: 20px;">
+        
+        <div class="result-grid-2col">
+            <div class="result-section grid-item-total">
+                <h3 class="side-title">🎬 動画の総枚数 一覧 (全カット合算)</h3>
+                <div id="totalSummaryText" class="summary-list total-color"></div>
+            </div>
+
+            <div class="result-section grid-item-slip">
+                <h3 class="side-title">📝 合成 一覧</h3>
+                <div id="slipSummaryContainer" class="slip-container"></div>
+            </div>
+        </div>
+
+        <div id="gengaDetectSection" class="result-section">
+            <h3 class="side-title">📊 原画参考の動画セル番号検出 一覧</h3>
+            <div id="gengaDetectSummaryText" class="summary-list genga-detect-color"></div>
+        </div>
+
+        <div id="timelineSection" class="result-section">
+            <h3 class="side-title">📊 上記の詳細比較 一覧 (重複除外)</h3>
+            <table class="normal-table">
+                <thead>
+                    <tr>
+                        <th>アニメーションフォルダ名</th>
+                        <th>通しフレーム (結合後)</th>
+                        <th style="color: #e74c3c;">原画 のセル番号</th>
+                        <th style="color: #3498db;">動画 のセル番号</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody"></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+        document.getElementById('log').textContent += `\n❌ [システムエラー発生]\n内容: ${msg}\n行番号: ${lineNo}`;
+        document.getElementById('status').textContent = "❌ エラーで停止しました";
+        document.getElementById('status').style.color = "#c0392b";
+        return false;
+    };
+
+    function normalizeFolderName(str) {
+        if (!str) return str;
+        let normalized = str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
+            return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+        });
+        return normalized.toUpperCase(); 
+    }
+
+    function formatNumberRange(arr) {
+        if (!arr || arr.length === 0) return "なし";
+        let items = arr.map(v => {
+            let n = parseInt(v, 10);
+            return { raw: v, num: isNaN(n) ? -1 : n };
+        });
+        items.sort((a, b) => a.num - b.num);
+
+        let resultChunks = [];
+        let i = 0;
+        
+        while (i < items.length) {
+            let startItem = items[i];
+            if (startItem.num === -1) {
+                resultChunks.push(startItem.raw);
+                i++;
+                continue;
+            }
+            let j = i;
+            while (j + 1 < items.length && items[j + 1].num !== -1 && items[j + 1].num === items[j].num + 1) { j++; }
+            if (j > i) {
+                resultChunks.push(`${startItem.raw}～${items[j].raw}`);
+                i = j + 1;
+            } else {
+                resultChunks.push(startItem.raw);
+                i++;
+            }
+        }
+        return resultChunks.join(", ");
+    }
+
+    const pastelColors = ["#f0f8ff", "#fff0f5", "#f5fffa", "#ffebcd", "#f0ffff", "#f5f5dc", "#e6e6fa", "#ffe4e1", "#e0ffff", "#fafad2"];
+
+    let gengaFilesList = [];
+    let dougaFilesList = [];
+
+    document.getElementById('gengaFile').addEventListener('change', function(e) {
+        gengaFilesList = Array.from(e.target.files).sort((a,b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+        renderPairingTable();
+    });
+
+    document.getElementById('dougaFile').addEventListener('change', function(e) {
+        dougaFilesList = Array.from(e.target.files).sort((a,b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+        renderPairingTable();
+    });
+
+    window.moveItem = function(listType, index, direction) {
+        let list = listType === 'genga' ? gengaFilesList : dougaFilesList;
+        if (index + direction < 0 || index + direction >= list.length) return;
+        
+        let temp = list[index];
+        list[index] = list[index + direction];
+        list[index + direction] = temp;
+        
+        renderPairingTable();
+    };
+
+    function renderPairingTable() {
+        const pairingSection = document.getElementById('pairingSection');
+        const pairingBody = document.getElementById('pairingBody');
+        pairingBody.innerHTML = '';
+
+        const maxFiles = Math.max(gengaFilesList.length, dougaFilesList.length);
+        
+        if (maxFiles === 0) {
+            pairingSection.style.display = 'none';
+            return;
+        }
+        
+        pairingSection.style.display = 'block';
+
+        for (let i = 0; i < maxFiles; i++) {
+            const tr = document.createElement('tr');
+            if ((!gengaFilesList[i] || !dougaFilesList[i]) && gengaFilesList.length > 0) {
+                tr.className = 'pairing-missing';
+            }
+
+            let gHTML = '<span style="color:#999;">（なし）</span>';
+            if (gengaFilesList[i]) {
+                gHTML = `
+                    <div class="flex-center">
+                        <div>
+                            <button class="icon-btn" onclick="moveItem('genga', ${i}, -1)" ${i === 0 ? 'disabled' : ''}>▲</button>
+                            <button class="icon-btn" onclick="moveItem('genga', ${i}, 1)" ${i === gengaFilesList.length - 1 ? 'disabled' : ''}>▼</button>
+                        </div>
+                        <span>${gengaFilesList[i].name}</span>
+                    </div>
+                `;
+            }
+
+            let dHTML = '<span style="color:#999;">（なし）</span>';
+            if (dougaFilesList[i]) {
+                dHTML = `
+                    <div class="flex-center">
+                        <div>
+                            <button class="icon-btn" onclick="moveItem('douga', ${i}, -1)" ${i === 0 ? 'disabled' : ''}>▲</button>
+                            <button class="icon-btn" onclick="moveItem('douga', ${i}, 1)" ${i === dougaFilesList.length - 1 ? 'disabled' : ''}>▼</button>
+                        </div>
+                        <span>${dougaFilesList[i].name}</span>
+                    </div>
+                `;
+            }
+
+            tr.innerHTML = `
+                <td style="font-weight:bold; text-align:center;">${i + 1}</td>
+                <td style="text-align:left;">${gHTML}</td>
+                <td style="text-align:left;">${dHTML}</td>
+            `;
+            pairingBody.appendChild(tr);
+        }
+    }
+
+    async function analyzeXDTS() {
+        const statusDiv = document.getElementById('status');
+        const logDiv = document.getElementById('log');
+        const resultArea = document.getElementById('resultArea');
+        const resultBody = document.getElementById('resultBody');
+        
+        const totalSummaryText = document.getElementById('totalSummaryText');
+        const gengaDetectSummaryText = document.getElementById('gengaDetectSummaryText');
+        const slipSummaryContainer = document.getElementById('slipSummaryContainer');
+
+        const gengaDetectSection = document.getElementById('gengaDetectSection');
+        const timelineSection = document.getElementById('timelineSection');
+
+        logDiv.textContent = '処理を開始します...\n';
+        resultBody.innerHTML = '';
+        totalSummaryText.textContent = '';
+        gengaDetectSummaryText.textContent = '';
+        slipSummaryContainer.innerHTML = ''; 
+        resultArea.style.display = 'none';
+
+        if (dougaFilesList.length === 0) {
+            statusDiv.textContent = "⚠️ 動画のXDTSファイルを選択してください。";
+            statusDiv.style.color = "#e74c3c";
+            return;
+        }
+
+        logDiv.textContent += `▶ 動画ファイル ${dougaFilesList.length}件、原画ファイル ${gengaFilesList.length}件を処理します\n`;
+
+        const hasGengaFile = gengaFilesList.length > 0;
+        if (hasGengaFile) {
+            statusDiv.textContent = "🔄 複数ファイルを結合し、トラック名基準で精密同期・集計中...";
+            gengaDetectSection.style.display = 'block';
+            timelineSection.style.display = 'block';
+        } else {
+            statusDiv.textContent = "🔄 動画データのみを結合・集計中...";
+            gengaDetectSection.style.display = 'none';
+            timelineSection.style.display = 'none';
+        }
+        statusDiv.style.color = "#2980b9";
+
+        try {
+            function parseTracksFromText(text, fileLabel) {
+                const firstBraceIndex = text.indexOf('{');
+                if (firstBraceIndex === -1) throw new Error(`${fileLabel}の中にデータが見つかりません。`);
+                
+                const jsonText = text.substring(firstBraceIndex);
+                let json = JSON.parse(jsonText);
+                const duration = json.duration || 300; 
+
+                const timeTable = (json.timeTables || [])[0];
+                if (!timeTable) throw new Error(`${fileLabel}にtimeTablesデータが見つかりません。`);
+
+                const cellHeader = (timeTable.timeTableHeaders || []).find(h => h.fieldId === 0) || (timeTable.timeTableHeaders || [])[0];
+                if (!cellHeader || !cellHeader.names) throw new Error(`${fileLabel}にフォルダ名情報が見つかりません。`);
+                
+                let trackNamesList = [];
+                cellHeader.names.forEach((name, index) => {
+                    trackNamesList[index] = name ? normalizeFolderName(name) : "";
+                });
+
+                const cellField = (timeTable.fields || []).find(f => f.fieldId === 0) || (timeTable.fields || [])[0];
+                if (!cellField || !cellField.tracks) return [];
+                
+                let resultTracks = [];
+                let nameCount = {}; // ★ 同名トラック対応用
+
+                cellField.tracks.forEach(track => {
+                    let trackName = trackNamesList[track.trackNo];
+                    if (!trackName) return;
+
+                    // ★ 同名トラックがあっても上書きされないよう一意なIDを発行
+                    if (!nameCount[trackName]) nameCount[trackName] = 0;
+                    let uniqueId = trackName + "_" + nameCount[trackName];
+                    nameCount[trackName]++;
+
+                    let rawFrames = {};
+                    const frames = track.frames || [];
+                    
+                    frames.forEach(f => {
+                        const dataArray = f.data || [];
+                        const cellData = dataArray.find(d => d.id === 0) || dataArray[0];
+
+                        if (cellData && cellData.values && cellData.values.length > 0) {
+                            let rawValue = cellData.values.join(", ");
+                            if (rawValue && !rawValue.includes("SYMBOL_TICK") && !rawValue.includes("SYMBOL_NULL")) {
+                                rawFrames[f.frame] = rawValue;
+                            } else if (rawValue && (rawValue.includes("SYMBOL_NULL"))) {
+                                rawFrames[f.frame] = "SYMBOL_BLANK";
+                            }
+                        }
+                    });
+
+                    const frameKeys = Object.keys(rawFrames).map(Number);
+                    const maxFrame = frameKeys.length > 0 ? Math.max(...frameKeys, duration) : duration;
+                    let currentCell = "（なし）";
+                    let fullTimeline = {};
+
+                    for (let i = 0; i <= maxFrame; i++) {
+                        if (rawFrames[i] !== undefined) {
+                            currentCell = rawFrames[i]; 
+                            if (rawFrames[i] === "SYMBOL_BLANK") currentCell = "SYMBOL_BLANK";
+                        }
+                        fullTimeline[i] = currentCell;
+                    }
+                    
+                    resultTracks.push({
+                        trackNo: track.trackNo,
+                        name: trackName,
+                        uniqueId: uniqueId, // ★ マージ用のキーを追加
+                        raw: rawFrames,
+                        complete: fullTimeline,
+                        maxFrame: maxFrame
+                    });
+                });
+                
+                logDiv.textContent += `✅ [${fileLabel}] から ${resultTracks.length} つのトラックを読込\n`;
+                return resultTracks;
+            }
+
+            let mergedDougaTracksMap = {};
+            let mergedGengaTracksMap = {};
+            let currentGlobalOffset = 0;
+            let fileOffsets = []; 
+
+            const maxFiles = Math.max(dougaFilesList.length, gengaFilesList.length);
+
+            for (let i = 0; i < maxFiles; i++) {
+                let dTracks = [];
+                let gTracks = [];
+                let dName = dougaFilesList[i] ? dougaFilesList[i].name : (gengaFilesList[i] ? gengaFilesList[i].name : `Cut ${i+1}`);
+
+                if (dougaFilesList[i]) {
+                    const dText = await dougaFilesList[i].text();
+                    dTracks = parseTracksFromText(dText, `動画 ${dougaFilesList[i].name}`);
+                }
+                
+                if (gengaFilesList[i]) {
+                    const gText = await gengaFilesList[i].text();
+                    gTracks = parseTracksFromText(gText, `原画 ${gengaFilesList[i].name}`);
+                }
+
+                let cutMaxFrame = 0;
+                dTracks.forEach(t => cutMaxFrame = Math.max(cutMaxFrame, t.maxFrame));
+                gTracks.forEach(t => cutMaxFrame = Math.max(cutMaxFrame, t.maxFrame));
+
+                fileOffsets.push({
+                    fileIndex: i,
+                    name: dName,
+                    start: currentGlobalOffset,
+                    end: currentGlobalOffset + cutMaxFrame
+                });
+
+                // ★ マージ時に uniqueId を使用して同名トラック同士を正確に繋ぐ
+                const mergeTracks = (sourceTracks, targetMap) => {
+                    sourceTracks.forEach(t => {
+                        if (!targetMap[t.uniqueId]) {
+                            targetMap[t.uniqueId] = { trackNo: Object.keys(targetMap).length, name: t.name, uniqueId: t.uniqueId, raw: {}, complete: {}, maxFrame: 0 };
+                        }
+                        let mt = targetMap[t.uniqueId];
+                        Object.keys(t.raw).forEach(f => mt.raw[Number(f) + currentGlobalOffset] = t.raw[f]);
+                        Object.keys(t.complete).forEach(f => mt.complete[Number(f) + currentGlobalOffset] = t.complete[f]);
+                        mt.maxFrame = Math.max(mt.maxFrame, t.maxFrame + currentGlobalOffset);
+                    });
+                };
+
+                mergeTracks(dTracks, mergedDougaTracksMap);
+                mergeTracks(gTracks, mergedGengaTracksMap);
+
+                currentGlobalOffset += cutMaxFrame + 10;
+            }
+
+            const gengaTracksList = Object.values(mergedGengaTracksMap);
+            const dougaTracksList = Object.values(mergedDougaTracksMap);
+
+            const activeDougaTracks = dougaTracksList.filter(t => !t.name.endsWith("_GO"));
+
+            let totalSummaryLines = [];
+            let gengaDetectLines = [];
+            let hasGoDataGlobal = false;
+            let totalSheetsSum = 0; 
+            
+            let trackColorMap = {};
+            let colorIndex = 0;
+
+            activeDougaTracks.forEach((dData) => {
+                let trackName = dData.name;
+                let dCompleteMerged = dData.complete;
+
+                if (!trackColorMap[trackName]) {
+                    trackColorMap[trackName] = pastelColors[colorIndex % pastelColors.length];
+                    colorIndex++;
+                }
+                let rowBgColor = trackColorMap[trackName];
+
+                let gData = hasGengaFile ? gengaTracksList.filter(t => !t.name.endsWith("_GO")).find(t => t.name === trackName) : null;
+                let detectedDougaCels = [];
+                
+                let seenRows = new Set(); 
+
+                if (gData && gData.raw) {
+                    const sortedGengaFrames = Object.keys(gData.raw).map(Number).sort((a, b) => a - b);
+
+                    sortedGengaFrames.forEach(frame => {
+                        let gengaCel = gData.raw[frame];
+                        let dougaCel = dCompleteMerged[frame] || "（なし）";
+
+                        if (gengaCel === "SYMBOL_BLANK") gengaCel = "（なし）";
+                        if (dougaCel === "SYMBOL_BLANK") dougaCel = "（なし）";
+
+                        if (gengaCel === "（なし）" && dougaCel === "（なし）") return;
+
+                        let uniqueRowKey = `${gengaCel}_${dougaCel}`;
+                        if (seenRows.has(uniqueRowKey)) return;
+                        seenRows.add(uniqueRowKey);
+
+                        const tr = document.createElement('tr');
+                        tr.style.backgroundColor = rowBgColor;
+                        
+                        const tdName = document.createElement('td');
+                        tdName.className = "cell-name";
+                        tdName.textContent = trackName;
+                        
+                        const tdFrame = document.createElement('td');
+                        tdFrame.className = "frame-num";
+                        tdFrame.textContent = frame; 
+                        
+                        const tdGenga = document.createElement('td');
+                        tdGenga.style.fontWeight = "bold";
+                        tdGenga.textContent = gengaCel;
+
+                        const tdDouga = document.createElement('td');
+                        tdDouga.style.fontWeight = "bold";
+                        tdDouga.textContent = dougaCel;
+                        
+                        tr.appendChild(tdName);
+                        tr.appendChild(tdFrame);
+                        tr.appendChild(tdGenga);
+                        tr.appendChild(tdDouga);
+                        resultBody.appendChild(tr);
+
+                        if (dougaCel !== "（なし）") {
+                            detectedDougaCels.push(dougaCel);
+                        }
+                    });
+                    
+                    let uniqueDougaCels = Array.from(new Set(detectedDougaCels));
+                    gengaDetectLines.push(`${trackName}セル : ${uniqueDougaCels.length > 0 ? formatNumberRange(uniqueDougaCels) : "なし"}`);
+
+                } else {
+                    if (hasGengaFile) {
+                        const sortedDougaFrames = Object.keys(dData.raw).map(Number).sort((a, b) => a - b);
+
+                        sortedDougaFrames.forEach(frame => {
+                            let dougaCel = dData.raw[frame];
+                            if (dougaCel === "SYMBOL_BLANK" || dougaCel === "（なし）") return;
+
+                            let uniqueRowKey = `（原画なし）_${dougaCel}`;
+                            if (seenRows.has(uniqueRowKey)) return;
+                            seenRows.add(uniqueRowKey);
+
+                            const tr = document.createElement('tr');
+                            tr.style.backgroundColor = rowBgColor; 
+
+                            const tdName = document.createElement('td');
+                            tdName.className = "cell-name";
+                            tdName.textContent = trackName;
+                            
+                            const tdFrame = document.createElement('td');
+                            tdFrame.className = "frame-num";
+                            tdFrame.textContent = frame; 
+                            
+                            const tdGenga = document.createElement('td');
+                            tdGenga.style.color = "#999";
+                            tdGenga.textContent = "（原画なし）";
+
+                            const tdDouga = document.createElement('td');
+                            tdDouga.style.fontWeight = "bold";
+                            tdDouga.textContent = dougaCel;
+                            
+                            tr.appendChild(tdName);
+                            tr.appendChild(tdFrame);
+                            tr.appendChild(tdGenga);
+                            tr.appendChild(tdDouga);
+                            resultBody.appendChild(tr);
+                        });
+
+                        gengaDetectLines.push(`${trackName}セル : 原画データなし`);
+                    }
+                }
+
+                let pureKeyNumbers = [];
+                Object.keys(dData.raw).forEach(f => {
+                    let val = dData.raw[f];
+                    if (val && val !== "SYMBOL_BLANK") {
+                        let num = parseInt(val, 10);
+                        if (!isNaN(num)) pureKeyNumbers.push(num);
+                    }
+                });
+
+                let uniqueKeys = Array.from(new Set(pureKeyNumbers)).sort((a, b) => a - b);
+                let actualSheetsCount = uniqueKeys.length; 
+                totalSheetsSum += actualSheetsCount; 
+
+                let missingLabel = "";
+                if (uniqueKeys.length > 0) {
+                    let maxNum = Math.max(...uniqueKeys);
+                    let missingNums = [];
+
+                    for (let n = 1; n <= maxNum; n++) {
+                        if (!uniqueKeys.includes(n)) {
+                            missingNums.push(n);
+                        }
+                    }
+
+                    if (missingNums.length > 0) {
+                        missingLabel = ` ※${trackName.toLowerCase()}${formatNumberRange(missingNums.map(String))}欠番`;
+                    }
+                }
+                totalSummaryLines.push(`${trackName}セル : ${actualSheetsCount > 0 ? actualSheetsCount + "枚" : "0枚"}${missingLabel}`);
+
+                let matchedGoTracks = dougaTracksList.filter(t => t.name === trackName + "_GO" || t.name.startsWith(trackName + "_GO"));
+
+                if (matchedGoTracks.length > 0) {
+                    let totalTimelineFrames = dData.maxFrame;
+                    matchedGoTracks.forEach(t => {
+                        if (t.maxFrame > totalTimelineFrames) totalTimelineFrames = t.maxFrame;
+                    });
+
+                    let parentTimeline = [];
+                    for (let f = 0; f <= totalTimelineFrames; f++) {
+                        let activeParents = [];
+                        matchedGoTracks.forEach(t => {
+                            let val = t.complete[f];
+                            if (val && val !== "（なし）" && val !== "SYMBOL_BLANK") {
+                                // ★ "a-go 2" のようにプレーンテキストで追加 (複数の場合は後で結合)
+                                let tName = t.name.toLowerCase().replace('_', '-');
+                                activeParents.push(`${tName} ${val}`);
+                            }
+                        });
+                        
+                        if (activeParents.length > 0) {
+                            let uniqueParents = Array.from(new Set(activeParents));
+                            // ★ " + " (半角スペースあり) で結合して画像通りの見た目にする
+                            parentTimeline[f] = uniqueParents.join(" + ");
+                        } else {
+                            parentTimeline[f] = "SYMBOL_BLANK"; 
+                        }
+                    }
+
+                    let blocks = [];
+                    let currentParent = null;
+                    let startF = 0;
+
+                    for (let f = 0; f <= totalTimelineFrames; f++) {
+                        let pVal = parentTimeline[f];
+                        if (pVal !== currentParent) {
+                            if (currentParent && currentParent !== "SYMBOL_BLANK") {
+                                blocks.push({ parent: currentParent, start: startF, end: f });
+                            }
+                            currentParent = pVal;
+                            startF = f;
+                        }
+                    }
+                    if (currentParent && currentParent !== "SYMBOL_BLANK") {
+                        blocks.push({ parent: currentParent, start: startF, end: totalTimelineFrames + 1 });
+                    }
+
+                    let validRows = [];
+                    blocks.forEach(block => {
+                        let periodChildCels = [];
+                        for (let f = block.start; f < block.end; f++) {
+                            if (dData.raw[f] !== undefined || f === block.start) {
+                                let targetCel = dData.complete[f]; 
+                                if (targetCel && targetCel !== "（なし）" && targetCel !== "SYMBOL_BLANK") {
+                                    periodChildCels.push(targetCel);
+                                }
+                            }
+                        }
+                        let uniquePeriodCels = Array.from(new Set(periodChildCels));
+                        if (uniquePeriodCels.length > 0) {
+                            let blockFileIndex = fileOffsets.findIndex(o => block.start >= o.start && block.start <= o.end);
+                            validRows.push({
+                                block: block,
+                                uniqueCels: uniquePeriodCels,
+                                fileIndex: blockFileIndex
+                            });
+                        }
+                    });
+
+                    let tableRowsHTML = [];
+                    let lastDisplayedParentString = null;
+                    let currentFileIndex = -1;
+
+                    validRows.forEach((row, idx) => {
+                        hasGoDataGlobal = true;
+
+                        if (row.fileIndex !== currentFileIndex) {
+                            lastDisplayedParentString = null; 
+                            currentFileIndex = row.fileIndex;
+                            let fileNameStr = fileOffsets[row.fileIndex] ? fileOffsets[row.fileIndex].name : `Cut ${row.fileIndex + 1}`;
+                            
+                            if (maxFiles > 1) {
+                                tableRowsHTML.push(`
+                                    <tr>
+                                        <td colspan="5" style="background:#e8f4f8; color:#2c3e50; font-weight:bold; font-size:0.95rem; padding:6px; border-bottom: 2px solid #3498db; text-align:left; border-left: 5px solid #2980b9;">
+                                            📄 ${fileNameStr}
+                                        </td>
+                                    </tr>
+                                `);
+                            }
+                        }
+
+                        let parentCellTD = "";
+                        if (row.block.parent === lastDisplayedParentString) {
+                            parentCellTD = `<td class="slip-arrow">↓</td>`;
+                        } else {
+                            parentCellTD = `<td class="slip-parent">${row.block.parent}</td>`;
+                            lastDisplayedParentString = row.block.parent;
+                        }
+
+                        let formattedChildVal = formatNumberRange(row.uniqueCels);
+                        
+                        let isEndBlock = false;
+                        if (idx === validRows.length - 1) {
+                            isEndBlock = true;
+                        } else {
+                            if (validRows[idx + 1].fileIndex !== row.fileIndex) {
+                                isEndBlock = true;
+                            }
+                        }
+                        
+                        let endLabel = isEndBlock ? `<span class="slip-end-tag">END</span>` : "";
+
+                        tableRowsHTML.push(`
+                            <tr>
+                                ${parentCellTD}
+                                <td>＋</td>
+                                <td class="slip-child">${trackName} <span>${formattedChildVal}</span>${endLabel}</td>
+                                <td>＝</td>
+                                <td class="slip-result">${trackName} <span>${formattedChildVal}</span>${endLabel}</td>
+                            </tr>
+                        `);
+                    });
+
+                    if (tableRowsHTML.length > 0) {
+                        const groupDiv = document.createElement('div');
+                        groupDiv.className = "slip-folder-group";
+                        groupDiv.innerHTML = `
+                            <div class="slip-folder-title">■ ${trackName} セル 伝票形式</div>
+                            <table class="slip-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 42%;">合成・親</th>
+                                        <th style="width: 5%;">＋</th>
+                                        <th style="width: 27%;">合成・子</th>
+                                        <th style="width: 5%;">＝</th>
+                                        <th style="width: 21%;">セル番号</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tableRowsHTML.join('')}
+                                </tbody>
+                            </table>
+                        `;
+                        slipSummaryContainer.appendChild(groupDiv);
+                    }
+                }
+            });
+
+            if (totalSummaryLines.length > 0) {
+                totalSummaryLines.push(`-------------------`);
+                totalSummaryLines.push(`合計枚数 : ${totalSheetsSum}枚`);
+            }
+
+            totalSummaryText.textContent = totalSummaryLines.join("\n");
+            
+            if (hasGengaFile) {
+                gengaDetectSummaryText.textContent = gengaDetectLines.join("\n");
+            }
+            
+            if (!hasGoDataGlobal) {
+                slipSummaryContainer.innerHTML = '<div style="color:#999; text-align:center; padding:20px;">対象の_GOフォルダ（有効指示）がありません。</div>';
+            }
+
+            resultArea.style.display = 'block'; 
+            statusDiv.textContent = hasGengaFile 
+                ? `✅ 複数ファイルの結合・生成完了！補助的に使用して必ず最終確認して下さい。`
+                : `✅ 動画枚数と合成伝票のみ生成が完了！補助的に使用して必ず最終確認して下さい。`;
+            statusDiv.style.color = "#27ae60";
+
+        } catch (error) {
+            statusDiv.textContent = "❌ 解析エラー";
+            statusDiv.style.color = "#c0392b";
+            logDiv.textContent += "\n❌ [エラー発生]: " + error.message;
+        }
+    }
+</script>
+
+</body>
+</html>

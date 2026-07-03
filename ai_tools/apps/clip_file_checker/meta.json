@@ -1,0 +1,30 @@
+{
+  "id": "clip_file_checker",
+  "name": "CLIP STUDIOファイル解析・チェック",
+  "shortDescription": "CLIP STUDIOのファイル（.clip）を解析し、そのデータがあらかじめ指定した条件を満たしているかどうかをチェックします",
+  "tags": ["作画", "CLIP STUDIO", "解析"],
+  "searchKeywords": ["clip studio", "check", "validation"],
+  "aiInfo": {
+    "model": "Gemini",
+    "version": "3.5"
+  },
+  "manual": "1.入力フィールドにチェック対象のCLIPファイルをドラッグ＆ドロップするか、クリックして選択します。<br>2.判定条件を入力し、チェック結果を確認します。<br>3.「再読み込み」ボタンを押すと、同じファイルを再度読み込んでチェック結果を更新します。<br>4.「修正版を保存」ボタンを押すと、条件をクリアしたCLIPファイルを保存できます。<br>※上書き保存する場合は、必ずバックアップを取って作業してください。",
+  "promptUrl": "https://gemini.google.com/share/d/1XXapvE6hImYjsUX0tys9udLfoUhChQlx?usp=sharing",
+  "author": "Shun Iwasawa",
+  "promptLicense": "CC BY 4.0",
+  
+  "referencedOSS": [
+    {
+      "name": "clipstudio.js",
+      "url": "https://github.com/saitolume/clipstudio.js",
+      "license": "MIT License"
+    }
+  ],
+  
+  "referenceArticles": [
+    {
+      "title": "CLIP STUDIO PAINTのファイルからNode.jsでサムネイル画像を出力する",
+      "url": "https://qiita.com/kcpoipoi/items/16afb4ae3f83439f6ff6"
+    }
+  ]
+}

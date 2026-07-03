@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Toei TS Editor Ver.5.00.0 (Pure JSON-XDTS) - Cut & Page Manager</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+
+    <style>
+        :root {
+            --bg-body: #f4f5f7;
+            --bg-panel: #ffffff;
+            --border-color: #d1d5da;
+            --text-main: #24292e;
+            --text-muted: #586069;
+            --primary: #0366d6;
+            --primary-hover: #005cc5;
+            --success: #28a745;
+            --success-hover: #218838;
+            --secondary: #6a737d;
+            --secondary-hover: #586069;
+            --sidebar-bg: #f8f9fa;
+            --sidebar-active: #e6f0ff;
+            --accent: #f6f8fa;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            margin: 0; background: var(--bg-body); color: var(--text-main); 
+            display: flex; flex-direction: column; height: 100vh; overflow: hidden; 
+        }
+
+        /* --- ツールバー --- */
+        .controls { 
+            padding: 12px 16px; background: var(--bg-panel); display: flex; flex-wrap: wrap; 
+            gap: 12px; border-bottom: 1px solid var(--border-color); font-size: 12px; 
+            z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.04); align-items: center;
+        }
+
+        .group { 
+            border: 1px solid #e1e4e8; padding: 8px 12px; border-radius: 6px; 
+            display: flex; flex-direction: column; gap: 6px; background: #fafbfc; 
+        }
+
+        .group-title { font-weight: 600; color: var(--text-muted); font-size: 11px; margin-bottom: 2px; }
+
+        .input-row { display: flex; gap: 8px; align-items: center; }
+
+        input[type="number"], input[type="text"], select {
+            border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 6px;
+            font-size: 12px; color: var(--text-main); background: var(--bg-panel);
+        }
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3); }
+
+        .btn { 
+            cursor: pointer; color: white; border: none; padding: 6px 12px; border-radius: 4px; 
+            font-weight: 600; font-size: 11px; transition: background 0.2s;
+        }
+        .btn-primary { background: var(--primary); }
+        .btn-success { background: var(--success); }
+        .btn-secondary { background: var(--secondary); }
+
+        /* --- メインレイアウト --- */
+        .main-container { display: flex; flex: 1; overflow: hidden; }
+
+        /* --- サイドバー (カット&ページ管理) --- */
+        .sidebar { 
+            width: 240px; background: var(--sidebar-bg); display: flex; flex-direction: column; 
+            border-right: 1px solid var(--border-color); 
+        }
+        .sidebar-header {
+            padding: 12px; background: #eaecef; font-size: 12px; font-weight: 600;
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color);
+        }
+        .page-list { flex: 1; overflow-y: auto; padding: 4px 0; }
+        
+        /* カット項目 */
+        .cut-item {
+            padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #eee;
+            background: #fff; font-size: 12px; font-weight: bold; color: var(--text-muted);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .cut-item.active { background: var(--primary); color: #fff; border-bottom-color: var(--primary-hover); }
+        .cut-item:hover:not(.active) { background: #f0f0f0; }
+
+        /* ページ項目 */
+        .page-sub-item {
+            padding: 6px 12px 6px 28px; cursor: pointer; font-size: 11px; color: var(--text-main);
+            border-bottom: 1px solid #f0f0f0; transition: all 0.2s; position: relative;
+        }
+        .page-sub-item::before { content: "└"; position: absolute; left: 12px; color: #ccc; }
+        .page-sub-item.active { background: var(--sidebar-active); font-weight: bold; color: var(--primary); }
+        .page-sub-item:hover:not(.active) { background: #eef2f5; }
+
+        .sidebar-settings {
+            padding: 10px; display: flex; flex-direction: column; gap: 8px;
+            border-top: 1px solid var(--border-color); background: var(--sidebar-bg);
+        }
+
+        /* --- キャンバス領域 --- */
+        .content { flex: 1; overflow: auto; position: relative; background: #eaeaeb; }
+        #canvas-wrapper { 
+            position: relative; display: inline-block; background: #ffffff; 
+            transform-origin: top left; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin: 20px;
+            min-width: 1000px; min-height: 1400px;
+        }
+        #bg-img { 
+            display: none; transform-origin: top left; pointer-events: none; 
+            user-select: none; -webkit-user-drag: none; 
+        }
+        
+        /* ハンドル */
+        .drag-handle {
+            position: absolute; left: -22px; top: 0px; color: var(--text-muted); font-size: 18px;
+            cursor: grab; user-select: none; z-index: 10; pointer-events: auto; padding: 4px;
+        }
+        .drag-handle:active { cursor: grabbing; color: var(--primary); transform: scale(1.1); }
+        .resize-handle {
+            position: absolute; right: -16px; bottom: -16px; width: 20px; height: 20px;
+            cursor: se-resize; z-index: 10; pointer-events: auto;
+        }
+        .resize-handle::after {
+            content: ""; position: absolute; left: 2px; top: 2px; width: 10px; height: 10px;
+            border-right: 2.5px solid rgba(130, 130, 150, 0.8); border-bottom: 2.5px solid rgba(130, 130, 150, 0.8);
+        }
+
+        table { border-collapse: collapse; background: transparent; table-layout: fixed; pointer-events: auto; }
+        td { border: 1px solid rgba(0, 102, 214, 0.35); padding: 0; box-sizing: border-box; }
+        tr.border-6 td { border-bottom: 1.5px solid rgba(0, 80, 200, 0.7); }
+        tr.border-24 td { border-bottom: 2.5px solid #1b1f23; }
+        tr.header-row td { border: 1px solid var(--border-color); background: rgba(255, 140, 0, 0.05); }
+        
+        td input { 
+            width: 100%; height: 100%; border: none; background: transparent; text-align: center; 
+            color: #111; font-weight: bold; outline: none; font-size: 13px;
+            padding: 0; margin: 0; box-sizing: border-box; line-height: 1; display: block;
+        }
+        td input:focus { background: rgba(3, 102, 214, 0.15); box-shadow: inset 0 0 0 1.5px var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="controls">
+    <div class="group">
+        <div class="group-title">1. シート画像読み込み <span style="font-weight:normal; font-size:10px; color:var(--text-muted);">(PNG, JPG, WebP)</span></div>
+        <input type="file" id="loader" accept=".png, .jpg, .jpeg, .webp, image/*">
+        <div class="input-row">
+            不透明度: <input type="range" id="opac" min="0" max="1" step="0.1" value="0.5" style="width:60px;">
+            拡大率: <input type="number" id="img-scale" value="100" min="10" max="500" style="width:50px">%
+        </div>
+    </div>
+
+    <div class="group" style="flex-direction: row; gap: 20px; align-items: center;">
+        <div>
+            <div class="group-title">2. 編集中のカット</div>
+            <input type="text" id="export-name" value="Cut001" style="width:140px; font-size: 14px; font-weight: bold; text-align: center;">
+            <div style="font-size:9px; color:var(--text-muted); text-align:center; margin-top:2px;">現在のカット名を編集</div>
+        </div>
+        <div style="border-left: 1px solid var(--border-color); padding-left: 16px; display:flex; flex-direction:column; gap:4px;">
+            <div class="input-row">
+                <span class="group-title" style="width:20px;">尺</span>
+                <input type="number" id="duration-sec" value="6" style="width:40px"> 秒 ＋ <input type="number" id="duration-koma" value="0" style="width:40px">
+            </div>
+            <div class="input-row" id="col-page-settings">
+                <span class="group-title" style="width:20px;">列</span>
+                <input type="number" id="col-count" value="3" min="1" style="width:40px">
+                <span class="group-title">1ページ:</span>
+                <select id="page-sec"><option value="6">6秒</option><option value="3">3秒</option></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="group">
+        <div class="group-title">3. プロジェクト / 出力</div>
+        <div class="input-row">
+            <button class="btn btn-primary" onclick="saveProject()">保存</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('file-reader').click()">開く</button>
+            <input type="file" id="file-reader" style="display:none" onchange="loadProject(event)">
+            <button class="btn btn-success" onclick="downloadAllXDTS()">XDTS一括書出</button>
+        </div>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="sidebar">
+        <div id="cut-page-manager" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+            <div class="sidebar-header">
+                <span>カット&ページ管理</span>
+                <button class="btn btn-primary" onclick="addConcurrentCut()" style="padding: 2px 6px; font-size: 10px;">兼用追加</button>
+            </div>
+            <div id="page-list" class="page-list"></div>
+        </div>
+        
+        <div class="sidebar-settings">
+            <div class="group">
+                <div class="group-title">🔍 表示倍率</div>
+                <div class="input-row" style="margin-top: 4px;">
+                    <input type="range" id="view-zoom" min="0.5" max="3" step="0.1" value="1" style="width:100px;">
+                    <span id="zoom-val" style="width:40px; text-align:right; font-weight:bold;">100%</span>
+                </div>
+            </div>
+
+            <div class="group" id="frame-size-settings">
+                <div style="font-size: 10px; color: var(--text-muted); line-height: 1.3; margin-bottom: 8px;">
+                    ※右表の上下角に移動とリサイズ用ハンドルが付いています。
+                </div>
+                
+                <div class="group-title">枠サイズ (px)</div>
+                <div class="input-row" style="margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                    <div style="display:flex; align-items:center; gap:4px; white-space:nowrap;">幅: <input type="number" id="w-size" value="45" step="0.1" style="width:50px"></div>
+                    <div style="display:flex; align-items:center; gap:4px; white-space:nowrap;">高: <input type="number" id="h-size" value="18" step="0.01" style="width:50px"></div>
+                </div>
+
+                <div class="group-title">グリッド位置 (px)</div>
+                <div class="input-row" style="flex-wrap: wrap; gap: 6px;">
+                    <div style="display:flex; align-items:center; gap:4px; white-space:nowrap;">左X: <input type="number" id="x1" value="50" style="width:45px"></div>
+                    <div style="display:flex; align-items:center; gap:4px; white-space:nowrap;">左Y: <input type="number" id="y1" value="50" style="width:45px"></div>
+                    <div style="display:flex; align-items:center; gap:4px; white-space:nowrap;">右X: <input type="number" id="x2" value="450" style="width:45px"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding: 10px; border-top: 1px solid var(--border-color); background: var(--sidebar-bg); text-align: center;">
+            <button class="btn" id="start-tutorial" style="background: #ff9800; width: 100%; font-size: 12px; padding: 8px;">❓ 使い方ガイド</button>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div id="canvas-wrapper"><img id="bg-img"><div id="grid-container" class="grid-layer"></div></div>
+    </div>
+</div>
+
+<script>
+    // データ構造 (各カットに一意のIDを割り振ります)
+    let cuts = [{ id: "cut_init", name: "Cut001", sec: 6, koma: 0 }];
+    let activeCutIndex = 0;
+    let activePageIndex = 0;
+    
+    // ページデータ（全カットで共有されますが、内部のcellsはカットIDごとに独立します）
+    let pages = [{ cells: {}, imgData: "", settings: { "w-size": 45, "h-size": 18, "col-count": 3, "x1": 50, "y1": 50, "x2": 450, "opac": 0.5, "scale": 100, "page-sec": 6 } }];
+    let commonHeaders = {};
+    let viewZoom = 1.0;
+
+    const controlIds = ['w-size', 'h-size', 'col-count', 'x1', 'y1', 'x2', 'opac', 'img-scale', 'duration-sec', 'duration-koma', 'page-sec'];
+
+    function init() {
+        controlIds.forEach(id => {
+            document.getElementById(id).addEventListener('input', (e) => {
+                const val = e.target.value;
+                const p = pages[activePageIndex];
+                const c = cuts[activeCutIndex];
+
+                if (id === 'duration-sec') { c.sec = parseInt(val); checkAndAutoAddPages(); renderPageList(); }
+                else if (id === 'duration-koma') { c.koma = parseInt(val); checkAndAutoAddPages(); renderPageList(); }
+                else if (id === 'col-count' || id === 'page-sec') {
+                    pages.forEach(pg => pg.settings[id] = val);
+                    checkAndAutoAddPages();
+                    renderGrids();
+                }
+                else if (['w-size', 'h-size', 'x1', 'y1', 'x2'].includes(id)) {
+                    pages.forEach(pg => pg.settings[id] = parseFloat(val));
+                    renderGrids();
+                }
+                else if (id === 'opac' || id === 'img-scale') {
+                    p.settings[id === 'img-scale' ? 'scale' : 'opac'] = val;
+                    applyImage();
+                }
+            });
+        });
+
+        const exportInput = document.getElementById('export-name');
+        
+        // リアルタイム反映
+        exportInput.addEventListener('input', (e) => {
+            cuts[activeCutIndex].name = e.target.value;
+            renderPageList();
+        });
+
+        // 確定処理のみに
+        exportInput.addEventListener('change', (e) => {
+            cuts[activeCutIndex].name = e.target.value;
+            renderPageList();
+            renderGrids();
+        });
+
+        document.getElementById('loader').onchange = loadImg;
+        document.getElementById('view-zoom').oninput = (e) => {
+            viewZoom = parseFloat(e.target.value);
+            document.getElementById('zoom-val').textContent = Math.round(viewZoom * 100) + '%';
+            document.getElementById('canvas-wrapper').style.transform = `scale(${viewZoom})`;
+        };
+
+        renderPageList();
+        renderGrids();
+        checkAndAutoAddPages();
+        
+        // チュートリアルの設定を呼び出す
+        setupTutorial();
+    }
+
+    function addConcurrentCut() {
+        const inputName = prompt("追加する兼用カット名を入力してください:", "");
+        if (inputName && inputName.trim() !== "") {
+            const newName = inputName.trim();
+            if (cuts.find(x => x.name === newName)) {
+                alert("そのカット名は既に存在します。");
+                return;
+            }
+            const baseSec = cuts[activeCutIndex].sec;
+            const baseKoma = cuts[activeCutIndex].koma;
+            const uniqueId = "cut_" + Date.now() + "_manual";
+            
+            cuts.push({ id: uniqueId, name: newName, sec: baseSec, koma: baseKoma });
+            
+            renderPageList();
+            renderGrids();
+        }
+    }
+
+    // 必要ページを自動計算して追加
+    function checkAndAutoAddPages() {
+        let maxFrames = 0;
+        cuts.forEach(c => { maxFrames = Math.max(maxFrames, (c.sec * 24) + c.koma); });
+
+        let currentCapacity = 0;
+        pages.forEach(p => { currentCapacity += parseInt(p.settings['page-sec']) * 24; });
+
+        while (currentCapacity < maxFrames) {
+            const lastSetting = JSON.parse(JSON.stringify(pages[pages.length-1].settings));
+            pages.push({ cells: {}, imgData: "", settings: lastSetting });
+            currentCapacity += parseInt(lastSetting['page-sec']) * 24;
+        }
+        renderPageList();
+    }
+
+    function renderPageList() {
+        const list = document.getElementById('page-list');
+        list.innerHTML = "";
+
+        cuts.forEach((cut, cIdx) => {
+            const cutDiv = document.createElement('div');
+            cutDiv.className = `cut-item ${cIdx === activeCutIndex ? 'active' : ''}`;
+            cutDiv.innerHTML = `<span>${cut.name}</span><span style="font-size:9px;opacity:0.8">${cut.sec}+${cut.koma}</span>`;
+            cutDiv.onclick = () => {
+                activeCutIndex = cIdx;
+                syncInputsToActiveCut();
+                renderPageList();
+                renderGrids();
+            };
+            list.appendChild(cutDiv);
+
+            // このカットに必要なページを表示
+            const framesNeeded = (cut.sec * 24) + cut.koma;
+            let framesCounted = 0;
+            pages.forEach((pg, pIdx) => {
+                const pgFrames = parseInt(pg.settings['page-sec']) * 24;
+                if (framesCounted < framesNeeded) {
+                    const pgDiv = document.createElement('div');
+                    pgDiv.className = `page-sub-item ${ (cIdx === activeCutIndex && pIdx === activePageIndex) ? 'active' : ''}`;
+                    pgDiv.textContent = `${cut.name}_${(pIdx+1).toString().padStart(2, '0')}`;
+                    pgDiv.onclick = (e) => {
+                        e.stopPropagation();
+                        activeCutIndex = cIdx;
+                        activePageIndex = pIdx;
+                        syncInputsToActiveCut();
+                        applyImage();
+                        renderPageList();
+                        renderGrids();
+                    };
+                    list.appendChild(pgDiv);
+                }
+                framesCounted += pgFrames;
+            });
+        });
+    }
+
+    function syncInputsToActiveCut() {
+        const c = cuts[activeCutIndex];
+        const p = pages[activePageIndex];
+        document.getElementById('export-name').value = c.name;
+        document.getElementById('duration-sec').value = c.sec;
+        document.getElementById('duration-koma').value = c.koma;
+        
+        document.getElementById('w-size').value = p.settings['w-size'];
+        document.getElementById('h-size').value = p.settings['h-size'];
+        document.getElementById('col-count').value = p.settings['col-count'];
+        document.getElementById('x1').value = p.settings['x1'];
+        document.getElementById('y1').value = p.settings['y1'];
+        document.getElementById('x2').value = p.settings['x2'];
+        document.getElementById('opac').value = p.settings['opac'];
+        document.getElementById('img-scale').value = p.settings['scale'];
+        document.getElementById('page-sec').value = p.settings['page-sec'];
+    }
+
+    function loadImg(e) {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => { pages[activePageIndex].imgData = ev.target.result; applyImage(); };
+        reader.readAsDataURL(file);
+    }
+
+    function applyImage() {
+        const img = document.getElementById('bg-img'); 
+        const p = pages[activePageIndex];
+        if (p.imgData) { 
+            img.style.display = "block"; img.style.opacity = p.settings['opac']; 
+            img.onload = () => {
+                img.style.width = (img.naturalWidth * (p.settings['scale']/100)) + "px";
+                renderGrids();
+            };
+            img.src = p.imgData; 
+        } else { img.style.display = "none"; renderGrids(); }
+    }
+
+    function renderGrids() {
+        const p = pages[activePageIndex];
+        const c = cuts[activeCutIndex];
+        const container = document.getElementById('grid-container');
+        container.innerHTML = "";
+        
+        const createTbl = (start, x, y, tag) => {
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = `position:absolute; left:${x}px; top:${y}px; display:inline-block;`;
+            
+            const handle = document.createElement('div');
+            handle.className = 'drag-handle'; handle.innerHTML = '⠿';
+            handle.onmousedown = (e) => { e.preventDefault(); startDrag(e, tag); };
+            wrapper.appendChild(handle);
+
+            const rHandle = document.createElement('div');
+            rHandle.className = 'resize-handle';
+            rHandle.onmousedown = (e) => { e.preventDefault(); startResize(e); };
+            wrapper.appendChild(rHandle);
+
+            const tbl = document.createElement('table');
+            const w = p.settings['w-size'], h = p.settings['h-size'], cols = p.settings['col-count'];
+            tbl.style.width = `${w * cols}px`;
+
+            const hTr = document.createElement('tr'); hTr.className = 'header-row';
+            for (let colIdx = 0; colIdx < cols; colIdx++) {
+                const td = document.createElement('td'); td.style.cssText = `width:${w}px; height:${h}px;`;
+                const input = document.createElement('input'); 
+                input.value = commonHeaders[`h-${colIdx}`] || String.fromCharCode(65 + colIdx);
+                input.oninput = (e) => { commonHeaders[`h-${colIdx}`] = e.target.value; };
+                td.appendChild(input); hTr.appendChild(td);
+            }
+            tbl.appendChild(hTr);
+
+            for (let r = 0; r < 72; r++) {
+                const tr = document.createElement('tr'); const idx = start + r;
+                if ((idx+1)%24===0) tr.className='border-24'; else if((idx+1)%6===0) tr.className='border-6';
+                for (let colIdx = 0; colIdx < cols; colIdx++) {
+                    const td = document.createElement('td'); td.style.cssText = `width:${w}px; height:${h}px;`;
+                    const input = document.createElement('input');
+                    
+                    const cellKey = `${c.id}_c-${idx}-${colIdx}`;
+                    input.value = p.cells[cellKey] || "";
+                    input.setAttribute('data-idx', `${idx}-${colIdx}`);
+                    input.oninput = (e) => { p.cells[cellKey] = e.target.value; };
+                    input.onkeydown = (e) => handleKey(e, input, idx, colIdx);
+                    td.appendChild(input); tr.appendChild(td);
+                }
+                tbl.appendChild(tr);
+            }
+            wrapper.appendChild(tbl); return wrapper;
+        };
+
+        container.appendChild(createTbl(0, p.settings['x1'], p.settings['y1'], 't1'));
+        if (parseInt(p.settings['page-sec']) === 6) {
+            container.appendChild(createTbl(72, p.settings['x2'], p.settings['y1'], 't2'));
+        }
+    }
+
+    function handleKey(e, el, rIdx, cIdx) {
+        let down = false;
+        const c = cuts[activeCutIndex];
+        const cellKey = `${c.id}_c-${rIdx}-${cIdx}`;
+        if (e.key === '*') { e.preventDefault(); el.value = '×'; pages[activePageIndex].cells[cellKey] = '×'; down = true; }
+        else if (e.key === '/') { e.preventDefault(); el.value = '〇'; pages[activePageIndex].cells[cellKey] = '〇'; down = true; }
+        else if (e.key === '-') { e.preventDefault(); el.value = '●'; pages[activePageIndex].cells[cellKey] = '●'; down = true; }
+        let r = rIdx, col = cIdx;
+        if (e.key === 'ArrowUp') r--; else if (e.key === 'ArrowDown' || e.key === 'Enter' || down) { e.preventDefault(); r++; }
+        else if (e.key === 'ArrowLeft') col--; else if (e.key === 'ArrowRight') col++; else return;
+        const next = document.querySelector(`input[data-idx="${r}-${col}"]`);
+        if (next) { next.focus(); next.select(); }
+    }
+
+    function startDrag(e, tag) {
+        const p = pages[activePageIndex]; const sX = e.clientX, sY = e.clientY;
+        const iX1 = p.settings['x1'], iX2 = p.settings['x2'], iY = p.settings['y1'];
+        document.body.style.userSelect = 'none';
+        document.onmousemove = (me) => {
+            const dx = (me.clientX - sX)/viewZoom, dy = (me.clientY - sY)/viewZoom;
+            if (tag === 't1') { p.settings['x1'] = Math.round(iX1 + dx); p.settings['y1'] = Math.round(iY + dy); }
+            else { p.settings['x2'] = Math.round(iX2 + dx); }
+            syncInputsToActiveCut(); renderGrids();
+        };
+        document.onmouseup = () => { document.onmousemove = null; document.body.style.userSelect = ''; };
+    }
+
+    function startResize(e) {
+        const p = pages[activePageIndex]; const sX = e.clientX, sY = e.clientY;
+        const origW = p.settings['w-size'], origH = p.settings['h-size'], cols = p.settings['col-count'];
+        document.body.style.userSelect = 'none';
+        document.onmousemove = (me) => {
+            const dx = (me.clientX - sX)/viewZoom, dy = (me.clientY - sY)/viewZoom;
+            let nW = Math.round((origW + dx/cols) * 10) / 10;
+            let nH = Math.round((origH + dy/73) * 100) / 100;
+            pages.forEach(pg => { pg.settings['w-size'] = Math.max(10, nW); pg.settings['h-size'] = Math.max(5, nH); });
+            syncInputsToActiveCut(); renderGrids();
+        };
+        document.onmouseup = () => { document.onmousemove = null; document.body.style.userSelect = ''; };
+    }
+
+    function downloadAllXDTS() {
+        const symbolMap = { '×': 'SYMBOL_NULL_CELL', '〇': 'SYMBOL_TICK_1', '●': 'SYMBOL_TICK_2' };
+        const cols = pages[0].settings['col-count'];
+        const headerNames = Array.from({length:cols}, (_,c) => commonHeaders[`h-${c}`] || String.fromCharCode(65+c));
+
+        cuts.forEach(cut => {
+            const totalFrames = (cut.sec * 24) + cut.koma;
+            const exportData = {
+                "free": {}, "version": 10,
+                "timeTables": [{
+                    "duration": totalFrames, "footDummykomas": 24, "headDummykomas": 24, "name": cut.name,
+                    "fields": [{ "fieldId": 0, "tracks": [] }],
+                    "timeTableHeaders": [{ "fieldId": 0, "names": headerNames }]
+                }]
+            };
+
+            for (let c = 0; c < cols; c++) {
+                const track = { "frames": [], "trackNo": c };
+                let globalF = 0;
+                pages.forEach(pg => {
+                    const pgF = parseInt(pg.settings['page-sec']) * 24;
+                    for (let r = 0; r < pgF; r++) {
+                        if (globalF < totalFrames) {
+                            const cellKey = `${cut.id}_c-${r}-${c}`;
+                            const val = (pg.cells[cellKey] || "").trim();
+                            if (val !== "") track.frames.push({ "frame": globalF, "data": [{ "fontColorId": 0, "id": 0, "values": [symbolMap[val] || val] }] });
+                        }
+                        globalF++;
+                    }
+                });
+                exportData.timeTables[0].fields[0].tracks.push(track);
+            }
+            const blob = new Blob(["exchangeDigitalTimeSheet Save Data\n" + JSON.stringify(exportData, null, 4)], { type: "text/plain" });
+            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${cut.name}.xdts`; a.click();
+        });
+    }
+
+    function saveProject() {
+        const projectData = { cuts, pages, commonHeaders };
+        const blob = new Blob([JSON.stringify(projectData)], {type:"application/json"});
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+        a.download = cuts[activeCutIndex].name + "_project.json"; a.click();
+    }
+
+    function loadProject(e) {
+        const r = new FileReader(); r.onload = (ev) => { 
+            const data = JSON.parse(ev.target.result);
+            cuts = data.cuts; pages = data.pages; commonHeaders = data.commonHeaders || {};
+            
+            cuts.forEach((c, idx) => {
+                if (!c.id) {
+                    c.id = "cut_" + (Date.now() + idx);
+                    pages.forEach(pg => {
+                        for (let key in pg.cells) {
+                            if (!key.startsWith("cut_")) {
+                                pg.cells[`${c.id}_${key}`] = pg.cells[key];
+                            }
+                        }
+                    });
+                }
+            });
+
+            activeCutIndex = 0; activePageIndex = 0;
+            syncInputsToActiveCut(); applyImage(); renderPageList(); renderGrids();
+        };
+        r.readAsText(e.target.files[0]);
+    }
+
+    // --- 新しく設定し直したチュートリアル ---
+    function setupTutorial() {
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            nextBtnText: '次へ',
+            prevBtnText: '戻る',
+            doneBtnText: '完了',
+            steps: [
+                {
+                    element: '#loader',
+                    popover: {
+                        title: '1. 画像読み込み',
+                        description: 'まずは背景となるシート画像（PNGやJPGなど）をここから読み込みます。',
+                        side: "bottom", align: 'start'
+                    }
+                },
+                {
+                    element: '#export-name',
+                    popover: {
+                        title: '2. カット名の編集',
+                        description: '現在編集しているカット名です。ここで名前を変更すると自動で全体に反映されます。',
+                        side: "bottom", align: 'start'
+                    }
+                },
+                {
+                    element: '#duration-sec',
+                    popover: {
+                        title: '3. 尺の設定',
+                        description: 'カットの長さ（秒＋コマ）を設定します。尺に合わせて自動でページが追加されます。',
+                        side: "bottom", align: 'start'
+                    }
+                },
+                {
+                    // 新規追加: 列と1ページの設定
+                    element: '#col-page-settings',
+                    popover: {
+                        title: '4. 列・１ページ',
+                        description: 'セル数の指定と６秒シートか３秒シートを選択します。',
+                        side: "bottom", align: 'start'
+                    }
+                },
+                {
+                    // 修正: サイドバー上部のカット管理部分のみを光らせる
+                    element: '#cut-page-manager',
+                    popover: {
+                        title: '5. カット＆ページ管理',
+                        description: '複数カットやページの切り替えはここで行います。「兼用追加」で別カットとして複製することも可能です。',
+                        side: "right", align: 'start'
+                    }
+                },
+                {
+                    // 新規追加: 枠サイズ・微調整用
+                    element: '#frame-size-settings',
+                    popover: {
+                        title: '6. 枠サイズ',
+                        description: '右表の入力する表のサイズの微調整用です。<br>※右表の上下角に移動とリサイズ用ハンドルが有り感覚的にサイズ変更できます。',
+                        side: "right", align: 'start'
+                    }
+                },
+                {
+                    // 修正: キャンバス領域全体を光らせる
+                    element: '.content',
+                    popover: {
+                        title: '7. シート入力',
+                        description: '入力用ショートカット<br>「/＝〇(中割り)」<br>「*＝×(空)」<br>「-＝●(中割り:逆シート不可)」<br><br>入力用の表のサイズは、表の左上と右下のハンドルをドラッグして、背景画像に枠をピッタリ合わせましょう。',
+                        side: "top", align: 'start'
+                    }
+                },
+                {
+                    element: '.btn-success',
+                    popover: {
+                        title: '8. XDTS書き出し',
+                        description: '作業が終わったら、ここをクリックして全カットのデータをXDTS形式で一括ダウンロードします！<br>XDTSﾌｧｲﾙは東映デジタルタイムシートで読み込んで原画を動画に一括変換機能が使用できます。',
+                        side: "bottom", align: 'start'
+                    }
+                }
+            ]
+        });
+
+        // ボタンが押されたらチュートリアルを開始
+        document.getElementById('start-tutorial').addEventListener('click', () => {
+            driverObj.drive();
+        });
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
