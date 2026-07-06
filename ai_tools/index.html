@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open-Prompted Anime Tools</title>
+    <style>
+        /* ==========================================
+           ① OpenToonzテーマの配色変更 (image1_v2.pngに基づく)
+        ========================================== */
+        :root {
+            /* OpenToonzテーマ（既定値） */
+            --bg-main: #ffffff;
+            --bg-container: #ffffff;
+            --bg-list-pane: #d8d8d8; /* ライトグレー */
+            --border-list-pane: #b8b8b8;
+            --bg-search: #3a833c; /* 濃い緑 */
+            --border-search: #2d662f;
+            --text-search-label: #000000; /* 黒字 */
+            --input-border: #2d662f;
+            --input-text: #333333;
+            --bg-app-item: #e5e5e5;
+            --border-app-item: #c0c0c0;
+            --text-app-title: #111111;
+            --text-app-desc: #555555;
+            --bg-tag: #4caf50;
+            --bg-app-pane: #ffffff; /* 白 */
+            --text-placeholder: #2e7d32;
+            --text-placeholder-sub: #666666;
+            --bg-info-btn: #3a833c; /* 緑の丸 */
+            --border-info-btn: #2d662f;
+            --bg-info-pane: #f0f0f0; 
+            --border-info-pane: #d8d8d8;
+            --text-info-title: #111111;
+            --text-info-label: #2e7d32;
+            --text-info-body: #333333;
+            --bg-manual: #ffffff;
+            --border-manual: #d8d8d8;
+            --link-color: #1976d2;
+            --bg-download: #3a833c;
+            --bg-download-hover: #2d662f;
+            --text-download: #ffffff;
+            --bg-toggle-theme: #ffffff;
+            --border-toggle-theme: #999999;
+            --text-toggle-theme: #333333;
+        }
+
+        [data-theme="dark"] {
+            /* ダークテーマ（ツール風） */
+            --bg-main: #1c1c1c;
+            --bg-container: #2b2b2b;
+            --bg-list-pane: #252825;
+            --border-list-pane: #384238;
+            --bg-search: #1e3d20;
+            --border-search: #2d4c30;
+            --text-search-label: #81c784;
+            --input-border: #4d5c4d;
+            --input-text: #e0e0e0;
+            --bg-app-item: #2d332d;
+            --border-app-item: #3e4d3e;
+            --text-app-title: #81c784;
+            --text-app-desc: #b0bec5;
+            --bg-tag: #4caf50;
+            --bg-app-pane: #1e1e1e; 
+            --text-placeholder: #81c784;
+            --text-placeholder-sub: #90a4ae;
+            --bg-info-btn: #f57c00;
+            --border-info-btn: #ef6c00;
+            --bg-info-pane: #2c2b21;
+            --border-info-pane: #423f28;
+            --text-info-title: #ffb74d;
+            --text-info-label: #ffa726;
+            --text-info-body: #e0e0e0;
+            --bg-manual: #212121;
+            --border-manual: #373737;
+            --link-color: #4fc3f7;
+            --bg-download: #f57c00;
+            --bg-download-hover: #ef6c00;
+            --text-download: #ffffff;
+            --bg-toggle-theme: #333333;
+            --border-toggle-theme: #555555;
+            --text-toggle-theme: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            overflow: hidden;
+            background-color: var(--bg-main);
+            color: var(--input-text);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* ==========================================
+           List Pane (左側パネル)
+        ========================================== */
+        .list-pane {
+            width: 320px;
+            height: 100%;
+            background-color: var(--bg-list-pane);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 10;
+            border-right: 2px solid var(--border-list-pane);
+            overflow: hidden;
+        }
+        .list-pane.collapsed {
+            width: 0;
+            min-width: 0;
+            border-right: none;
+        }
+        
+        .search-container {
+            background-color: var(--bg-search);
+            padding: 16px;
+            border-bottom: 2px solid var(--border-search);
+            flex-shrink: 0;
+        }
+        .search-label {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff; /* 💡 常時白字に固定 */
+            margin-bottom: 8px;
+            font-family: 'Futura', 'Helvetica Neue', Arial, sans-serif;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--input-border);
+            border-radius: 4px;
+            background-color: var(--bg-container);
+            font-size: 14px;
+            color: var(--input-text);
+            outline: none;
+        }
+        
+        .app-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+        .app-item {
+            background-color: var(--bg-app-item);
+            border: 1px solid var(--border-app-item);
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .app-item:hover {
+            background-color: var(--bg-container);
+        }
+        .app-item.active {
+            background-color: var(--bg-container);
+            border-color: var(--bg-tag);
+            border-width: 2px;
+        }
+        .app-item h4 {
+            font-size: 15px;
+            color: var(--text-app-title);
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        .app-item p {
+            font-size: 12px;
+            color: var(--text-app-desc);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tag {
+            font-size: 10px;
+            background-color: var(--bg-tag);
+            color: #ffffff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* ② テーマ切り替えスイッチ（List Paneの最下部） */
+        .theme-switch-container {
+            padding: 16px;
+            border-top: 1px solid var(--border-list-pane);
+            background-color: var(--bg-list-pane);
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .theme-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-toggle-theme);
+            border: 1px solid var(--border-toggle-theme);
+            color: var(--text-toggle-theme);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .theme-btn:hover {
+            opacity: 0.9;
+        }
+
+        .toggle-list-btn {
+            position: absolute;
+            right: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 50px;
+            background-color: var(--bg-list-pane);
+            border: 2px solid var(--border-list-pane);
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--input-text);
+            z-index: 11;
+        }
+
+        /* ==========================================
+           Application Pane (中央メインエリア)
+        ========================================== */
+        .app-pane {
+            flex: 1;
+            height: 100%;
+            background-color: var(--bg-app-pane);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .app-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #ffffff;
+            display: none;
+        }
+        .app-viewer.active {
+            display: block;
+        }
+        .welcome-placeholder {
+            text-align: center;
+            color: var(--text-placeholder);
+            padding: 20px;
+            max-width: 500px;
+        }
+        .welcome-placeholder h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .welcome-placeholder p {
+            font-size: 14px;
+            color: var(--text-placeholder-sub);
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           ③ Info Button (アイコン化対応)
+        ========================================== */
+        .info-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background-color: var(--bg-info-btn);
+            border: 2px solid var(--border-info-btn);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            transition: all 0.2s ease;
+            padding: 12px;
+        }
+        .info-btn:hover {
+            transform: scale(1.05);
+        }
+        .info-btn-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* ==========================================
+           Information Pane (右側詳細パネル)
+        ========================================== */
+        .info-pane {
+            width: 0;
+            height: 100%;
+            background-color: var(--bg-info-pane);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            z-index: 15;
+            position: relative;
+        }
+        .info-pane.open {
+            width: 360px;
+            border-left: 2px solid var(--border-info-pane);
+        }
+        .info-content {
+            padding: 24px;
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .info-pane.open .info-content {
+            opacity: 1;
+        }
+        
+        .info-title {
+            font-size: 20px;
+            color: var(--text-info-title);
+            border-bottom: 2px solid var(--border-info-pane);
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .section-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text-info-label);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .section-body {
+            font-size: 13px;
+            color: var(--text-info-body);
+            line-height: 1.6;
+        }
+        .manual-box {
+            background-color: var(--bg-manual);
+            border: 1px solid var(--border-manual);
+            padding: 12px;
+            border-radius: 6px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 12px;
+            white-space: pre-wrap;
+            color: var(--text-info-body);
+        }
+        /* ① 権利・ライセンス表記用の装飾ボックス */
+        .license-box {
+            background-color: rgba(0,0,0,0.02);
+            border: 1px solid var(--border-manual);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-info-body);
+            white-space: normal; 
+        }
+        .license-sub-section {
+            margin-bottom: 10px;
+        }
+        .license-sub-section:last-child {
+            margin-bottom: 0;
+        }
+        .license-box strong.box-sub-title {
+            font-size: 11px; 
+            color: var(--text-info-label); 
+            display: block; 
+            margin-bottom: 4px;
+        }
+        
+        .link-badge {
+            display: inline-flex;
+            align-items: center;
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .link-badge:hover {
+            text-decoration: underline;
+        }
+        
+        /* 共有URLコピーボタンのスタイル定義 */
+        .share-url-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #1976d2; /* 青色ベース */
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: auto; /* ダウンロードボタンの一歩上に押し上げる */
+            flex-shrink: 0;
+        }
+        .share-url-btn:hover {
+            background-color: #1565c0;
+        }
+        
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--bg-download);
+            color: var(--text-download);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px; /* 共有ボタンとのすき間 */
+            flex-shrink: 0;
+        }
+        .download-btn:hover {
+            background-color: var(--bg-download-hover);
+        }
+        
+        .empty-info-msg {
+            color: var(--text-placeholder-sub);
+            font-style: italic;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="list-pane" id="listPane">
+            <div class="search-container">
+                <span class="search-label">Open-Prompted Anime Tools</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="アプリ名、説明、タグで検索...">
+            </div>
+            
+            <div class="app-list" id="appList">
+            </div>
+            
+            <div class="theme-switch-container">
+                <button class="theme-btn" id="themeBtn">🌙 ダークテーマに切り替え</button>
+            </div>
+            
+            <button class="toggle-list-btn" id="toggleListBtn" title="リストを折りたたむ">◀</button>
+        </div>
+        
+        <div class="app-pane">
+            <div class="welcome-placeholder" id="welcomePlaceholder">
+                <h2>Application Pane</h2>
+                <p>左のリストからWebアプリケーションを選択してください。</p>
+            </div>
+            <iframe class="app-viewer" id="appViewer" src=""></iframe>
+            
+            <button class="info-btn" id="infoBtn" title="Information">
+                <img src="info.svg" alt="Info" class="info-btn-icon">
+            </button>
+        </div>
+        
+        <div class="info-pane" id="infoPane">
+            <div class="info-content" id="infoContent">
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="./apps/apps-index.js"></script>
+    <script>
+        let appsData = [];
+
+        function initPlatform() {
+            // 💡 apps-index.js内で定義された「window.globalAppsData」が自動展開されているか確認
+            if (typeof globalAppsData !== 'undefined') {
+                appsData = globalAppsData;
+            } else {
+                console.error("エラー: apps/apps-index.js が見つからないか、データが正しくありません。");
+                return;
+            }
+            
+            // 本番用の相対パスを iframeUrl にマッピング
+            appsData.forEach(app => {
+                app.iframeUrl = `./apps/${app.id}/index.html`;
+            });
+            
+            renderAppList();
+
+            // URLパラメータ(?app=ID)を解析して初期選択状態にする処理
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialAppId = urlParams.get('app');
+            if (initialAppId) {
+                const targetApp = appsData.find(app => app.id === initialAppId);
+                if (targetApp) {
+                    selectApp(targetApp);
+                    infoPane.classList.add('open');
+                    isInfoOpen = true;
+                }
+            }
+        }
+
+        // ページの読み込み完了時に実行
+        window.onload = initPlatform;
+
+        let selectedApp = null;
+        let isListCollapsed = false;
+        let isInfoOpen = false;
+        let currentTheme = "light";
+
+        const listPane = document.getElementById('listPane');
+        const toggleListBtn = document.getElementById('toggleListBtn');
+        const appList = document.getElementById('appList');
+        const searchInput = document.getElementById('searchInput');
+        const appViewer = document.getElementById('appViewer');
+        const welcomePlaceholder = document.getElementById('welcomePlaceholder');
+        const infoBtn = document.getElementById('infoBtn');
+        const themeBtn = document.getElementById('themeBtn');
+        const infoPane = document.getElementById('infoPane');
+        const infoContent = document.getElementById('infoContent');
+
+        toggleListBtn.addEventListener('click', () => {
+            isListCollapsed = !isListCollapsed;
+            if (isListCollapsed) {
+                listPane.classList.add('collapsed');
+                toggleListBtn.innerText = '▶';
+            } else {
+                listPane.classList.remove('collapsed');
+                toggleListBtn.innerText = '◀';
+            }
+        });
+
+        themeBtn.addEventListener('click', () => {
+            if (currentTheme === "light") {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeBtn.innerText = "☀️ OpenToonzテーマに切り替え";
+                currentTheme = "dark";
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeBtn.innerText = "🌙 ダークテーマに切り替え";
+                currentTheme = "light";
+            }
+        });
+
+        infoBtn.addEventListener('click', () => {
+            isInfoOpen = !isInfoOpen;
+            if (isInfoOpen) {
+                infoPane.classList.add('open');
+            } else {
+                infoPane.classList.remove('open');
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            renderAppList(e.target.value);
+        });
+
+        function renderAppList(keyword = '') {
+            appList.innerHTML = '';
+            const lowerKeyword = keyword.toLowerCase().trim();
+
+            const filteredApps = appsData.filter(app => {
+                if (!lowerKeyword) return true;
+                return (
+                    app.name.toLowerCase().includes(lowerKeyword) ||
+                    app.shortDescription.toLowerCase().includes(lowerKeyword) ||
+                    app.tags.some(tag => tag.toLowerCase().includes(lowerKeyword)) ||
+                    (app.searchKeywords && app.searchKeywords.some(key => key.toLowerCase().includes(lowerKeyword)))
+                );
+            });
+
+            if (filteredApps.length === 0) {
+                appList.innerHTML = '<p style="font-size:13px; text-align:center; padding-top:20px; opacity: 0.7;">該当なし</p>';
+                return;
+            }
+
+            filteredApps.forEach(app => {
+                const item = document.createElement('div');
+                item.className = 'app-item';
+                if (selectedApp && selectedApp.id === app.id) item.classList.add('active');
+
+                const tagsHtml = app.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+                item.innerHTML = `
+                    <h4>${app.name}</h4>
+                    <p>${app.shortDescription.substring(0, 45)}...</p>
+                    <div class="tag-container">${tagsHtml}</div>
+                `;
+                item.addEventListener('click', () => selectApp(app));
+                appList.appendChild(item);
+            });
+        }
+
+        function selectApp(app) {
+            selectedApp = app;
+            renderAppList(searchInput.value);
+            welcomePlaceholder.style.display = 'none';
+            appViewer.src = app.iframeUrl;
+            appViewer.classList.add('active');
+            renderInfoPane(app);
+
+            // アプリ切り替え時にブラウザのアドレスバーのURLパラメータもリロードなしで同期させる
+            // 💡 file:/// プロトコル時は、ブラウザ制限を避けるため履歴操作をスキップする安全策を追加
+            if (window.location.protocol !== 'file:') {
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?app=' + app.id;
+                window.history.replaceState({ path: newUrl }, '', newUrl);
+            }
+        }
+
+        function renderInfoPane(app) {
+            if (!app) {
+                infoContent.innerHTML = '<div class="empty-info-msg">アプリケーションが選択されていません。</div>';
+                return;
+            }
+            
+            let panelHtml = `
+                <h3 class="info-title">Information</h3>
+                <div class="info-section"><span class="section-label">説明</span><div class="section-body">${app.shortDescription}</div></div>
+                <div class="info-section"><span class="section-label">マニュアル</span><div class="manual-box">${app.manual}</div></div>
+            `;
+
+            if (app.author) {
+                panelHtml += `<div class="info-section"><span class="section-label">作者</span><div class="section-body">${app.author}</div></div>`;
+            }
+
+            if (app.aiInfo && app.aiInfo.model) {
+                panelHtml += `<div class="info-section"><span class="section-label">AIモデル</span><div class="section-body">${app.aiInfo.model} (${app.aiInfo.version || ''})</div></div>`;
+            }
+
+            if (app.promptUrl && app.promptUrl.trim() !== "") {
+                panelHtml += `
+                    <div class="info-section">
+                        <span class="section-label">プロンプト</span>
+                        <div class="section-body">
+                            <a href="${app.promptUrl}" target="_blank" class="link-badge">🔗 プロンプトと対話リンク</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (app.referencedOSS && app.referencedOSS.length > 0) {
+                const ossListHtml = app.referencedOSS.map(oss => `
+                    <li style="margin-bottom: 4px;">
+                        <a href="${oss.url}" target="_blank" class="link-badge">${oss.name}</a> (${oss.license})
+                    </li>
+                `).join('');
+                
+                panelHtml += `
+                    <div class="info-section">
+                        <span class="section-label">参考OSS (ライセンス準拠)</span>
+                        <div class="section-body">
+                            <ul style="padding-left: 16px; margin-top: 4px; font-size: 12px;">${ossListHtml}</ul>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (app.referenceArticles && app.referenceArticles.length > 0) {
+                const articlesListHtml = app.referenceArticles.map(art => `
+                    <li style="margin-bottom: 4px;">
+                        <a href="${art.url}" target="_blank" class="link-badge">${art.title}</a>
+                    </li>
+                `).join('');
+                
+                panelHtml += `
+                    <div class="info-section">
+                        <span class="section-label">参考記事・ブログ</span>
+                        <div class="section-body">
+                            <ul style="padding-left: 16px; margin-top: 4px; font-size: 12px;">${articlesListHtml}</ul>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let codeLicenseNotice = `・AI生成部分：著作権不発生 (プラットフォーム規定)<br>・人間手直し部分：<strong>0BSD ライセンス</strong>`;
+            if (app.referencedOSS && app.referencedOSS.length > 0) {
+                codeLicenseNotice += `<div style="font-size: 11px; margin-top: 4px; color: #cc0000; font-style: italic; line-height: 1.3;">※上記の参考OSSに依拠するコード部分には、該当するOSSのライセンスが優先して適用されます。</div>`;
+            }
+
+            let licenseBoxContent = `
+                <div class="license-sub-section">
+                    <strong class="box-sub-title">【ソースコード】</strong>
+                    <div style="line-height: 1.4;">${codeLicenseNotice}</div>
+                </div>
+            `;
+
+            if (app.promptUrl && app.promptUrl.trim() !== "") {
+                const authorName = app.author ? app.author : 'NameOfLicenser';
+                const rawLicense = app.promptLicense ? app.promptLicense.trim() : '';
+                let licenseLinkHtml = rawLicense;
+
+                if (rawLicense.toUpperCase().includes('CC BY 4.0')) {
+                    licenseLinkHtml = `<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" class="link-badge">Licensed under CC BY 4.0</a>`;
+                } else if (rawLicense.toUpperCase().includes('CC0')) {
+                    licenseLinkHtml = `<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" class="link-badge">Licensed under CC0 1.0</a>`;
+                }
+
+                const finalPromptLicenseNotice = `©${authorName} (${licenseLinkHtml})`;
+
+                licenseBoxContent += `
+                    <div class="license-sub-section" style="margin-top: 8px; border-top: 1px dashed var(--border-manual); padding-top: 6px;">
+                        <strong class="box-sub-title">【プロンプト】</strong>
+                        <div style="line-height: 1.4;">${finalPromptLicenseNotice}</div>
+                    </div>
+                `;
+            }
+
+            panelHtml += `
+                <div class="info-section">
+                    <span class="section-label">権利・ライセンス表記</span>
+                    <div class="license-box">
+                        ${licenseBoxContent}
+                    </div>
+                </div>
+            `;
+            
+            // 💡 file:/// 環境で起動している場合、共有URLはホストがないため、適切な形（相対や固定ドメイン）で出力されるよう調整
+            const currentHost = window.location.host ? window.location.protocol + "//" + window.location.host : "https://opentoonz.github.io";
+            const shareUrl = currentHost + window.location.pathname + '?app=' + app.id;
+            
+            panelHtml += `
+                <button class="share-url-btn" onclick="copyShareUrl('${shareUrl}', this)">📋 共有URLをコピー</button>
+                <button class="download-btn" onclick="downloadApp('${app.id}')">📥 ダウンロード</button>
+            `;
+
+            infoContent.innerHTML = panelHtml;
+        }
+
+        window.copyShareUrl = function(url, buttonElement) {
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = buttonElement.innerText;
+                buttonElement.innerText = "✅ コピーしました！";
+                const originalBg = buttonElement.style.backgroundColor;
+                buttonElement.style.backgroundColor = "#4caf50";
+                
+                setTimeout(() => {
+                    buttonElement.innerText = originalText;
+                    buttonElement.style.backgroundColor = originalBg;
+                }, 2000);
+            }).catch(err => {
+                console.error("URLのコピーに失敗しました:", err);
+                alert("URLのコピーに失敗しました。");
+            });
+        };
+
+        async function downloadApp(appId) {
+            const app = appsData.find(a => a.id === appId);
+            if (!app) return;
+
+            // 💡 file:/// 環境下では、ブラウザのセキュリティ（CORS）によりローカル別ファイルのfetchが遮断されます。
+            // そのため、ダブルクリック起動時のみ警告を出す親切設計にしています。
+            if (window.location.protocol === 'file:') {
+                alert("【ブラウザの安全制限】\\nPC上で直接HTMLを開いている状態（file:///）では、ダウンロードボタンは動作しません。\\nGitHub Pages（https://...）に公開されたWebサイト上では、何も設定をせずとも正常にダウンロードが可能です。");
+                return;
+            }
+
+            try {
+                const response = await fetch(app.iframeUrl);
+                if (!response.ok) throw new Error("ネットワーク応答が正常ではありません。");
+                const htmlText = await response.text();
+
+                const blob = new Blob([htmlText], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${app.id}.html`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error("ダウンロードに失敗しました:", error);
+                alert("アプリケーションのダウンロードに失敗しました。");
+            }
+        }
+
+        renderAppList();
+        renderInfoPane(null);
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "id": "xdts_timeline_checker",
+  "name": "XDTS 総合チェック",
+  "shortDescription": "原画と動画の .xdtsファイル を選択（複数選択可）し、動画タイムラインの全体集計と合成伝票を自動生成します。",
+  "tags": ["作画", "XDTS", "解析"],
+  "searchKeywords": ["timeline", "check", "annalyze"],
+  "aiInfo": {
+    "model": "Gemini",
+    "version": "3.x"
+  },
+  "manual": "1. 原画、動画のXDTSファイルを、それぞれのファイル選択ボタンから指定します。<br>「タイムラインを解析して伝票・表を作成」ボタンをクリックして、解析結果を確認します。",
+  "author": "Yuka Chomei",
+  "promptLicense": "CC BY 4.0"
+}

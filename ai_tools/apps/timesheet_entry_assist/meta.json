@@ -1,0 +1,14 @@
+{
+  "id": "timesheet_entry_assist",
+  "name": "タイムシート入力補助",
+  "shortDescription": "手書きのタイムシートのデジタル入力をサポートするツールです。タイムシート画像に入力フィールドを重畳して、手書きの数字を透かしながら動画番号を入力することができます。",
+  "tags": ["作画", "XDTS"],
+  "searchKeywords": ["timeline", "xsheet", "digitize"],
+  "aiInfo": {
+    "model": "Gemini",
+    "version": "3.x"
+  },
+  "manual": "画面左下「使い方ガイド」をクリックして説明をご参照ください。",
+  "author": "Yuka Chomei",
+  "promptLicense": "CC BY 4.0"
+}

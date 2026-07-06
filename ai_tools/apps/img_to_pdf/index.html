@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像PDF変換ツール（透かし機能付き）</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        .panel {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        h2 {
+            font-size: 18px;
+            margin-top: 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            color: #3498db;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input[type="text"], input[type="number"], input[type="color"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .file-drop-zone {
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            background: #eef2f7;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .file-drop-zone:hover {
+            background: #e2e8f0;
+        }
+        button {
+            display: block;
+            width: 100%;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #27ae60;
+        }
+        /* プレビューエリア */
+        #preview-container {
+            margin-top: 30px;
+        }
+        .preview-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .preview-item {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        /* キャンバスによる透かしプレビュー */
+        .preview-item canvas {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            line-height: 24px;
+            text-align: center;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>画像一括PDF変換ツール（透かし機能付き）</h1>
+
+    <div class="grid">
+        <div>
+            <div class="panel">
+                <h2>1. 画像ファイルの選択</h2>
+                <div class="file-drop-zone" onclick="document.getElementById('image-input').click()">
+                    <p>ここに画像をドラッグ＆ドロップ、またはクリックして選択</p>
+                    <input type="file" id="image-input" multiple accept="image/*" style="display:none">
+                </div>
+            </div>
+
+            <button id="generate-pdf-btn">PDFを生成してダウンロード</button>
+        </div>
+
+        <div class="panel">
+            <h2>2. 透かし（ウォーターマーク）設定</h2>
+            
+            <div class="form-group">
+                <label>透かしの種類</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="wm-type" value="none" checked> なし</label>
+                    <label><input type="radio" name="wm-type" value="text"> テキスト</label>
+                    <label><input type="radio" name="wm-type" value="image"> 画像ロゴ</label>
+                </div>
+            </div>
+
+            <div id="wm-text-settings" style="display:none;">
+                <div class="form-group">
+                    <label for="wm-text">透かし文字</label>
+                    <input type="text" id="wm-text" value="SAMPLE">
+                </div>
+                <div class="form-group">
+                    <label for="wm-color">文字の色</label>
+                    <input type="color" id="wm-color" value="#ff0000">
+                </div>
+                <div class="form-group">
+                    <label for="wm-size">フォントサイズ (px)</label>
+                    <input type="number" id="wm-size" value="40" min="10" max="200">
+                </div>
+                <div class="form-group">
+                    <label for="wm-angle">回転角度 (°)</label>
+                    <input type="number" id="wm-angle" value="-30" min="-180" max="180">
+                </div>
+            </div>
+
+            <div id="wm-image-settings" style="display:none;">
+                <div class="form-group">
+                    <label for="wm-image-input">透かし用画像（ロゴなど）を選択</label>
+                    <input type="file" id="wm-image-input" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="wm-img-scale">画像サイズ倍率</label>
+                    <input type="range" id="wm-img-scale" min="0.1" max="1" step="0.05" value="0.3">
+                </div>
+            </div>
+
+            <div id="wm-common-settings" style="display:none;">
+                <div class="form-group">
+                    <label for="wm-opacity">不透明度 (0.1 〜 1.0)</label>
+                    <input type="range" id="wm-opacity" min="0.1" max="1" step="0.05" value="0.4">
+                </div>
+                <div class="form-group">
+                    <label for="wm-position">配置位置</label>
+                    <select id="wm-position">
+                        <option value="center">中央</option>
+                        <option value="repeat">全体に並べる（タイル）</option>
+                        <option value="bottom-right">右下</option>
+                        <option value="top-left">左上</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="preview-container" style="display:none;">
+        <h2>現在のプレビュー</h2>
+        <div class="preview-list" id="preview-list"></div>
+    </div>
+</div>
+
+<script>
+    const { jsPDF } = window.jspdf;
+
+    let loadedImages = []; // 読み込まれた画像の配列 { id, file, imgElement }
+    let watermarkImageElement = null; // 透かし用画像エレメント
+
+    // DOM要素の取得
+    const imageInput = document.getElementById('image-input');
+    const wmImageInput = document.getElementById('wm-image-input');
+    const previewContainer = document.getElementById('preview-container');
+    const previewList = document.getElementById('preview-list');
+    const generatePdfBtn = document.getElementById('generate-pdf-btn');
+
+    // 設定要素
+    const wmTypeRadios = document.querySelectorAll('name[name="wm-type"]');
+    const wmTextSettings = document.getElementById('wm-text-settings');
+    const wmImageSettings = document.getElementById('wm-image-settings');
+    const wmCommonSettings = document.getElementById('wm-common-settings');
+
+    // 設定変更イベントの監視
+    document.querySelectorAll('input, select').forEach(element => {
+        element.addEventListener('input', () => {
+            switchWatermarkFields();
+            updatePreviews();
+        });
+    });
+
+    // 透かしタイプの切り替え表示
+    function switchWatermarkFields() {
+        const type = document.querySelector('input[name="wm-type"]:checked').value;
+        if (type === 'none') {
+            wmTextSettings.style.display = 'none';
+            wmImageSettings.style.display = 'none';
+            wmCommonSettings.style.display = 'none';
+        } else if (type === 'text') {
+            wmTextSettings.style.display = 'block';
+            wmImageSettings.style.display = 'none';
+            wmCommonSettings.style.display = 'block';
+        } else if (type === 'image') {
+            wmTextSettings.style.display = 'none';
+            wmImageSettings.style.display = 'block';
+            wmCommonSettings.style.display = 'block';
+        }
+    }
+
+    // 透かし用画像の読み込み
+    wmImageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                watermarkImageElement = img;
+                updatePreviews();
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // 複数画像の読み込み
+    imageInput.addEventListener('change', handleFileSelect);
+    
+    // ドラッグ＆ドロップ対応
+    const dropZone = document.querySelector('.file-drop-zone');
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.background = '#e2e8f0'; });
+    dropZone.addEventListener('dragleave', () => { dropZone.style.background = '#eef2f7'; });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.background = '#eef2f7';
+        if (e.dataTransfer.files.length > 0) {
+            handleFiles(e.dataTransfer.files);
+        }
+    });
+
+    function handleFileSelect(e) {
+        handleFiles(e.target.files);
+    }
+
+    function handleFiles(files) {
+        let loadedCount = 0;
+        const targetCount = files.length;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!file.type.match('image.*')) continue;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    loadedImages.push({
+                        id: Date.now() + Math.random(),
+                        imgElement: img
+                    });
+                    loadedCount++;
+                    if (loadedCount === targetCount || i === files.length - 1) {
+                        previewContainer.style.display = 'block';
+                        updatePreviews();
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // キャンバスに画像と透かしを描画する共通処理
+    function drawImageWithWatermark(canvas, imgElement) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = imgElement.naturalWidth;
+        canvas.height = imgElement.naturalHeight;
+
+        // 1. 元の画像を描画
+        ctx.drawImage(imgElement, 0, 0);
+
+        const wmType = document.querySelector('input[name="wm-type"]:checked').value;
+        if (wmType === 'none') return;
+
+        // 共通設定の取得
+        const opacity = parseFloat(document.getElementById('wm-opacity').value);
+        const position = document.getElementById('wm-position').value;
+
+        ctx.save();
+        ctx.globalAlpha = opacity;
+
+        if (wmType === 'text') {
+            // テキスト透かしの設定
+            const text = document.getElementById('wm-text').value || 'SAMPLE';
+            const color = document.getElementById('wm-color').value;
+            const size = parseInt(document.getElementById('wm-size').value);
+            const angle = parseInt(document.getElementById('wm-angle').value) * Math.PI / 180;
+
+            ctx.font = `bold ${size}px Arial`;
+            ctx.fillStyle = color;
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+
+            if (position === 'center') {
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(angle);
+                ctx.fillText(text, 0, 0);
+            } else if (position === 'repeat') {
+                // タイル状に敷き詰める
+                const stepX = size * 4;
+                const stepY = size * 3;
+                for (let x = 0; x < canvas.width + stepX; x += stepX) {
+                    for (let y = 0; y < canvas.height + stepY; y += stepY) {
+                        ctx.save();
+                        ctx.translate(x, y);
+                        ctx.rotate(angle);
+                        ctx.fillText(text, 0, 0);
+                        ctx.restore();
+                    }
+                }
+            } else if (position === 'bottom-right') {
+                ctx.textAlign = 'right';
+                ctx.fillText(text, canvas.width - 30, canvas.height - 30);
+            } else if (position === 'top-left') {
+                ctx.textAlign = 'left';
+                ctx.fillText(text, 30, 30);
+            }
+
+        } else if (wmType === 'image' && watermarkImageElement) {
+            // 画像透かしの設定
+            const scale = parseFloat(document.getElementById('wm-img-scale').value);
+            // 画像のサイズを元画像に合わせてスケール
+            const wmWidth = canvas.width * scale;
+            const wmHeight = (watermarkImageElement.naturalHeight / watermarkImageElement.naturalWidth) * wmWidth;
+
+            if (position === 'center') {
+                ctx.drawImage(watermarkImageElement, (canvas.width - wmWidth) / 2, (canvas.height - wmHeight) / 2, wmWidth, wmHeight);
+            } else if (position === 'repeat') {
+                const stepX = wmWidth * 2;
+                const stepY = wmHeight * 2;
+                for (let x = 0; x < canvas.width; x += stepX) {
+                    for (let y = 0; y < canvas.height; y += stepY) {
+                        ctx.drawImage(watermarkImageElement, x, y, wmWidth, wmHeight);
+                    }
+                }
+            } else if (position === 'bottom-right') {
+                ctx.drawImage(watermarkImageElement, canvas.width - wmWidth - 20, canvas.height - wmHeight - 20, wmWidth, wmHeight);
+            } else if (position === 'top-left') {
+                ctx.drawImage(watermarkImageElement, 20, 20, wmWidth, wmHeight);
+            }
+        }
+
+        ctx.restore();
+    }
+
+    // プレビュー表示の更新
+    function updatePreviews() {
+        previewList.innerHTML = '';
+        if (loadedImages.length === 0) {
+            previewContainer.style.display = 'none';
+            return;
+        }
+
+        loadedImages.forEach((imgObj) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'preview-item';
+
+            const canvas = document.createElement('canvas');
+            drawImageWithWatermark(canvas, imgObj.imgElement);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = () => {
+                loadedImages = loadedImages.filter(item => item.id !== imgObj.id);
+                updatePreviews();
+            };
+
+            itemDiv.appendChild(canvas);
+            itemDiv.appendChild(removeBtn);
+            previewList.appendChild(itemDiv);
+        });
+    }
+
+    // PDFの生成と保存
+    generatePdfBtn.addEventListener('click', async () => {
+        if (loadedImages.length === 0) {
+            alert('画像ファイルを1つ以上選択してください。');
+            return;
+        }
+
+        // 基本はA4縦サイズ (210mm × 297mm)
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+
+        for (let i = 0; i < loadedImages.length; i++) {
+            if (i > 0) {
+                pdf.addPage();
+            }
+
+            // 一時的なキャンバスを作成して高画質な透過済み画像を生成
+            const tempCanvas = document.createElement('canvas');
+            drawImageWithWatermark(tempCanvas, loadedImages[i].imgElement);
+            
+            // 圧縮率を維持するため JPEG/PNG に変換
+            const imgData = tempCanvas.toDataURL('image/jpeg', 0.85);
+
+            // 画像アスペクト比を維持しつつA4枠内に収める計算
+            const imgWidth = tempCanvas.width;
+            const imgHeight = tempCanvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            
+            const renderWidth = imgWidth * ratio;
+            const renderHeight = imgHeight * ratio;
+            const xOffset = (pdfWidth - renderWidth) / 2;
+            const yOffset = (pdfHeight - renderHeight) / 2;
+
+            pdf.addImage(imgData, 'JPEG', xOffset, yOffset, renderWidth, renderHeight);
+        }
+
+        pdf.save('combined_images_watermarked.pdf');
+    });
+</script>
+
+</body>
+</html>

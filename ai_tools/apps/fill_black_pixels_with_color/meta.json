@@ -1,0 +1,15 @@
+{
+  "id": "fill_black_pixels_with_color",
+  "name": "黒ピクセルを塗り色で埋める",
+  "shortDescription": "二値TGA画像の、実線（黒ピクセル）部分を周囲の塗り色で埋めます",
+  "tags": ["仕上げ", "二値", "TGA", "補正"],
+  "searchKeywords": ["ink paint", "fill lines", "black pixels"],
+  "aiInfo": {
+    "model": "Gemini",
+    "version": "3.5"
+  },
+  "manual": "1.入力フィールドに処理対象のTGAファイルをドラッグ＆ドロップするか、クリックして選択します。（複数選択可）<br>2. 処理が行われるので、結果をダウンロードします。",
+  "promptUrl": "https://gemini.google.com/share/d/1zUFBBd4z4mRuqNwzzkz-yG4_xfRTBPyH?usp=sharing",
+  "author": "Shun Iwasawa",
+  "promptLicense": "CC BY 4.0"
+}

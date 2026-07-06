@@ -1,0 +1,14 @@
+{
+  "id": "img_to_pdf",
+  "name": "画像一括PDF変換",
+  "shortDescription": "絵コンテなどの画像ファイルをPDFに変換します。透かし（ウォーターマーク）を付けることができます。",
+  "tags": ["絵コンテ", "PDF変換", "透かし"],
+  "searchKeywords": ["storyboard", "conversion", "watermark"],
+  "aiInfo": {
+    "model": "Gemini",
+    "version": "3.5"
+  },
+  "manual": "1. 画像ファイルをドラッグ＆ドロップ又はクリックして選択します。(複数選択可)<br>2. 透かしを設定します。<br>3. 「PDFを生成してダウンロード」ボタンをクリックします。",
+  "author": "Naruya Ninomiya",
+  "promptLicense": "CC BY 4.0"
+}
