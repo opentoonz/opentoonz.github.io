@@ -17,20 +17,25 @@ new function(){
 		reg = new RegExp(this.className+"-([a-zA-Z0-9-_]+)", "i");
 		objCN =new Array();
 		var objAll = document.getElementsByTagName ? document.getElementsByTagName("*") : document.all;
-		for(var i = 0; i < objAll.length; i++) {
-			var eltClass = objAll[i].className.split(/\s+/);
-			for(var j = 0; j < eltClass.length; j++) {
-				if(eltClass[j] == this.className) {
-					if(!objCN["main CN"]) objCN["main CN"] = new Array();
+		for (var i = 0; i < objAll.length; i++) {
+			var classList = objAll[i].classList 
+				? Array.from(objAll[i].classList) 
+				: (typeof objAll[i].className === 'string' ? objAll[i].className.split(/\s+/) : []);
+
+			for (var j = 0; j < classList.length; j++) {
+				var currentClass = classList[j];
+
+				if (currentClass == this.className) {
+					if (!objCN["main CN"]) objCN["main CN"] = new Array();
 					objCN["main CN"].push(objAll[i]);
 					break;
-				}else if(eltClass[j] == this.parentClassName){
-					if(!objCN["parent CN"]) objCN["parent CN"] = new Array();
+				} else if (currentClass == this.parentClassName) {
+					if (!objCN["parent CN"]) objCN["parent CN"] = new Array();
 					objCN["parent CN"].push(objAll[i]);
 					break;
-				}else if(eltClass[j].match(reg)){
-					var OCN = eltClass[j].match(reg)
-					if(!objCN[OCN]) objCN[OCN]=new Array();
+				} else if (currentClass.match(reg)) {
+					var OCN = currentClass.match(reg);
+					if (!objCN[OCN]) objCN[OCN] = new Array();
 					objCN[OCN].push(objAll[i]);
 					break;
 				}
