@@ -135,7 +135,7 @@
             display: block;
             font-size: 20px;
             font-weight: bold;
-            color: #ffffff; /* 💡 常時白字に固定 */
+            color: #ffffff; /* 常時白字に固定 */
             margin-bottom: 8px;
             font-family: 'Futura', 'Helvetica Neue', Arial, sans-serif;
         }
@@ -198,34 +198,39 @@
             font-weight: 500;
         }
 
-        /* ② テーマ切り替えスイッチ（List Paneの最下部） */
+        /* ② テーマ切り替えスイッチ & アプリ追加ボタンのコンテナ（横並び対応の修正） */
         .theme-switch-container {
             padding: 16px;
             border-top: 1px solid var(--border-list-pane);
             background-color: var(--bg-list-pane);
             flex-shrink: 0;
             display: flex;
-            justify-content: center;
+            gap: 8px; /* ボタン同士の間隔 */
+            justify-content: space-between;
         }
-        .theme-btn {
-            width: 100%;
-            padding: 10px;
+        .theme-btn, .contrib-btn {
+            flex: 1; /* 横幅を均等に2分割 */
+            padding: 10px 4px;
             background-color: var(--bg-toggle-theme);
             border: 1px solid var(--border-toggle-theme);
             color: var(--text-toggle-theme);
             border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px; /* 文字を少し小さくして収まりを最適化 */
             font-weight: bold;
             transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
         }
-        .theme-btn:hover {
-            opacity: 0.9;
+        .theme-btn:hover, .contrib-btn:hover {
+            opacity: 0.85;
         }
 
+        /* 💡 修正：ボタンの基点を left: 0 に変更し、Application Paneの左側に密着させる */
         .toggle-list-btn {
             position: absolute;
-            right: -24px;
+            left: 0;
             top: 50%;
             transform: translateY(-50%);
             width: 24px;
@@ -478,14 +483,19 @@
             <div class="app-list" id="appList">
             </div>
             
+            <!-- ② スイッチ部分を修正（ボタンを横幅圧縮し、横にリンクボタンを追加） -->
             <div class="theme-switch-container">
-                <button class="theme-btn" id="themeBtn">🌙 ダークテーマに切り替え</button>
+                <button class="theme-btn" id="themeBtn">🌙 ダークテーマ</button>
+                <a href="https://github.com/opentoonz/opentoonz.github.io/blob/master/CONTRIBUTING.md" target="_blank" class="contrib-btn">🚀 アプリを追加</a>
             </div>
             
-            <button class="toggle-list-btn" id="toggleListBtn" title="リストを折りたたむ">◀</button>
+            <!-- 💡 変更：ここにあった toggle-list-btn ボタンを下の app-pane の中へ引っ越し -->
         </div>
         
         <div class="app-pane">
+            <!-- 💡 変更：ここに配置することで、List Paneの「overflow: hidden」の影響を受けずに常時表示されます -->
+            <button class="toggle-list-btn" id="toggleListBtn" title="リストを折りたたむ">◀</button>
+
             <div class="welcome-placeholder" id="welcomePlaceholder">
                 <h2>Application Pane</h2>
                 <p>左のリストからWebアプリケーションを選択してください。</p>
@@ -509,22 +519,19 @@
         let appsData = [];
 
         function initPlatform() {
-            // 💡 apps-index.js内で定義された「window.globalAppsData」が自動展開されているか確認
             if (typeof globalAppsData !== 'undefined') {
                 appsData = globalAppsData;
             } else {
-                console.error("エラー: apps/apps-index.js が見つからないか、データが正しくありません。");
+                console.error("Error: apps/apps-index.js not found.");
                 return;
             }
             
-            // 本番用の相対パスを iframeUrl にマッピング
             appsData.forEach(app => {
                 app.iframeUrl = `./apps/${app.id}/index.html`;
             });
             
             renderAppList();
 
-            // URLパラメータ(?app=ID)を解析して初期選択状態にする処理
             const urlParams = new URLSearchParams(window.location.search);
             const initialAppId = urlParams.get('app');
             if (initialAppId) {
@@ -537,7 +544,6 @@
             }
         }
 
-        // ページの読み込み完了時に実行
         window.onload = initPlatform;
 
         let selectedApp = null;
@@ -570,11 +576,11 @@
         themeBtn.addEventListener('click', () => {
             if (currentTheme === "light") {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                themeBtn.innerText = "☀️ OpenToonzテーマに切り替え";
+                themeBtn.innerText = "☀️ ライトテーマ";
                 currentTheme = "dark";
             } else {
                 document.documentElement.removeAttribute('data-theme');
-                themeBtn.innerText = "🌙 ダークテーマに切り替え";
+                themeBtn.innerText = "🌙 ダークテーマ";
                 currentTheme = "light";
             }
         });
@@ -635,8 +641,6 @@
             appViewer.classList.add('active');
             renderInfoPane(app);
 
-            // アプリ切り替え時にブラウザのアドレスバーのURLパラメータもリロードなしで同期させる
-            // 💡 file:/// プロトコル時は、ブラウザ制限を避けるため履歴操作をスキップする安全策を追加
             if (window.location.protocol !== 'file:') {
                 const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?app=' + app.id;
                 window.history.replaceState({ path: newUrl }, '', newUrl);
@@ -750,7 +754,6 @@
                 </div>
             `;
             
-            // 💡 file:/// 環境で起動している場合、共有URLはホストがないため、適切な形（相対や固定ドメイン）で出力されるよう調整
             const currentHost = window.location.host ? window.location.protocol + "//" + window.location.host : "https://opentoonz.github.io";
             const shareUrl = currentHost + window.location.pathname + '?app=' + app.id;
             
@@ -783,8 +786,6 @@
             const app = appsData.find(a => a.id === appId);
             if (!app) return;
 
-            // 💡 file:/// 環境下では、ブラウザのセキュリティ（CORS）によりローカル別ファイルのfetchが遮断されます。
-            // そのため、ダブルクリック起動時のみ警告を出す親切設計にしています。
             if (window.location.protocol === 'file:') {
                 alert("【ブラウザの安全制限】\\nPC上で直接HTMLを開いている状態（file:///）では、ダウンロードボタンは動作しません。\\nGitHub Pages（https://...）に公開されたWebサイト上では、何も設定をせずとも正常にダウンロードが可能です。");
                 return;
