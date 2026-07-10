@@ -1,0 +1,60 @@
+{
+  "id": "export_folder_zipper",
+  "name": "OpenToonz Export Folder Zipper",
+  "shortDescription": "Package a folder created by OpenToonz Export > Export Scene into a shareable ZIP file directly in your browser. Files stay local and are not uploaded to a server.",
+  "tags": [
+    "OpenToonz",
+    "Export Scene",
+    "ZIP",
+    "Troubleshooting",
+    "Project Sharing"
+  ],
+  "searchKeywords": [
+    "opentoonz",
+    "export scene",
+    "zip",
+    "folder",
+    "scene package",
+    "scene file",
+    "tnz",
+    "tlv",
+    "tpl",
+    "palette",
+    "troubleshooting",
+    "project sharing",
+    "browser tool"
+  ],
+  "aiInfo": {
+    "model": "ChatGPT",
+    "version": "GPT-5.5 Thinking"
+  },
+  "manual": "1. In OpenToonz, use Export > Export Scene to create an exported scene folder.\n2. Select that exported folder in this tool.\n3. Review the detected contents, warnings, total size, and suggested ZIP name.\n4. Click Create ZIP.\n5. Download the generated ZIP package and use the SHA-256 receipt for verification when sharing or troubleshooting.",
+  "author": "Rodney Baker / Open Animation Library",
+  "promptUrl": "https://github.com/OpenAnimationLibrary/extrastuff/blob/master/docs/tools/export-folder-zipper/prompts/initial_prompt.md",
+  "promptLicense": "CC BY 4.0",
+  "referencedOSS": [
+    {
+      "name": "JSZip",
+      "url": "https://github.com/Stuk/jszip",
+      "license": "MIT License"
+    }
+  ],
+  "referenceArticles": [
+    {
+      "title": "MDN: HTMLInputElement.webkitdirectory",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/webkitdirectory"
+    },
+    {
+      "title": "MDN: File API",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/File_API"
+    },
+    {
+      "title": "MDN: SubtleCrypto.digest()",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest"
+    },
+    {
+      "title": "JSZip documentation",
+      "url": "https://stuk.github.io/jszip/"
+    }
+  ]
+}
