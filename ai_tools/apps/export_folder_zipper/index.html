@@ -8,7 +8,7 @@ If JSZip is unavailable, the application falls back to a built-in uncompressed Z
 
 JSZip license notice:
 The MIT License
-Copyright (c) 2009-2016 Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
+Copyright (c) 2009-2016 Stuart Knightley, David Duponchel, Franz Buchinger, Antonio Afonso
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -360,7 +360,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         </div>
 
         <div class="status" id="supportStatus" role="status">
-          <span>ⓘ</span>
+          <span>Info</span>
           <div>Folder selection works best in Chromium-based browsers. If folder drag/drop is unavailable, use <strong>Choose Export Folder</strong>.</div>
         </div>
 
@@ -425,7 +425,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       <div class="card-body small">
         <p><strong>Privacy:</strong> this page does not upload files. ZIP creation happens in your browser memory.</p>
         <p><strong>Best use:</strong> select the whole folder produced by OpenToonz <span class="mono">Export &gt; Export Scene</span>, then download the generated ZIP for sharing or troubleshooting.</p>
-        <p><strong>Large projects:</strong> browser ZIP creation is memory-bound. For very large productions, use your operating system’s built-in ZIP/compress command.</p>
+        <p><strong>Large projects:</strong> browser ZIP creation is memory-bound. For very large productions, use your operating system's built-in ZIP/compress command.</p>
       </div>
     </section>
   </main>
@@ -694,7 +694,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         }
         if (selected.length > limit) {
           const li = document.createElement('li');
-          li.innerHTML = `<span class="path">… ${selected.length - limit} more files</span><span class="size"></span>`;
+          li.innerHTML = `<span class="path">... ${selected.length - limit} more files</span><span class="size"></span>`;
           fileList.appendChild(li);
         }
       }
@@ -877,8 +877,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         zipBtn.disabled = true;
         downloadLink.classList.add('hidden');
-        showStatus('', '<span>…</span><div>Creating ZIP locally in this browser.</div>');
-        setProgress(0, 'Preparing files…');
+        showStatus('', '<span>...</span><div>Creating ZIP locally in this browser.</div>');
+        setProgress(0, 'Preparing files...');
 
         try {
           let blob;
@@ -905,18 +905,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
               compressionOptions: { level: 6 },
               mimeType: 'application/zip'
             }, metadata => {
-              setProgress(metadata.percent || 0, `Compressing… ${Math.round(metadata.percent || 0)}%`);
+              setProgress(metadata.percent || 0, `Compressing... ${Math.round(metadata.percent || 0)}%`);
             });
           } else {
-            showStatus('warn', '<span>ⓘ</span><div>JSZip was not loaded. Creating a valid uncompressed ZIP fallback instead.</div>');
+            showStatus('warn', '<span>Info</span><div>JSZip was not loaded. Creating a valid uncompressed ZIP fallback instead.</div>');
             blob = await createStoredZipBlob(selected, manifestCheck.checked ? JSON.stringify(makeManifest(analysis.suggestedName, null, null), null, 2) : null, progress => {
-              setProgress(progress, `Packaging without compression… ${Math.round(progress)}%`);
+              setProgress(progress, `Packaging without compression... ${Math.round(progress)}%`);
             });
           }
 
           let hash = '';
           if (hashCheck.checked && crypto && crypto.subtle) {
-            setProgress(100, 'Computing SHA-256 receipt…');
+            setProgress(100, 'Computing SHA-256 receipt...');
             hash = await sha256Blob(blob);
           }
 
@@ -930,11 +930,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
           const receipt = makeReceipt(zipName, blob.size, hash);
           receiptBox.value = receipt;
-          showStatus('good', `<span>✓</span><div><strong>${zipName}</strong> created (${formatBytes(blob.size)}). ${hash ? 'SHA-256 receipt generated.' : 'Hash skipped.'}</div>`);
+          showStatus('good', `<span>OK</span><div><strong>${zipName}</strong> created (${formatBytes(blob.size)}). ${hash ? 'SHA-256 receipt generated.' : 'Hash skipped.'}</div>`);
           setProgress(100, 'ZIP ready.');
         } catch (error) {
           console.error(error);
-          showStatus('bad', `<span>⚠</span><div>ZIP creation failed: ${escapeHtml(error && error.message ? error.message : String(error))}</div>`);
+          showStatus('bad', `<span>Warning</span><div>ZIP creation failed: ${escapeHtml(error && error.message ? error.message : String(error))}</div>`);
           setProgress(0, 'Failed.');
         } finally {
           zipBtn.disabled = selected.length === 0;
@@ -1018,7 +1018,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           loadFiles(records);
         } catch (error) {
           console.error(error);
-          showStatus('bad', `<span>⚠</span><div>Could not read dropped folder: ${escapeHtml(error.message || String(error))}</div>`);
+          showStatus('bad', `<span>Warning</span><div>Could not read dropped folder: ${escapeHtml(error.message || String(error))}</div>`);
         }
       });
 
