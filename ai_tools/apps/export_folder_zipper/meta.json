@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "export_folder_zipper",
   "name": "OpenToonz Export Folder Zipper",
   "shortDescription": "Package a folder created by OpenToonz Export > Export Scene into a shareable ZIP file directly in your browser. Files stay local and are not uploaded to a server.",
@@ -30,7 +30,7 @@
   },
   "manual": "1. In OpenToonz, use Export > Export Scene to create an exported scene folder.\n2. Select that exported folder in this tool.\n3. Review the detected contents, warnings, total size, and suggested ZIP name.\n4. Click Create ZIP.\n5. Download the generated ZIP package and use the SHA-256 receipt for verification when sharing or troubleshooting.",
   "author": "Rodney Baker / Open Animation Library",
-  "promptUrl": "https://github.com/OpenAnimationLibrary/extrastuff/blob/master/docs/tools/export-folder-zipper/prompts/initial_prompt.md",
+  "promptUrl": "https://github.com/OpenAnimationLibrary/extrastuff/blob/master/docs/tools/opentoonz-export-folder-zipper/prompts/initial_prompt.md",
   "promptLicense": "CC BY 4.0",
   "referencedOSS": [
     {
