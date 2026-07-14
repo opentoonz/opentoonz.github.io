@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "export_folder_zipper",
   "name": "OpenToonz Export Folder Zipper",
   "shortDescription": "Package a folder created by OpenToonz Export > Export Scene into a shareable ZIP file directly in your browser. Files stay local and are not uploaded to a server.",
