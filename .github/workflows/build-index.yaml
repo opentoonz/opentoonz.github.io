@@ -38,9 +38,9 @@ jobs:
         git config --local user.name "github-actions[bot]"
         
         # 変更があるか確認
-        if ! git diff --exit-code ai-tools/apps/apps-index.json; then
-          git add ai-tools/apps/apps-index.json
-          git commit -m "chore: [skip ci] apps-index.json を自動更新"
+        if ! git diff --exit-code ai-tools/apps/apps-index.js; then
+          git add ai-tools/apps/apps-index.js
+          git commit -m "chore: [skip ci] apps-index.js を自動更新"
           git push
         else
           echo "変更はありませんでした。"
